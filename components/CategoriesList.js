@@ -10,6 +10,7 @@ const StyledList = styled.ul`
   gap: 1rem;
   margin: 0.5rem;
   list-style: none;
+  margin-bottom: 6rem;
 `;
 
 const StyledButton = styled.button`
@@ -27,6 +28,10 @@ const StyledListOfMembers = styled.ul`
   flex-direction: column;
 `;
 
+const StyledMemberItem = styled.li`
+  text-align: left;
+`;
+
 const StyledCategory = styled.section`
   display: flex;
   justify-content: space-between;
@@ -40,7 +45,7 @@ const StyleSpan = styled.span`
   white-space: nowrap;
 `;
 
-export default function CategoriesList({ categories }) {
+export default function CategoriesList({ categories, familyMembers }) {
   const [selected, setSelected] = useState(null);
 
   function handleExpand(index) {
@@ -64,8 +69,13 @@ export default function CategoriesList({ categories }) {
             <section>
               {selected === index && (
                 <StyledListOfMembers>
-                  {category.selectedMembers.map((member) => (
-                    <li key={member.id}>{member.name}</li>
+                  {category.selectedMembers.map((memberId) => (
+                    <StyledMemberItem key={memberId}>
+                      {
+                        familyMembers.find((member) => member.id === memberId)
+                          ?.name
+                      }
+                    </StyledMemberItem>
                   ))}
                 </StyledListOfMembers>
               )}

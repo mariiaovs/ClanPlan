@@ -81,8 +81,17 @@ export default function TaskDetails({
   onCancel,
   onCheckboxChange,
   familyMembers,
+  categories,
 }) {
-  const { title, category, priority, dueDate, id, isDone, assignedTo } = task;
+  const {
+    title,
+    category: categoryId,
+    priority,
+    dueDate,
+    id,
+    isDone,
+    assignedTo,
+  } = task;
 
   return (
     <>
@@ -108,7 +117,9 @@ export default function TaskDetails({
         <p> What is to do?</p>
         <h2>{title}</h2>
         <p>Category: </p>
-        <h2>{category}</h2>
+        <h2>
+          {categories.find((category) => category.id === categoryId).category}
+        </h2>
         <p>Priority: </p>
         <h2>{"🔥".repeat(priority)}</h2>
         <p>Due Date:</p>

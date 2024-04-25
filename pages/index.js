@@ -29,10 +29,6 @@ const StyledClearFilterButton = styled.button`
   background-color: var(--color-font);
   padding: 0.5rem;
   border-radius: 0.7rem;
-  &:hover {
-    cursor: pointer;
-    opacity: 0.5;
-  }
 `;
 
 export default function HomePage({
@@ -41,6 +37,7 @@ export default function HomePage({
   setShowModal,
   showModal,
   familyMembers,
+  categories,
 }) {
   const [filters, setFilters] = useState({});
 
@@ -101,7 +98,11 @@ export default function HomePage({
       {!filteredTasks.length && (
         <StyledMessage>No tasks with this search criteria.</StyledMessage>
       )}
-      <TasksList tasks={filteredTasks} onCheckboxChange={onCheckboxChange} />
+      <TasksList
+        tasks={filteredTasks}
+        onCheckboxChange={onCheckboxChange}
+        categories={categories}
+      />
     </div>
   );
 }

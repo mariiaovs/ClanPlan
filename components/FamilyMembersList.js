@@ -14,7 +14,14 @@ const StyledListItems = styled.li`
   box-shadow: 5px 5px 15px 5px rgba(112, 107, 91, 0.83);
   margin: 0.5rem;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 1fr;
+`;
+
+const StyleSpan = styled.span`
+  max-width: 270px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export default function FamilyMembersList({ familyMembers }) {
@@ -23,10 +30,10 @@ export default function FamilyMembersList({ familyMembers }) {
       <StyledList>
         {familyMembers.map((member) => (
           <StyledListItems key={member.id}>
-            <p>
+            <StyleSpan title={member.name}>
               <strong>{member.name}</strong>
-            </p>
-            <p>{member.role}</p>
+            </StyleSpan>
+            <span>{member.role}</span>
           </StyledListItems>
         ))}
       </StyledList>

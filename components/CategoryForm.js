@@ -78,12 +78,13 @@ export default function CategoryForm({
   }
 
   function onSelect(selectedList) {
-    setSelectedMembers([...selectedList]);
+    const selectedMemberIds = selectedList.map((member) => member.id);
+    setSelectedMembers([...selectedMemberIds]);
   }
 
   function onRemove(removedItem) {
     setSelectedMembers(
-      selectedMembers.filter((member) => member.id !== removedItem.id)
+      selectedMembers.filter((member) => member !== removedItem.id)
     );
   }
 

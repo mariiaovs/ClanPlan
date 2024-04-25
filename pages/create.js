@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import BackArrow from "@/public/assets/images/back-arrow.svg";
 import StyledBackLink from "@/components/StyledBackLink";
 
-export default function CreatePage({ onAddTask, familyMembers }) {
+export default function CreatePage({ onAddTask, familyMembers, categories }) {
   return (
     <div>
       <Header />
@@ -14,6 +14,7 @@ export default function CreatePage({ onAddTask, familyMembers }) {
         onTaskSubmit={onAddTask}
         title="Add a task"
         familyMembers={familyMembers}
+        categories={categories}
       />
     </div>
   );

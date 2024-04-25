@@ -43,9 +43,13 @@ export default function Form({
   value,
   isEdit,
   familyMembers,
+  categories,
+  allocatedMembersList,
 }) {
   const [enteredTitle, setEnteredTitle] = useState("");
   const [isValid, setIsValid] = useState(false);
+  const [allocatedMembers, setAllocatedMembers] =
+    useState(allocatedMembersList);
 
   const formattedTodayDate = new Date().toISOString().substring(0, 10);
 
@@ -72,6 +76,20 @@ export default function Form({
     }
   }
 
+  function handleFamilyMembersSelection(event) {
+    const selectedCategoryId = event.target.value;
+    const allocatedMembersId = categories.find(
+      (category) => category.id === selectedCategoryId
+    ).selectedMembers;
+
+    setAllocatedMembers(
+      allocatedMembersId.map((memberId) => ({
+        id: memberId,
+        name: familyMembers.find((member) => member.id === memberId).name,
+      }))
+    );
+  }
+
   return (
     <StyledForm onSubmit={handleSubmit}>
       <StyledHeading>{title}</StyledHeading>
@@ -93,15 +111,14 @@ export default function Form({
         id="category"
         name="category"
         defaultValue={value?.category}
+        onChange={handleFamilyMembersSelection}
       >
         <option value="">Please select a category</option>
-        <option value="Maintenance">Maintenance</option>
-        <option value="Bills">Bills</option>
-        <option value="Errands">Errands</option>
-        <option value="School">School</option>
-        <option value="Pets">Pets</option>
-        <option value="Health">Health</option>
-        <option value="Social">Social</option>
+        {categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.category}
+          </option>
+        ))}
       </StyledSelect>
       <StyledLabel htmlFor="priority">Priority:</StyledLabel>
       <StyledDiv>
@@ -132,11 +149,12 @@ export default function Form({
         defaultValue={value?.assignedTo}
       >
         <option value="">Select Family Member</option>
-        {familyMembers.map((member) => (
-          <option key={member.id} value={member.id}>
-            {member.name}
-          </option>
-        ))}
+        {allocatedMembers &&
+          allocatedMembers.map((member) => (
+            <option key={member.id} value={member.id}>
+              {member.name}
+            </option>
+          ))}
       </StyledSelect>
       <StyledButton>{isEdit ? "Update" : "Create"}</StyledButton>
     </StyledForm>

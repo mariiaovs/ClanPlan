@@ -1,53 +1,11 @@
 import { useState } from "react";
 import GlobalStyle from "../styles";
 import initialTasks from "@/db/lib/tasks";
+import initialFamilyMembers from "@/db/lib/familyMembers";
+import initialCategories from "@/db/lib/categories";
 import { uid } from "uid";
 import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
-
-const initialFamilyMembers = [
-  {
-
-    id: "1",
-    name: "Swetha",
-    role: "Parent",
-  },
-  {
-    id: "2",
-    name: "Lokesh",
-    role: "Parent",
-  },
-];
-
-const initialCategories = [
-  {
-    id: "1",
-    category: "Bills",
-    selectedMembers: [
-      {
-        id: "2",
-        name: "Lokesh",
-        role: "Parent",
-      },
-    ],
-  },
-  {
-    id: "2",
-    category: "Maintenance",
-    selectedMembers: [
-      {
-        id: "1",
-        name: "Swetha",
-        role: "Parent",
-      },
-      {
-        id: "2",
-        name: "Lokesh",
-        role: "Parent",
-      },
-    ],
-  },
-];
 
 export default function App({ Component, pageProps }) {
   const [tasks, setTasks] = useState(initialTasks);

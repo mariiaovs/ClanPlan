@@ -21,7 +21,7 @@ const StyledListItems = styled.li`
   margin: 0.5rem;
 `;
 
-export default function TasksList({ tasks, onCheckboxChange }) {
+export default function TasksList({ tasks, onCheckboxChange, categories }) {
   function handleCurrentTask(dueDate) {
     const today = new Date();
     return today.toDateString() === new Date(dueDate).toDateString();
@@ -34,7 +34,11 @@ export default function TasksList({ tasks, onCheckboxChange }) {
           $current={handleCurrentTask(task.dueDate)}
           $isDone={task.isDone}
         >
-          <TaskPreview task={task} onCheckboxChange={onCheckboxChange} />
+          <TaskPreview
+            task={task}
+            onCheckboxChange={onCheckboxChange}
+            categories={categories}
+          />
         </StyledListItems>
       ))}
     </StyledList>

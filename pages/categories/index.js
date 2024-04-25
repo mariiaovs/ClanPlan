@@ -33,12 +33,12 @@ export default function CategoriesPage({
       {!categories.length && (
         <StyledMessage>The list is empty. Add members to begin!</StyledMessage>
       )}
-      <CategoriesList categories={categories} />
+      <CategoriesList categories={categories} familyMembers={familyMembers} />
 
       <StyledPlus onClick={() => setShowModal(true)} $right={true} />
 
       {showModal && (
-        <Modal setShowModal={setShowModal}>
+        <Modal $top="7rem" setShowModal={setShowModal}>
           <CategoryForm
             onAddCategory={onAddCategory}
             familyMembers={familyMembers}

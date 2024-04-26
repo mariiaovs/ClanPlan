@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const StyledButton = styled.button`
   ${({ $left }) => $left && `margin-left: ${$left};`}
-  margin-top: 2rem;
+  margin-top: 1rem;
   color: white;
   font-weight: 700;
   background-color: ${({ $clear }) => ($clear ? "red" : "var(--color-font)")};

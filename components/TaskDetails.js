@@ -31,7 +31,7 @@ const StyledSection = styled.section`
   flex-direction: column;
   border-radius: 2rem;
   padding: 2rem;
-  gap: 0.5rem;
+  gap: 0.6rem;
   transition: background-color 0.5s ease, color 0.5s ease, opacity 0.5s ease;
   box-shadow: 5px 5px 15px 5px rgba(112, 107, 91, 0.83);
   ${({ $isDone }) =>
@@ -118,12 +118,18 @@ export default function TaskDetails({
         <h2>{title}</h2>
         <p>Category: </p>
         <h2>
-          {categories.find((category) => category.id === categoryId).category}
+          {categories.find((category) => category.id === categoryId)
+            ?.category || "-"}
         </h2>
         <p>Priority: </p>
-        <h2>{"🔥".repeat(priority)}</h2>
+        <h2>{"🔥".repeat(Number(priority))}</h2>
         <p>Due Date:</p>
-        <h3>{dueDate}</h3>
+        <h3>{dueDate || "-"}</h3>
+        <p>Assigned to:</p>
+        <h2>
+          {familyMembers.find((member) => member.id === assignedTo)?.name ||
+            "-"}
+        </h2>
         <label htmlFor="checkbox">
           Done:
           <StyledCheckbox
@@ -133,10 +139,6 @@ export default function TaskDetails({
             onChange={() => onCheckboxChange(id)}
           />
         </label>
-        <p>Member:</p>
-        <h2>
-          {familyMembers.find((member) => member.id === assignedTo)?.name}
-        </h2>
       </StyledSection>
     </>
   );

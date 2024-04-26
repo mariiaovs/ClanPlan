@@ -21,7 +21,13 @@ const StyledListItems = styled.li`
   margin: 0.5rem;
 `;
 
-export default function TasksList({ tasks, onCheckboxChange, categories }) {
+export default function TasksList({
+  tasks,
+  onCheckboxChange,
+  setDetailsBackLinkRef,
+  categories
+}) {
+
   function handleCurrentTask(dueDate) {
     const today = new Date();
     return today.toDateString() === new Date(dueDate).toDateString();
@@ -37,6 +43,7 @@ export default function TasksList({ tasks, onCheckboxChange, categories }) {
           <TaskPreview
             task={task}
             onCheckboxChange={onCheckboxChange}
+            setDetailsBackLinkRef={setDetailsBackLinkRef}
             categories={categories}
           />
         </StyledListItems>

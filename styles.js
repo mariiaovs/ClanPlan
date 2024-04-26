@@ -54,6 +54,41 @@ a:hover, button:hover {
   opacity: 0.5;
 }
   
+.rbc-today {
+    background-color: var(--color-background);
+}
 
+.rbc-event {
+  background-color: var(--color-font);
+  font-size: 0.5rem;
+  font-weight: 700;
+  padding: 0.2rem;
+}
+
+.rbc-row-segment .rbc-event-content {
+  text-overflow: clip;
+}
+
+.rbc-time-view {
+.rbc-label {
+display: none;
+}
+.rbc-allday-cell {
+height: auto;
+max-height: unset;
+}
+.rbc-time-content {
+display: none;
+}
+}
+
+.rbc-button-link span {
+  white-space: normal;
+  text-overflow: clip;
+}
+
+.rbc-addons-dnd-row-body {
+  height: 296px;
+}
 
 `;

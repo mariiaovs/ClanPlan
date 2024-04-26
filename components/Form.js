@@ -1,17 +1,18 @@
 import { useState } from "react";
 import styled from "styled-components";
 import StyledButton from "./StyledButton";
+import { useRouter } from "next/router";
 
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.2rem;
   margin: 1rem;
   margin-top: 6rem;
   background-color: white;
   padding: 1rem;
   border-radius: 1rem;
-  margin-bottom: 5rem;
+  margin-bottom: 4.5rem;
 `;
 
 const StyledHeading = styled.h2`
@@ -46,6 +47,7 @@ export default function Form({
   categories,
   allocatedMembersList,
 }) {
+  const router = useRouter();
   const [enteredTitle, setEnteredTitle] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [allocatedMembers, setAllocatedMembers] =
@@ -71,8 +73,10 @@ export default function Form({
 
     if (isEdit) {
       onTaskSubmit({ ...data, id: value.id, isDone: value.isDone });
+      router.push(`/tasks/${value.id}`);
     } else {
       onTaskSubmit(data);
+      router.push("/");
     }
   }
 

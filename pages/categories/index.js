@@ -1,5 +1,3 @@
-import StyledBackLink from "@/components/StyledBackLink";
-import BackArrow from "@/public/assets/images/back-arrow.svg";
 import styled from "styled-components";
 import { StyledMessage } from "..";
 import Modal from "@/components/Modal";

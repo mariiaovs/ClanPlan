@@ -5,6 +5,7 @@ import StyledButton from "@/components/StyledButton";
 import Modal from "@/components/Modal";
 import FilterWindow from "@/components/FilterWindow";
 import { useState } from "react";
+import Link from "next/link";
 
 const StyledHeading = styled.h2`
   text-align: center;
@@ -31,12 +32,27 @@ const StyledClearFilterButton = styled.button`
   border-radius: 0.7rem;
 `;
 
+const StyledLink = styled(Link)`
+  margin: 1rem;
+  color: white;
+  font-weight: 700;
+  background-color: var(--color-font);
+  padding: 0.5rem;
+  width: 8rem;
+  border-radius: 0.5rem;
+  border: 0.5px solid white;
+  position: absolute;
+  right: calc(50% - 180px);
+  text-align: center;
+`;
+
 export default function HomePage({
   tasks,
   onCheckboxChange,
   setShowModal,
   showModal,
   familyMembers,
+  setDetailsBackLinkRef,
   categories,
 }) {
   const [filters, setFilters] = useState({});
@@ -52,8 +68,7 @@ export default function HomePage({
 
   const filteredTasks = tasks.filter(
     (task) =>
-      (!Number(filters.priority) ||
-        task.priority === Number(filters.priority)) &&
+      (!Number(filters.priority) || task.priority === filters.priority) &&
       (!filters.category || task.category === filters.category) &&
       (!filters.member || task.assignedTo.includes(filters.member))
   );
@@ -66,10 +81,12 @@ export default function HomePage({
             familyMembers={familyMembers}
             onApply={handleApplyFilters}
             filters={filters}
+            categories={categories}
           />
         </Modal>
       )}
       <StyledHeading>Family Task List</StyledHeading>
+
       <StyledButton
         $width="4rem"
         $left="0.5rem"
@@ -77,6 +94,7 @@ export default function HomePage({
       >
         <Filter />
       </StyledButton>
+      <StyledLink href="/calendar">📅 Calendar</StyledLink>
       {!tasks.length && <StyledMessage>No tasks to display.</StyledMessage>}
       <StyledList>
         {Object.keys(filters).map(
@@ -90,6 +108,9 @@ export default function HomePage({
                 {key === "member"
                   ? familyMembers.find((member) => member.id === filters[key])
                       .name
+                  : key === "category"
+                  ? categories.find((category) => category.id === filters[key])
+                      .category
                   : filters[key]}
               </StyledClearFilterButton>
             )
@@ -101,6 +122,7 @@ export default function HomePage({
       <TasksList
         tasks={filteredTasks}
         onCheckboxChange={onCheckboxChange}
+        setDetailsBackLinkRef={setDetailsBackLinkRef}
         categories={categories}
       />
     </div>

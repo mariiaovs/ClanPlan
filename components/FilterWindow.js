@@ -30,7 +30,12 @@ const StyledSelect = styled.select`
   padding: 0.3rem;
 `;
 
-export default function FilterWindow({ onApply, familyMembers, filters }) {
+export default function FilterWindow({
+  onApply,
+  familyMembers,
+  filters,
+  categories,
+}) {
   function handleApplyFilter(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
@@ -74,13 +79,11 @@ export default function FilterWindow({ onApply, familyMembers, filters }) {
         defaultValue={filters.category}
       >
         <option value="">Choose a category</option>
-        <option value="Maintenance">Maintenance</option>
-        <option value="Bills">Bills</option>
-        <option value="Errands">Errands</option>
-        <option value="School">School</option>
-        <option value="Pets">Pets</option>
-        <option value="Health">Health</option>
-        <option value="Social">Social</option>
+        {categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.category}
+          </option>
+        ))}
       </StyledSelect>
       <StyledLabel htmlFor="member">Assigned member:</StyledLabel>
       <StyledSelect id="member" name="member" defaultValue={filters.member}>

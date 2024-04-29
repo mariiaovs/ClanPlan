@@ -5,7 +5,7 @@ const initialTasks = [
     category: "3",
     priority: "3",
     dueDate: "2024-05-12",
-    assignedTo: "",
+    assignedTo: ["2"],
     isDone: false,
   },
   {
@@ -14,7 +14,7 @@ const initialTasks = [
     category: "1",
     priority: "2",
     dueDate: "2024-05-12",
-    assignedTo: "",
+    assignedTo: ["1"],
     isDone: false,
   },
   {
@@ -23,7 +23,7 @@ const initialTasks = [
     category: "2",
     priority: "1",
     dueDate: "2024-05-12",
-    assignedTo: "",
+    assignedTo: ["1"],
     isDone: false,
   },
   {
@@ -32,7 +32,7 @@ const initialTasks = [
     category: "7",
     priority: "3",
     dueDate: "2024-05-12",
-    assignedTo: "",
+    assignedTo: ["2"],
     isDone: false,
   },
   {
@@ -41,7 +41,7 @@ const initialTasks = [
     category: "4",
     priority: "1",
     dueDate: "2024-05-20",
-    assignedTo: "",
+    assignedTo: ["1", "2"],
     isDone: false,
   },
   {
@@ -50,7 +50,7 @@ const initialTasks = [
     category: "2",
     priority: "2",
     dueDate: "2024-06-18",
-    assignedTo: "",
+    assignedTo: ["2"],
     isDone: false,
   },
   {
@@ -59,7 +59,7 @@ const initialTasks = [
     category: "6",
     priority: "3",
     dueDate: "2024-05-22",
-    assignedTo: "",
+    assignedTo: ["1", "2"],
     isDone: false,
   },
   {
@@ -67,8 +67,8 @@ const initialTasks = [
     title: "Dentist Appointment",
     category: "5",
     priority: "2",
-    dueDate: "2024-04-25",
-    assignedTo: "",
+    dueDate: "2024-06-25",
+    assignedTo: ["2"],
     isDone: false,
   },
   {
@@ -77,7 +77,7 @@ const initialTasks = [
     category: "2",
     priority: "1",
     dueDate: "2024-05-05",
-    assignedTo: "2",
+    assignedTo: ["2"],
     isDone: false,
   },
   {
@@ -86,7 +86,7 @@ const initialTasks = [
     category: "4",
     priority: "2",
     dueDate: "2024-05-30",
-    assignedTo: "",
+    assignedTo: ["1", "2"],
     isDone: false,
   },
 ];

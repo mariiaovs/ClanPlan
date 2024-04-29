@@ -54,6 +54,9 @@ a:hover, button:hover {
   opacity: 0.5;
 }
   
+
+/* react-big-calendar styles: */
+
 .rbc-today {
     background-color: var(--color-background);
 }
@@ -89,6 +92,17 @@ display: none;
 
 .rbc-addons-dnd-row-body {
   height: 296px;
+}
+
+
+/* MultiSelect styles: */
+
+span.chip {
+  background-color: var(--color-font);
+}
+
+.multiSelectContainer li.option:hover {
+  background-color: var(--color-font);
 }
 
 `;

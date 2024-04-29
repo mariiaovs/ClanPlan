@@ -126,10 +126,14 @@ export default function TaskDetails({
         <p>Due Date:</p>
         <h3>{dueDate || "-"}</h3>
         <p>Assigned to:</p>
-        <h2>
-          {familyMembers.find((member) => member.id === assignedTo)?.name ||
-            "-"}
-        </h2>
+        <h3>
+          {assignedTo
+            .map(
+              (memberId) =>
+                familyMembers.find((member) => member.id === memberId)?.name
+            )
+            .join(", ") || "-"}
+        </h3>
         <label htmlFor="checkbox">
           Done:
           <StyledCheckbox

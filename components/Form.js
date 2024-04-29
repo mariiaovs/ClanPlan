@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import StyledButton from "./StyledButton";
 import { useRouter } from "next/router";
+import Multiselect from "multiselect-react-dropdown";
 
 const StyledForm = styled.form`
   display: flex;
@@ -50,8 +51,10 @@ export default function Form({
   const router = useRouter();
   const [enteredTitle, setEnteredTitle] = useState("");
   const [isValid, setIsValid] = useState(false);
-  const [allocatedMembers, setAllocatedMembers] =
-    useState(allocatedMembersList);
+  const [allocatedMembers, setAllocatedMembers] = useState(
+    allocatedMembersList || familyMembers
+  );
+  const [assignedTo, setAssignedTo] = useState(value?.assignedTo || []);
 
   const formattedTodayDate = new Date().toISOString().substring(0, 10);
 
@@ -72,26 +75,35 @@ export default function Form({
     }
 
     if (isEdit) {
-      onTaskSubmit({ ...data, id: value.id, isDone: value.isDone });
+      onTaskSubmit({ ...data, id: value.id, assignedTo, isDone: value.isDone });
       router.push(`/tasks/${value.id}`);
     } else {
-      onTaskSubmit(data);
+      onTaskSubmit({ ...data, assignedTo });
       router.push("/");
     }
   }
 
   function handleFamilyMembersSelection(event) {
+    setAssignedTo([]);
     const selectedCategoryId = event.target.value;
-    const allocatedMembersId = categories.find(
+    const allocatedMembersIds = categories.find(
       (category) => category.id === selectedCategoryId
-    ).selectedMembers;
-
+    )?.selectedMembers;
     setAllocatedMembers(
-      allocatedMembersId.map((memberId) => ({
+      allocatedMembersIds?.map((memberId) => ({
         id: memberId,
-        name: familyMembers.find((member) => member.id === memberId).name,
-      }))
+        name: familyMembers?.find((member) => member.id === memberId)?.name,
+      })) || familyMembers
     );
+  }
+
+  function onSelect(selectedList) {
+    const selectedMemberIds = selectedList.map((member) => member.id);
+    setAssignedTo(selectedMemberIds);
+  }
+
+  function onRemove(removedItem) {
+    setAssignedTo(assignedTo.filter((member) => member !== removedItem.id));
   }
 
   return (
@@ -117,7 +129,11 @@ export default function Form({
         defaultValue={value?.category}
         onChange={handleFamilyMembersSelection}
       >
-        <option value="">Please select a category</option>
+        <option value="">
+          {categories.length
+            ? "Please select a category"
+            : "No categories added"}
+        </option>
         {categories.map((category) => (
           <option key={category.id} value={category.id}>
             {category.category}
@@ -146,20 +162,29 @@ export default function Form({
         min={formattedTodayDate}
         defaultValue={value?.dueDate}
       ></input>
-      <StyledLabel htmlFor="assignedTo">Member:</StyledLabel>
-      <StyledSelect
+      <StyledLabel htmlFor="assignedTo">Assign to:</StyledLabel>
+      <Multiselect
         id="assignedTo"
         name="assignedTo"
-        defaultValue={value?.assignedTo}
-      >
-        <option value="">Select Family Member</option>
-        {allocatedMembers &&
-          allocatedMembers.map((member) => (
-            <option key={member.id} value={member.id}>
-              {member.name}
-            </option>
-          ))}
-      </StyledSelect>
+        options={allocatedMembers}
+        onSelect={onSelect}
+        onRemove={onRemove}
+        displayValue="name"
+        showCheckbox={true}
+        keepSearchTerm={true}
+        showArrow={true}
+        emptyRecordMsg={
+          familyMembers.length
+            ? "No members added to the category"
+            : "No members added to the family"
+        }
+        placeholder="Select Family Member"
+        avoidHighlightFirstOption={true}
+        selectedValues={assignedTo.map((memberId) => ({
+          id: memberId,
+          name: familyMembers.find((member) => member.id === memberId).name,
+        }))}
+      />
       <StyledButton>{isEdit ? "Update" : "Create"}</StyledButton>
     </StyledForm>
   );

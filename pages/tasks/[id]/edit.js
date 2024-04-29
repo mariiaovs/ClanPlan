@@ -14,13 +14,13 @@ export default function EditPage({
 
   const task = tasks.find((task) => task.id === id);
 
-  const allocatedMembersId = categories.find(
+  const allocatedMembersIds = categories.find(
     (category) => category.id === task?.category
   )?.selectedMembers;
 
-  const allocatedMembersList = allocatedMembersId?.map((memberId) => ({
+  const allocatedMembersList = allocatedMembersIds?.map((memberId) => ({
     id: memberId,
-    name: familyMembers.find((member) => member.id === memberId).name,
+    name: familyMembers?.find((member) => member.id === memberId)?.name,
   }));
 
   return (

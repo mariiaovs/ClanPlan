@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GlobalStyle from "../styles";
 import initialTasks from "@/db/lib/tasks";
 import initialFamilyMembers from "@/db/lib/familyMembers";
@@ -14,6 +14,10 @@ export default function App({ Component, pageProps }) {
   const [showModal, setShowModal] = useState(false);
   const [detailsBackLinkRef, setDetailsBackLinkRef] = useState("/");
   const [currentDate, setCurrentDate] = useState(new Date());
+
+  const [filters, setFilters] = useState({});
+  const [isFilterSet, setIsFilterSet] = useState(false);
+  const [listType, setListType] = useState("today");
 
   const router = useRouter();
 
@@ -64,6 +68,30 @@ export default function App({ Component, pageProps }) {
     setCurrentDate(date);
   }
 
+  function handleApplyFilters(formData) {
+    setFilters(formData);
+    setShowModal(false);
+  }
+
+  function handleDeleteFilterOption(key) {
+    setFilters({ ...filters, [key]: "" });
+  }
+
+  function handleButtonClick(listType) {
+    setListType(listType);
+    setFilters({});
+  }
+
+  useEffect(() => {
+    if (
+      filters.priority === "0" &&
+      filters.category === "" &&
+      filters.member === ""
+    ) {
+      setIsFilterSet(false);
+    }
+  }, [filters.category, filters.member, filters.priority]);
+
   // Sorting the task in chronological order of date
   const tasksAfterSorting = tasks.sort(
     (a, b) => Date.parse(a.dueDate) - Date.parse(b.dueDate)
@@ -90,6 +118,14 @@ export default function App({ Component, pageProps }) {
         setDetailsBackLinkRef={setDetailsBackLinkRef}
         onChangeDate={handleChangeDate}
         currentDate={currentDate}
+        onApplyFilters={handleApplyFilters}
+        onDeleteFilterOption={handleDeleteFilterOption}
+        filters={filters}
+        setFilters={setFilters}
+        setIsFilterSet={setIsFilterSet}
+        isFilterSet={isFilterSet}
+        onButtonClick={handleButtonClick}
+        listType={listType}
       />
     </Layout>
   );

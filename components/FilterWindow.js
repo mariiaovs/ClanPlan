@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import StyledButton from "./StyledButton";
+import { useRouter } from "next/router";
 
 const StyledForm = styled.form`
   display: flex;
@@ -35,12 +36,20 @@ export default function FilterWindow({
   familyMembers,
   filters,
   categories,
+  setIsFilterSet,
 }) {
+  const router = useRouter();
+  const { listType } = router.query;
   function handleApplyFilter(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
     onApply(data);
+    if (data.priority === "0" && data.category === "" && data.member === "") {
+      setIsFilterSet(false);
+    } else {
+      setIsFilterSet(true);
+    }
   }
 
   function handleReset(event) {
@@ -85,15 +94,20 @@ export default function FilterWindow({
           </option>
         ))}
       </StyledSelect>
-      <StyledLabel htmlFor="member">Assigned member:</StyledLabel>
-      <StyledSelect id="member" name="member" defaultValue={filters.member}>
-        <option value="">Choose a member</option>
-        {familyMembers.map((member) => (
-          <option key={member.id} value={member.id}>
-            {member.name}
-          </option>
-        ))}
-      </StyledSelect>
+      {listType !== "notAssigned" && (
+        <>
+          <StyledLabel htmlFor="member">Assigned member:</StyledLabel>
+          <StyledSelect id="member" name="member" defaultValue={filters.member}>
+            <option value="">Choose a member</option>
+            {familyMembers.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.name}
+              </option>
+            ))}
+          </StyledSelect>
+        </>
+      )}
+
       <StyledButton type="submit">Apply</StyledButton>
     </StyledForm>
   );

@@ -15,6 +15,7 @@ const StyledListItems = styled.li`
   margin: 0.5rem;
   display: grid;
   grid-template-columns: 3fr 1fr;
+  background-color: white;
 `;
 
 const StyleSpan = styled.span`

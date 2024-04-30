@@ -4,6 +4,8 @@ import Trash from "@/public/assets/images/trash-icon.svg";
 import Pen from "@/public/assets/images/edit-pen-icon.svg";
 import Modal from "./Modal";
 import Link from "next/link";
+import { useReducer } from "react";
+import { useRouter } from "next/router";
 
 const StyledTrash = styled(Trash)`
   width: 1.5rem;
@@ -110,7 +112,7 @@ export default function TaskDetails({
       )}
       <StyledSection $isDone={isDone}>
         <StyledTrash onClick={() => setShowModal(true)} />
-        <StyledLink href={`${id}/edit`}>
+        <StyledLink href={`/tasks/${id}/edit`}>
           <StyledPen />
         </StyledLink>
 

@@ -1,0 +1,77 @@
+import FilterWindow from "./FilterWindow";
+import Modal from "./Modal";
+import StyledButton from "./StyledButton";
+import FilterIcon from "@/public/assets/images/filter.svg";
+import styled from "styled-components";
+
+const StyledList = styled.ul`
+  list-style: none;
+  padding: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+`;
+
+const StyledClearFilterButton = styled.button`
+  color: white;
+  font-weight: 700;
+  background-color: var(--color-font);
+  padding: 0.5rem;
+  border-radius: 0.7rem;
+`;
+
+export default function Filter({
+  showModal,
+  setShowModal,
+  familyMembers,
+  onApplyFilters,
+  filters,
+  categories,
+  onDeleteFilterOption,
+  setIsFilterSet,
+}) {
+  return (
+    <>
+      {showModal && (
+        <Modal $top="5rem" setShowModal={setShowModal}>
+          <FilterWindow
+            familyMembers={familyMembers}
+            onApply={onApplyFilters}
+            filters={filters}
+            categories={categories}
+            setIsFilterSet={setIsFilterSet}
+          />
+        </Modal>
+      )}
+
+      <StyledButton
+        $width="4rem"
+        $left="0.5rem"
+        onClick={() => setShowModal(true)}
+      >
+        <FilterIcon />
+      </StyledButton>
+
+      <StyledList>
+        {Object.keys(filters).map(
+          (key) =>
+            Number(filters[key]) !== 0 && (
+              <StyledClearFilterButton
+                onClick={() => onDeleteFilterOption(key)}
+                key={key}
+              >
+                ❌ {key}:{" "}
+                {key === "member"
+                  ? familyMembers.find((member) => member.id === filters[key])
+                      .name
+                  : key === "category"
+                  ? categories.find((category) => category.id === filters[key])
+                      .category
+                  : filters[key]}
+              </StyledClearFilterButton>
+            )
+        )}
+      </StyledList>
+    </>
+  );
+}

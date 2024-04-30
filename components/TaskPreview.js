@@ -40,7 +40,7 @@ export default function TaskPreview({
         onChange={() => onCheckboxChange(id)}
       />
       <StyledLink
-        href={`tasks/${id}`}
+        href={`/tasks/${id}`}
         onClick={() => setDetailsBackLinkRef("/")}
       >
         <h3>{title}</h3>

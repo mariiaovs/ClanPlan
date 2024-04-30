@@ -1,49 +1,43 @@
+import Filter from "@/components/Filter";
 import TasksList from "@/components/TasksList";
+
 import styled from "styled-components";
-import Filter from "@/public/assets/images/filter.svg";
-import StyledButton from "@/components/StyledButton";
-import Modal from "@/components/Modal";
-import FilterWindow from "@/components/FilterWindow";
-import { useState } from "react";
-import Link from "next/link";
+
+const StyledSection = styled.section`
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const StyledSpan = styled.span`
+  color: ${({ $redColor }) => ($redColor ? "red" : "white")};
+  text-align: center;
+  display: block;
+  width: 100%;
+`;
+
+const StyledButton = styled.button`
+  background-color: ${({ $isActive }) =>
+    $isActive ? "gray" : "var(--color-font)"};
+  border: none;
+  margin-top: 1rem;
+  color: white;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  align-self: center;
+  border-radius: 0.7rem;
+`;
 
 const StyledHeading = styled.h2`
+  margin-top: 1rem;
   text-align: center;
 `;
 
 const StyledMessage = styled.p`
   text-align: center;
   padding-top: 4rem;
-`;
-
-const StyledList = styled.ul`
-  list-style: none;
-  padding: 0.5rem;
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-`;
-
-const StyledClearFilterButton = styled.button`
-  color: white;
-  font-weight: 700;
-  background-color: var(--color-font);
-  padding: 0.5rem;
-  border-radius: 0.7rem;
-`;
-
-const StyledLink = styled(Link)`
-  margin: 1rem;
-  color: white;
-  font-weight: 700;
-  background-color: var(--color-font);
-  padding: 0.5rem;
-  width: 8rem;
-  border-radius: 0.5rem;
-  border: 0.5px solid white;
-  position: absolute;
-  right: calc(50% - 180px);
-  text-align: center;
 `;
 
 export default function HomePage({
@@ -54,19 +48,47 @@ export default function HomePage({
   familyMembers,
   setDetailsBackLinkRef,
   categories,
+  filters,
+  setFilters,
+  onApplyFilters,
+  onDeleteFilterOption,
+  isFilterSet,
+  setIsFilterSet,
+  onButtonClick,
+  listType,
 }) {
-  const [filters, setFilters] = useState({});
+  const missedTasks = tasks.filter(
+    (task) =>
+      task.dueDate &&
+      new Date(task.dueDate).toISOString().substring(0, 10) <
+        new Date().toISOString().substring(0, 10) &&
+      !task.isDone
+  );
 
-  function handleApplyFilters(formData) {
-    setFilters(formData);
-    setShowModal(false);
+  const todaysTasks = tasks.filter(
+    (task) =>
+      new Date(task?.dueDate).toDateString() === new Date().toDateString() &&
+      !task.isDone
+  );
+
+  const notAssignedTasks = tasks.filter(
+    (task) => task.assignedTo === "" && !task.isDone
+  );
+
+  const completedTasks = tasks.filter((task) => task.isDone);
+
+  let tasksAfterListTypeSelection = tasks;
+  if (listType === "today") {
+    tasksAfterListTypeSelection = todaysTasks;
+  } else if (listType === "missed") {
+    tasksAfterListTypeSelection = missedTasks;
+  } else if (listType === "done") {
+    tasksAfterListTypeSelection = completedTasks;
+  } else if (listType === "notAssigned") {
+    tasksAfterListTypeSelection = notAssignedTasks;
   }
 
-  function handleDeleteFilterOption(key) {
-    setFilters({ ...filters, [key]: "" });
-  }
-
-  const filteredTasks = tasks.filter(
+  const filteredTasks = tasksAfterListTypeSelection.filter(
     (task) =>
       (!Number(filters.priority) || task.priority === filters.priority) &&
       (!filters.category || task.category === filters.category) &&
@@ -74,49 +96,89 @@ export default function HomePage({
   );
 
   return (
-    <div>
-      {showModal && (
-        <Modal $top="5rem" setShowModal={setShowModal}>
-          <FilterWindow
-            familyMembers={familyMembers}
-            onApply={handleApplyFilters}
-            filters={filters}
-            categories={categories}
-          />
-        </Modal>
+    <>
+      <StyledSection>
+        <StyledButton
+          onClick={() => onButtonClick("today")}
+          $isActive={listType === "today"}
+        >
+          <StyledSpan>Today</StyledSpan>
+        </StyledButton>
+        <StyledButton
+          onClick={() => onButtonClick("all")}
+          $isActive={listType === "all"}
+        >
+          <StyledSpan>All Tasks</StyledSpan>
+        </StyledButton>
+        <StyledButton
+          onClick={() => onButtonClick("done")}
+          $isActive={listType === "done"}
+        >
+          <StyledSpan>Done</StyledSpan>
+        </StyledButton>
+        <StyledButton
+          onClick={() => onButtonClick("missed")}
+          $isActive={listType === "missed"}
+        >
+          <StyledSpan $redColor={true}>Missed {missedTasks.length}!</StyledSpan>
+        </StyledButton>
+        <StyledButton
+          onClick={() => onButtonClick("notAssigned")}
+          $isActive={listType === "notAssigned"}
+        >
+          <StyledSpan $redColor={true}>
+            Not assigned {notAssignedTasks.length}
+          </StyledSpan>
+        </StyledButton>
+      </StyledSection>
+      {listType === "today" && (
+        <StyledHeading>
+          {todaysTasks.length === 1
+            ? `${todaysTasks.length} Task for today`
+            : `${todaysTasks.length} Tasks for today`}
+        </StyledHeading>
       )}
-      <StyledHeading>Family Task List</StyledHeading>
-
-      <StyledButton
-        $width="4rem"
-        $left="0.5rem"
-        onClick={() => setShowModal(true)}
-      >
-        <Filter />
-      </StyledButton>
-      <StyledLink href="/calendar">📅 Calendar</StyledLink>
-      {!tasks.length && <StyledMessage>No tasks to display.</StyledMessage>}
-      <StyledList>
-        {Object.keys(filters).map(
-          (key) =>
-            Number(filters[key]) !== 0 && (
-              <StyledClearFilterButton
-                onClick={() => handleDeleteFilterOption(key)}
-                key={key}
-              >
-                ❌ {key}:{" "}
-                {key === "member"
-                  ? familyMembers.find((member) => member.id === filters[key])
-                      .name
-                  : key === "category"
-                  ? categories.find((category) => category.id === filters[key])
-                      .category
-                  : filters[key]}
-              </StyledClearFilterButton>
-            )
-        )}
-      </StyledList>
-      {!filteredTasks.length && (
+      {listType === "all" && <StyledHeading>My Family Tasks</StyledHeading>}
+      {listType === "done" && (
+        <StyledHeading>Completed Tasks </StyledHeading>
+      )}{" "}
+      {listType === "notAssigned" && (
+        <StyledHeading>Not assigned Tasks </StyledHeading>
+      )}
+      {listType === "missed" && (
+        <StyledHeading>
+          You have missed&nbsp;
+          {missedTasks.length === 1
+            ? `${missedTasks.length} Task`
+            : `${missedTasks.length} Tasks`}
+        </StyledHeading>
+      )}
+      {tasksAfterListTypeSelection.length > 0 && (
+        <Filter
+          showModal={showModal}
+          setShowModal={setShowModal}
+          familyMembers={familyMembers}
+          onApplyFilters={onApplyFilters}
+          filters={filters}
+          categories={categories}
+          onDeleteFilterOption={onDeleteFilterOption}
+          setFilters={setFilters}
+          isFilterSet={isFilterSet}
+          setIsFilterSet={setIsFilterSet}
+        />
+      )}
+      {!filteredTasks.length && !isFilterSet && listType !== "today" && (
+        <StyledMessage>No tasks to display.</StyledMessage>
+      )}
+      {!filteredTasks.length && !isFilterSet && listType === "today" && (
+        <StyledMessage>
+          {" "}
+          <span>Relax !!!!</span>
+          <br />
+          <span>No tasks for today</span>
+        </StyledMessage>
+      )}
+      {!filteredTasks.length && isFilterSet && (
         <StyledMessage>No tasks with this search criteria.</StyledMessage>
       )}
       <TasksList
@@ -125,8 +187,6 @@ export default function HomePage({
         setDetailsBackLinkRef={setDetailsBackLinkRef}
         categories={categories}
       />
-    </div>
+    </>
   );
 }
-
-export { StyledMessage };

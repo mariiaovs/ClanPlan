@@ -16,7 +16,7 @@ const StyledList = styled.ul`
 const StyledButton = styled.button`
   display: flex;
   flex-direction: column;
-  background-color: inherit;
+  background-color: white;
   box-shadow: 5px 5px 15px 5px rgba(112, 107, 91, 0.83);
   border-radius: 2rem;
   padding: 1rem;

@@ -1,4 +1,11 @@
 import { createGlobalStyle } from "styled-components";
+import { Indie_Flower } from "next/font/google";
+
+const indieFlower = Indie_Flower({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-indieflower",
+});
 
 export default createGlobalStyle`
   *,
@@ -15,10 +22,7 @@ export default createGlobalStyle`
     --color-background:#fbe0c3; 
     --color-font:#344648;
     --color-font-light:white;
-  }
-
-  .Layout {
-    font-family: var(--font-indieFlower);
+    --font-indieflower:${indieFlower.style.fontFamily};
   }
 
   body {
@@ -29,6 +33,8 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     max-width: 375px;
     background-color: var(--color-background);
+    font-family: var(--font-indieflower);
+    
 
   }
 
@@ -43,8 +49,10 @@ input, button, textarea, select {
 
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
-  font-family: var(--font-indieFlower);
+  font-family: var(--font-indieflower);
+
 }
+
 
 #root, #__next {
   isolation: isolate;

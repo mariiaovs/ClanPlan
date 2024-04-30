@@ -10,6 +10,7 @@
     "test": "jest --watchAll"
   },
   "dependencies": {
+    "@next/font": "^14.2.3",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.8",
     "multiselect-react-dropdown": "^2.0.25",

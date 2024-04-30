@@ -6,13 +6,6 @@ import initialCategories from "@/db/lib/categories";
 import { uid } from "uid";
 import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
-import { Indie_Flower } from "next/font/google";
-
-const indieFlower = Indie_Flower({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-indieflower",
-});
 
 export default function App({ Component, pageProps }) {
   const [tasks, setTasks] = useState(initialTasks);
@@ -105,7 +98,7 @@ export default function App({ Component, pageProps }) {
   );
 
   return (
-    <Layout className={indieFlower.variable}>
+    <Layout>
       <GlobalStyle />
       <Component
         {...pageProps}

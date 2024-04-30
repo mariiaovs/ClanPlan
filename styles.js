@@ -17,10 +17,14 @@ export default createGlobalStyle`
     --color-font-light:white;
   }
 
+  .Layout {
+    font-family: var(--font-indieFlower);
+  }
+
   body {
     margin: auto;
     margin-top:5rem;
-    font-family: system-ui;
+    font-family: Helvetica;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     max-width: 375px;
@@ -39,6 +43,7 @@ input, button, textarea, select {
 
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
+  font-family: var(--font-indieFlower);
 }
 
 #root, #__next {

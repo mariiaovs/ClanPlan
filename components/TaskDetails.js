@@ -61,7 +61,7 @@ const DeleteConfirmBox = styled.div`
   border-radius: 1rem;
 `;
 
-const StyledPragraph = styled.p`
+const StyledPragraphHe = styled.p`
   text-align: center;
 `;
 
@@ -73,6 +73,11 @@ const StyledCheckbox = styled.input`
   &:checked {
     filter: hue-rotate(180deg);
   }
+`;
+
+const StyledParagraphContent = styled.p`
+  font-size: larger;
+  font-weight: 600;
 `;
 
 export default function TaskDetails({
@@ -100,9 +105,9 @@ export default function TaskDetails({
       {showModal && (
         <Modal $top="13.5rem" setShowModal={setShowModal}>
           <DeleteConfirmBox>
-            <StyledPragraph>
+            <StyledParagraphContent>
               Are you sure you want to delete this task?
-            </StyledPragraph>
+            </StyledParagraphContent>
             <ButtonContainer>
               <StyledButton onClick={onCancel}>No</StyledButton>
               <StyledButton onClick={() => onDelete(id)}>Yes</StyledButton>
@@ -117,25 +122,25 @@ export default function TaskDetails({
         </StyledLink>
 
         <p> What is to do?</p>
-        <h2>{title}</h2>
+        <StyledParagraphContent>{title}</StyledParagraphContent>
         <p>Category: </p>
-        <h2>
+        <StyledParagraphContent>
           {categories.find((category) => category.id === categoryId)
             ?.category || "-"}
-        </h2>
+        </StyledParagraphContent>
         <p>Priority: </p>
         <h2>{"🔥".repeat(Number(priority))}</h2>
         <p>Due Date:</p>
-        <h3>{dueDate || "-"}</h3>
+        <StyledParagraphContent>{dueDate || "-"}</StyledParagraphContent>
         <p>Assigned to:</p>
-        <h3>
+        <StyledParagraphContent>
           {assignedTo
             .map(
               (memberId) =>
                 familyMembers.find((member) => member.id === memberId)?.name
             )
             .join(", ") || "-"}
-        </h3>
+        </StyledParagraphContent>
         <label htmlFor="checkbox">
           Done:
           <StyledCheckbox

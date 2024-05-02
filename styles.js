@@ -33,7 +33,7 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     max-width: 375px;
     background-color: var(--color-background);
-    font-family: var(--font-indieflower);
+    
     
 
   }
@@ -47,12 +47,23 @@ input, button, textarea, select {
   font: inherit;
 }
 
+button{
+  font-family: var(--font-indieflower);
+}
+
+li{
+  font-family: var(--font-indieflower);
+}
+
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
   font-family: var(--font-indieflower);
 
 }
 
+label{
+  font-family: var(--font-indieflower);
+}
 
 #root, #__next {
   isolation: isolate;

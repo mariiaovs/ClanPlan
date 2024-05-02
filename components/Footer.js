@@ -45,6 +45,7 @@ const StyledLink = styled(Link)`
 
 const StyledSpan = styled.span`
   font-size: 0.6rem;
+  font-family: Arial, Helvetica, sans-serif;
 `;
 const StyledCreateItem = styled.li`
   position: fixed;

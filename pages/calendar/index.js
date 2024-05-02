@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import StyledBackLink from "@/components/StyledBackLink";
 import BackArrow from "@/public/assets/images/back-arrow.svg";
 import { useState } from "react";
+import CalendarTask from "@/components/CalendarEvent";
 
 const localizer = globalizeLocalizer(globalize);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -52,6 +53,7 @@ export default function CalendarPage({
       title: task.title,
       start: new Date(dueDate),
       end: new Date(dueDate),
+      isDone: task.isDone,
       allDay: true,
     };
   });
@@ -97,6 +99,9 @@ export default function CalendarPage({
         defaultView={currentView}
         date={currentDate}
         onNavigate={handleNavigate}
+        components={{
+          event: CalendarTask,
+        }}
       />
     </StyledSection>
   );

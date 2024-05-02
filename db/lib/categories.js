@@ -1,37 +1,37 @@
 const initialCategories = [
   {
     id: "1",
-    category: "Bills",
+    title: "Bills",
     selectedMembers: ["1"],
   },
   {
     id: "2",
-    category: "Maintenance",
+    title: "Maintenance",
     selectedMembers: ["1", "2"],
   },
   {
     id: "3",
-    category: "Errands",
+    title: "Errands",
     selectedMembers: ["2"],
   },
   {
     id: "4",
-    category: "Social",
+    title: "Social",
     selectedMembers: ["1", "2"],
   },
   {
     id: "5",
-    category: "Health",
+    title: "Health",
     selectedMembers: ["2"],
   },
   {
     id: "6",
-    category: "Pets",
+    title: "Pets",
     selectedMembers: ["1", "2"],
   },
   {
     id: "7",
-    category: "School",
+    title: "School",
     selectedMembers: ["1", "2"],
   },
 ];

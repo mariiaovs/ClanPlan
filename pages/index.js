@@ -53,7 +53,6 @@ export default function HomePage({
   onApplyFilters,
   onDeleteFilterOption,
   isFilterSet,
-  setIsFilterSet,
   onButtonClick,
   listType,
 }) {
@@ -72,7 +71,7 @@ export default function HomePage({
   );
 
   const notAssignedTasks = tasks.filter(
-    (task) => task.assignedTo === "" && !task.isDone
+    (task) => !task.assignedTo.length && !task.isDone
   );
 
   const completedTasks = tasks.filter((task) => task.isDone);
@@ -147,10 +146,8 @@ export default function HomePage({
       )}
       {listType === "missed" && (
         <StyledHeading>
-          You have missed&nbsp;
-          {missedTasks.length === 1
-            ? `${missedTasks.length} Task`
-            : `${missedTasks.length} Tasks`}
+          You have missed {missedTasks.length}
+          {missedTasks.length === 1 ? " Task" : " Tasks"}
         </StyledHeading>
       )}
       {tasksAfterListTypeSelection.length > 0 && (
@@ -163,8 +160,6 @@ export default function HomePage({
           categories={categories}
           onDeleteFilterOption={onDeleteFilterOption}
           setFilters={setFilters}
-          isFilterSet={isFilterSet}
-          setIsFilterSet={setIsFilterSet}
         />
       )}
       {!filteredTasks.length && !isFilterSet && listType !== "today" && (

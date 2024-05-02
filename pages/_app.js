@@ -14,12 +14,15 @@ export default function App({ Component, pageProps }) {
   const [showModal, setShowModal] = useState(false);
   const [detailsBackLinkRef, setDetailsBackLinkRef] = useState("/");
   const [currentDate, setCurrentDate] = useState(new Date());
-
   const [filters, setFilters] = useState({});
-  const [isFilterSet, setIsFilterSet] = useState(false);
   const [listType, setListType] = useState("today");
 
   const router = useRouter();
+
+  const isFilterSet =
+    (filters.priority !== "0" || filters.priority == true) &&
+    filters.category == true &&
+    filters.member == true;
 
   function handleAddTask(formData) {
     setTasks([
@@ -46,9 +49,6 @@ export default function App({ Component, pageProps }) {
     setTasks(tasks.filter((task) => task.id !== id));
     setShowModal(false);
     router.push("/");
-  }
-  function closeModalWindow() {
-    setShowModal(false);
   }
 
   function handleCheckboxChange(id) {
@@ -82,15 +82,15 @@ export default function App({ Component, pageProps }) {
     setFilters({});
   }
 
-  useEffect(() => {
-    if (
-      filters.priority === "0" &&
-      filters.category === "" &&
-      filters.member === ""
-    ) {
-      setIsFilterSet(false);
-    }
-  }, [filters.category, filters.member, filters.priority]);
+  function handleDeleteCategory(id) {
+    setCategories(categories.filter((category) => category.id !== id));
+    setTasks(
+      tasks.map((task) =>
+        task.category === id ? { ...task, category: "" } : task
+      )
+    );
+    setShowModal(false);
+  }
 
   // Sorting the task in chronological order of date
   const tasksAfterSorting = tasks.sort(
@@ -109,8 +109,7 @@ export default function App({ Component, pageProps }) {
         onAddMember={handleAddMember}
         setShowModal={setShowModal}
         showModal={showModal}
-        onDelete={handleDeleteTask}
-        onCancel={closeModalWindow}
+        onDeleteTask={handleDeleteTask}
         onCheckboxChange={handleCheckboxChange}
         categories={categories}
         onAddCategory={handleAddCategory}
@@ -122,10 +121,10 @@ export default function App({ Component, pageProps }) {
         onDeleteFilterOption={handleDeleteFilterOption}
         filters={filters}
         setFilters={setFilters}
-        setIsFilterSet={setIsFilterSet}
         isFilterSet={isFilterSet}
         onButtonClick={handleButtonClick}
         listType={listType}
+        onDeleteCategory={handleDeleteCategory}
       />
     </Layout>
   );

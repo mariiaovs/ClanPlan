@@ -44,16 +44,16 @@ export default function CategoryForm({
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    if (!data.category.trim()) {
+    if (!data.title.trim()) {
       setIsValidCategory(false);
-      event.target.category.focus();
+      event.target.title.focus();
       return;
     } else {
       setIsValidCategory(true);
       const uniqueCategoryCheck = categories.find(
         (category) =>
-          category.category.trim().toUpperCase() ===
-          data.category.trim().toUpperCase()
+          category.title.trim().toUpperCase() ===
+          data.title.trim().toUpperCase()
       );
 
       if (uniqueCategoryCheck) {
@@ -82,7 +82,7 @@ export default function CategoryForm({
     setSelectedMembers([...selectedMemberIds]);
   }
 
-  function onRemove(removedItem) {
+  function onRemove(selectedList, removedItem) {
     setSelectedMembers(
       selectedMembers.filter((member) => member !== removedItem.id)
     );
@@ -91,8 +91,8 @@ export default function CategoryForm({
   return (
     <StyledForm onSubmit={handleSubmit}>
       <StyledHeading>Add a new category</StyledHeading>
-      <StyledLabel htmlFor="category">
-        <StyledSpan $left={true}>*</StyledSpan>Name:
+      <StyledLabel htmlFor="title">
+        <StyledSpan $left={true}>*</StyledSpan>Title:
         {!isValidCategory && (
           <StyledSpan>Please enter valid category!</StyledSpan>
         )}
@@ -104,8 +104,8 @@ export default function CategoryForm({
       </StyledLabel>
       <input
         type="text"
-        name="category"
-        id="category"
+        name="title"
+        id="title"
         onChange={handleChange}
         maxLength={50}
       ></input>

@@ -5,8 +5,6 @@ import globalize from "globalize";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useRouter } from "next/router";
-import StyledBackLink from "@/components/StyledBackLink";
-import BackArrow from "@/public/assets/images/back-arrow.svg";
 import { useState } from "react";
 
 const localizer = globalizeLocalizer(globalize);

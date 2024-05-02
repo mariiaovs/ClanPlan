@@ -13,8 +13,7 @@ export default function DetailsPage({
   tasks,
   showModal,
   setShowModal,
-  onDelete,
-  onCancel,
+  onDeleteTask,
   onCheckboxChange,
   familyMembers,
   detailsBackLinkRef,
@@ -40,11 +39,10 @@ export default function DetailsPage({
           task={task}
           showModal={showModal}
           setShowModal={setShowModal}
-          onDelete={onDelete}
-          onCancel={onCancel}
           onCheckboxChange={onCheckboxChange}
           familyMembers={familyMembers}
           categories={categories}
+          onDeleteTask={onDeleteTask}
         />
       ) : (
         <StyledMessage>Page not found!</StyledMessage>

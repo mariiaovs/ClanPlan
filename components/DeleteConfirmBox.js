@@ -21,6 +21,11 @@ const StyledPragraph = styled.p`
   text-align: center;
 `;
 
+const StyledParagraphContent = styled.p`
+  font-size: larger;
+  font-weight: 600;
+`;
+
 export default function DeleteConfirmBox({
   setShowModal,
   onConfirm,
@@ -29,7 +34,7 @@ export default function DeleteConfirmBox({
 }) {
   return (
     <StyledSection>
-      <StyledPragraph>{message}</StyledPragraph>
+      <StyledParagraphContent>{message}</StyledParagraphContent>
       <ButtonContainer>
         <StyledButton onClick={() => setShowModal(false)}>No</StyledButton>
         <StyledButton onClick={() => onConfirm(id)}>Yes</StyledButton>

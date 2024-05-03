@@ -13,7 +13,7 @@ const initialTasks = [
     title: "Pay Electricity Bill",
     category: "1",
     priority: "2",
-    dueDate: "2024-05-12",
+    dueDate: "2024-04-12",
     assignedTo: ["1"],
     isDone: false,
   },

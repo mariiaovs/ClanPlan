@@ -4,6 +4,7 @@ import Modal from "@/components/Modal";
 import CategoriesList from "@/components/CategoriesList";
 import CategoryForm from "@/components/CategoryForm";
 import Plus from "@/public/assets/images/plus.svg";
+import { useState } from "react";
 
 const StyledHeading = styled.h2`
   text-align: center;
@@ -23,7 +24,11 @@ export default function CategoriesPage({
   showModal,
   setShowModal,
   familyMembers,
+  onDeleteCategory,
+  tasks,
 }) {
+  const [modalMode, setModalMode] = useState("");
+
   return (
     <>
       <StyledHeading>Task Categories</StyledHeading>
@@ -31,11 +36,26 @@ export default function CategoriesPage({
       {!categories.length && (
         <StyledMessage>The list is empty. Add members to begin!</StyledMessage>
       )}
-      <CategoriesList categories={categories} familyMembers={familyMembers} />
+      <CategoriesList
+        categories={categories}
+        familyMembers={familyMembers}
+        setShowModal={setShowModal}
+        showModal={showModal}
+        modalMode={modalMode}
+        setModalMode={setModalMode}
+        onDeleteCategory={onDeleteCategory}
+        tasks={tasks}
+      />
 
-      <StyledPlus onClick={() => setShowModal(true)} $right={true} />
+      <StyledPlus
+        onClick={() => {
+          setModalMode("add");
+          setShowModal(true);
+        }}
+        $right={true}
+      />
 
-      {showModal && (
+      {showModal && modalMode === "add" && (
         <Modal $top="7rem" setShowModal={setShowModal}>
           <CategoryForm
             onAddCategory={onAddCategory}

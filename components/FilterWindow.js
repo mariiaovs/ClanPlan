@@ -36,7 +36,6 @@ export default function FilterWindow({
   familyMembers,
   filters,
   categories,
-  setIsFilterSet,
 }) {
   const router = useRouter();
   const { listType } = router.query;
@@ -45,11 +44,6 @@ export default function FilterWindow({
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
     onApply(data);
-    if (data.priority === "0" && data.category === "" && data.member === "") {
-      setIsFilterSet(false);
-    } else {
-      setIsFilterSet(true);
-    }
   }
 
   function handleReset(event) {
@@ -90,7 +84,7 @@ export default function FilterWindow({
         <option value="">Choose a category</option>
         {categories.map((category) => (
           <option key={category.id} value={category.id}>
-            {category.category}
+            {category.title}
           </option>
         ))}
       </StyledSelect>

@@ -1,18 +1,9 @@
 import styled from "styled-components";
-import StyledButton from "./StyledButton";
-import Trash from "@/public/assets/images/trash-icon.svg";
+import StyledTrash from "./StyledTrash";
 import Pen from "@/public/assets/images/edit-pen-icon.svg";
 import Modal from "./Modal";
 import Link from "next/link";
-import { useReducer } from "react";
-import { useRouter } from "next/router";
-
-const StyledTrash = styled(Trash)`
-  width: 1.5rem;
-  position: absolute;
-  top: 1rem;
-  right: 1.3rem;
-`;
+import DeleteConfirmBox from "./DeleteConfirmBox";
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -45,26 +36,6 @@ const StyledSection = styled.section`
     `};
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-`;
-
-const DeleteConfirmBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin: 1rem;
-  background-color: white;
-  padding: 1rem;
-  border-radius: 1rem;
-`;
-
-const StyledPragraphHe = styled.p`
-  text-align: center;
-`;
-
 const StyledCheckbox = styled.input`
   margin-left: 2rem;
   display: inline;
@@ -74,21 +45,20 @@ const StyledCheckbox = styled.input`
     filter: hue-rotate(180deg);
   }
 `;
-
 const StyledParagraphContent = styled.p`
   font-size: larger;
   font-weight: 600;
 `;
 
+
 export default function TaskDetails({
   task,
   showModal,
   setShowModal,
-  onDelete,
-  onCancel,
   onCheckboxChange,
   familyMembers,
   categories,
+  onDeleteTask,
 }) {
   const {
     title,
@@ -104,15 +74,13 @@ export default function TaskDetails({
     <>
       {showModal && (
         <Modal $top="13.5rem" setShowModal={setShowModal}>
-          <DeleteConfirmBox>
-            <StyledParagraphContent>
-              Are you sure you want to delete this task?
-            </StyledParagraphContent>
-            <ButtonContainer>
-              <StyledButton onClick={onCancel}>No</StyledButton>
-              <StyledButton onClick={() => onDelete(id)}>Yes</StyledButton>
-            </ButtonContainer>
-          </DeleteConfirmBox>
+
+          <DeleteConfirmBox
+            setShowModal={setShowModal}
+            onConfirm={onDeleteTask}
+            id={id}
+            message="Are you sure you want to delete this task?"
+          />
         </Modal>
       )}
       <StyledSection $isDone={isDone}>
@@ -124,10 +92,12 @@ export default function TaskDetails({
         <p> What is to do?</p>
         <StyledParagraphContent>{title}</StyledParagraphContent>
         <p>Category: </p>
+
         <StyledParagraphContent>
           {categories.find((category) => category.id === categoryId)
             ?.category || "-"}
         </StyledParagraphContent>
+
         <p>Priority: </p>
         <h2>{"🔥".repeat(Number(priority))}</h2>
         <p>Due Date:</p>

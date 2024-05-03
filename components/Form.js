@@ -102,7 +102,7 @@ export default function Form({
     setAssignedTo(selectedMemberIds);
   }
 
-  function onRemove(removedItem) {
+  function onRemove(selectedList, removedItem) {
     setAssignedTo(assignedTo.filter((member) => member !== removedItem.id));
   }
 
@@ -136,7 +136,7 @@ export default function Form({
         </option>
         {categories.map((category) => (
           <option key={category.id} value={category.id}>
-            {category.category}
+            {category.title}
           </option>
         ))}
       </StyledSelect>

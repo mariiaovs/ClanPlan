@@ -51,7 +51,7 @@ export default function TaskPreview({
         <StyledParagraphContent>{title}</StyledParagraphContent>
         <StyledParagraph>{"🔥".repeat(Number(priority))}</StyledParagraph>
         <p>
-          {categories.find((category) => category.id === categoryId)?.category}
+          {categories.find((category) => category.id === categoryId)?.title}
         </p>
         <p>{dueDate}</p>
       </StyledLink>

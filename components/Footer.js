@@ -38,7 +38,8 @@ const StyledLink = styled(Link)`
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 0.3rem;
+  padding: 0.6rem;
+
   background-color: ${({ $isActive }) => ($isActive ? "gray" : "")};
   flex-direction: column;
 `;

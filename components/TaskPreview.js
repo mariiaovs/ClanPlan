@@ -24,6 +24,11 @@ const StyledParagraph = styled.p`
   text-align: center;
 `;
 
+const StyledParagraphContent = styled.p`
+  font-size: larger;
+  font-weight: 600;
+`;
+
 export default function TaskPreview({
   task,
   onCheckboxChange,
@@ -43,7 +48,7 @@ export default function TaskPreview({
         href={`/tasks/${id}`}
         onClick={() => setDetailsBackLinkRef("/")}
       >
-        <h3>{title}</h3>
+        <StyledParagraphContent>{title}</StyledParagraphContent>
         <StyledParagraph>{"🔥".repeat(Number(priority))}</StyledParagraph>
         <p>
           {categories.find((category) => category.id === categoryId)?.title}

@@ -2,6 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import StyledButton from "./StyledButton";
 import Multiselect from "multiselect-react-dropdown";
+import useSWR from "swr";
+import StyledLoadingAnimation from "./StyledLoadingAnimation";
 
 const StyledHeading = styled.h2`
   align-self: center;
@@ -29,7 +31,6 @@ const StyledForm = styled.form`
 
 export default function CategoryForm({
   onSubmitCategory,
-  familyMembers,
   categories,
   formHeading,
   value,
@@ -43,10 +44,34 @@ export default function CategoryForm({
   );
   const [isMemberSelected, setIsMemberSelected] = useState(true);
 
+  const { data: familyMembers, isLoading } = useSWR("/api/members");
+
+  if (isLoading) {
+    return <StyledLoadingAnimation />;
+  }
+
+  if (!familyMembers) {
+    return;
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
+
+    if (value) {
+      const selectedMembersIds = selectedMembers.map((member) => member._id);
+      if (
+        data.title === value.title &&
+        selectedMembers.length === value.selectedMembers.length &&
+        selectedMembers.every((member) =>
+          selectedMembersIds.includes(member._id)
+        )
+      ) {
+        alert("No changes were made to the form.");
+        return;
+      }
+    }
 
     if (!data.title.trim()) {
       setIsValidCategory(false);
@@ -74,7 +99,11 @@ export default function CategoryForm({
     } else {
       setIsMemberSelected(true);
     }
-    onSubmitCategory({ ...data, selectedMembers, id: value?.id });
+    onSubmitCategory({
+      title: data.title.trim(),
+      selectedMembers,
+      id: value?._id,
+    });
   }
 
   function handleChange(event) {
@@ -84,13 +113,12 @@ export default function CategoryForm({
   }
 
   function onSelect(selectedList) {
-    const selectedMemberIds = selectedList.map((member) => member.id);
-    setSelectedMembers([...selectedMemberIds]);
+    setSelectedMembers(selectedList);
   }
 
   function onRemove(_selectedList, removedItem) {
     setSelectedMembers(
-      selectedMembers.filter((member) => member !== removedItem.id)
+      selectedMembers.filter((member) => member._id !== removedItem._id)
     );
   }
 
@@ -134,10 +162,7 @@ export default function CategoryForm({
         emptyRecordMsg="No members added to the family"
         placeholder="Please select a member"
         avoidHighlightFirstOption={true}
-        selectedValues={selectedMembers.map((memberId) => ({
-          id: memberId,
-          name: familyMembers.find((member) => member.id === memberId).name,
-        }))}
+        selectedValues={selectedMembers}
       />
       <StyledButton>{value ? "Update" : "Add"}</StyledButton>
     </StyledForm>

@@ -8,6 +8,8 @@ import DeleteConfirmBox from "./DeleteConfirmBox";
 import Pen from "@/public/assets/images/edit-pen-icon.svg";
 import StyledButton from "./StyledButton";
 import CategoryForm from "./CategoryForm";
+import useSWR from "swr";
+import StyledLoadingAnimation from "./StyledLoadingAnimation";
 
 const StyledList = styled.ul`
   display: flex;
@@ -82,27 +84,37 @@ const StyledSection = styled.section`
 `;
 
 const StyledPragraph = styled.p`
+  font-size: larger;
+  font-weight: 600;
   text-align: center;
 `;
 
 export default function CategoriesList({
-  categories,
-  familyMembers,
   showModal,
   setShowModal,
   modalMode,
   setModalMode,
-  onDeleteCategory,
-  tasks,
-  onEditCategory,
+  familyMembers,
+  categories,
+  mutate,
 }) {
   const [selected, setSelected] = useState(null);
   const [categoryToHandle, setCategoryToHandle] = useState(null);
 
+  const { data: tasks, isLoading } = useSWR("/api/tasks");
+
+  if (isLoading) {
+    return <StyledLoadingAnimation />;
+  }
+
+  if (!tasks) {
+    return;
+  }
+
   const categoryIsUsed =
     categoryToHandle &&
     tasks.filter(
-      (task) => !task.isDone && task.category === categoryToHandle.id
+      (task) => !task.isDone && task.category?._id === categoryToHandle?._id
     ).length > 0;
 
   function handleTrashClick(category, event) {
@@ -112,12 +124,37 @@ export default function CategoriesList({
     event.stopPropagation();
   }
 
+  async function handleDeleteCategory(id) {
+    const response = await fetch(`/api/categories/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      setShowModal(false);
+      mutate();
+    }
+  }
+
+  async function handleEditCategory(updatedCategory) {
+    const response = await fetch(`/api/categories/${updatedCategory.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedCategory),
+    });
+    if (response.ok) {
+      setShowModal(false);
+      mutate();
+    }
+  }
+
   function handlePenClick(category, event) {
     setCategoryToHandle(category);
     const categoryIsUsed =
       category &&
-      tasks.filter((task) => !task.isDone && task.category === category.id)
-        .length > 0;
+      tasks.filter(
+        (task) => !task.isDone && task.category?._id === category._id
+      ).length > 0;
     if (categoryIsUsed) {
       setModalMode("confirm-edit");
       setShowModal(true);
@@ -135,11 +172,15 @@ export default function CategoriesList({
     }
     setSelected(index);
   }
+
   return (
     <>
       <StyledList>
         {categories.map((category, index) => (
-          <StyledListItem key={category.id} onClick={() => handleExpand(index)}>
+          <StyledListItem
+            key={category._id}
+            onClick={() => handleExpand(index)}
+          >
             <StyledPen onClick={(event) => handlePenClick(category, event)} />
             <StyledTrash
               onClick={(event) => {
@@ -151,12 +192,9 @@ export default function CategoriesList({
             </StyleHeading>
             {selected === index && (
               <StyledListOfMembers>
-                {category.selectedMembers.map((memberId) => (
-                  <StyledMemberItem key={memberId}>
-                    {
-                      familyMembers.find((member) => member.id === memberId)
-                        ?.name
-                    }
+                {category.selectedMembers.map((member) => (
+                  <StyledMemberItem key={member._id}>
+                    {member.name}
                   </StyledMemberItem>
                 ))}
               </StyledListOfMembers>
@@ -174,8 +212,8 @@ export default function CategoriesList({
                 : `Are you sure you want to delete "${categoryToHandle.title}"?`
             }
             setShowModal={setShowModal}
-            onConfirm={onDeleteCategory}
-            id={categoryToHandle.id}
+            onConfirm={handleDeleteCategory}
+            id={categoryToHandle._id}
           />
         </Modal>
       )}
@@ -198,10 +236,10 @@ export default function CategoriesList({
         <Modal $top="8rem" setShowModal={setShowModal}>
           <CategoryForm
             formHeading="Edit a category"
-            onSubmitCategory={onEditCategory}
-            familyMembers={familyMembers}
+            onSubmitCategory={handleEditCategory}
             categories={categories}
             value={categoryToHandle}
+            familyMembers={familyMembers}
           />
         </Modal>
       )}

@@ -6,7 +6,7 @@ const StyledButton = styled.button`
   color: white;
   font-weight: 700;
   background-color: ${({ $clear }) => ($clear ? "red" : "var(--color-font)")};
-  padding: 0.5rem;
+  padding: 0.4rem;
   width: ${({ $width }) => ($width ? $width : "6rem")};
   align-self: center;
   border-radius: 0.7rem;

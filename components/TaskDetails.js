@@ -4,6 +4,7 @@ import Pen from "@/public/assets/images/edit-pen-icon.svg";
 import Modal from "./Modal";
 import Link from "next/link";
 import DeleteConfirmBox from "./DeleteConfirmBox";
+import { useRouter } from "next/router";
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -50,34 +51,40 @@ const StyledParagraphContent = styled.p`
   font-weight: 600;
 `;
 
-
 export default function TaskDetails({
   task,
   showModal,
   setShowModal,
   onCheckboxChange,
-  familyMembers,
-  categories,
-  onDeleteTask,
 }) {
   const {
     title,
-    category: categoryId,
+    category,
     priority,
     dueDate,
-    id,
+    _id: id,
     isDone,
     assignedTo,
   } = task;
+  const router = useRouter();
+
+  async function handleDeleteTask(id) {
+    const response = await fetch(`/api/tasks/${id}`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      router.push("/");
+      setShowModal(false);
+    }
+  }
 
   return (
     <>
       {showModal && (
         <Modal $top="13.5rem" setShowModal={setShowModal}>
-
           <DeleteConfirmBox
             setShowModal={setShowModal}
-            onConfirm={onDeleteTask}
+            onConfirm={() => handleDeleteTask(id)}
             id={id}
             message="Are you sure you want to delete this task?"
           />
@@ -88,28 +95,19 @@ export default function TaskDetails({
         <StyledLink href={`/tasks/${id}/edit`}>
           <StyledPen />
         </StyledLink>
-
         <p> What is to do?</p>
         <StyledParagraphContent>{title}</StyledParagraphContent>
         <p>Category: </p>
-
         <StyledParagraphContent>
-          {categories.find((category) => category.id === categoryId)
-            ?.category || "-"}
+          {category?.title || "-"}
         </StyledParagraphContent>
-
         <p>Priority: </p>
         <h2>{"🔥".repeat(Number(priority))}</h2>
         <p>Due Date:</p>
         <StyledParagraphContent>{dueDate || "-"}</StyledParagraphContent>
         <p>Assigned to:</p>
         <StyledParagraphContent>
-          {assignedTo
-            .map(
-              (memberId) =>
-                familyMembers.find((member) => member.id === memberId)?.name
-            )
-            .join(", ") || "-"}
+          {assignedTo.map((member) => member.name).join(", ") || "-"}
         </StyledParagraphContent>
         <label htmlFor="checkbox">
           Done:
@@ -117,7 +115,7 @@ export default function TaskDetails({
             type="checkbox"
             id="checkbox"
             checked={isDone}
-            onChange={() => onCheckboxChange(id)}
+            onChange={(event) => onCheckboxChange(task, event)}
           />
         </label>
       </StyledSection>

@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import BackArrow from "@/public/assets/images/back-arrow.svg";
 import styled from "styled-components";
 import StyledBackLink from "@/components/StyledBackLink";
+import useSWR from "swr";
+import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
 
 const StyledMessage = styled.p`
   text-align: center;
@@ -10,27 +12,40 @@ const StyledMessage = styled.p`
 `;
 
 export default function DetailsPage({
-  tasks,
   showModal,
   setShowModal,
-  onDeleteTask,
-  onCheckboxChange,
-  familyMembers,
   detailsBackLinkRef,
-  categories,
 }) {
   const router = useRouter();
   const { id } = router.query;
 
-  if (!id) return;
+  const { data: task, isLoading, mutate } = useSWR(`/api/tasks/${id}`);
 
-  const task = tasks.find((task) => task.id === id);
+  if (isLoading) {
+    return <StyledLoadingAnimation />;
+  }
 
-  const backLink = detailsBackLinkRef === "/calendar" ? "/calendar" : "/";
+  if (!task) {
+    return;
+  }
+
+  async function handleCheckboxChange(task, event) {
+    const updatedTaskData = { ...task, isDone: event.target.checked };
+    const response = await fetch(`/api/tasks/${task._id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTaskData),
+    });
+    if (response.ok) {
+      mutate();
+    }
+  }
 
   return (
     <>
-      <StyledBackLink href={`${backLink}`}>
+      <StyledBackLink href={detailsBackLinkRef}>
         <BackArrow />
       </StyledBackLink>
 
@@ -39,10 +54,7 @@ export default function DetailsPage({
           task={task}
           showModal={showModal}
           setShowModal={setShowModal}
-          onCheckboxChange={onCheckboxChange}
-          familyMembers={familyMembers}
-          categories={categories}
-          onDeleteTask={onDeleteTask}
+          onCheckboxChange={handleCheckboxChange}
         />
       ) : (
         <StyledMessage>Page not found!</StyledMessage>

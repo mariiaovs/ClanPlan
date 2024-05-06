@@ -83,7 +83,7 @@ export default function FilterWindow({
       >
         <option value="">Choose a category</option>
         {categories.map((category) => (
-          <option key={category.id} value={category.id}>
+          <option key={category._id} value={category._id}>
             {category.title}
           </option>
         ))}
@@ -94,7 +94,7 @@ export default function FilterWindow({
           <StyledSelect id="member" name="member" defaultValue={filters.member}>
             <option value="">Choose a member</option>
             {familyMembers.map((member) => (
-              <option key={member.id} value={member.id}>
+              <option key={member._id} value={member._id}>
                 {member.name}
               </option>
             ))}

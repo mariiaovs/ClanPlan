@@ -1,13 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 import StyledButton from "./StyledButton";
-import { useRouter } from "next/router";
 import Multiselect from "multiselect-react-dropdown";
 
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
   margin: 1rem;
   margin-top: 6rem;
   background-color: white;
@@ -44,11 +42,10 @@ export default function Form({
   title,
   value,
   isEdit,
-  familyMembers,
-  categories,
   allocatedMembersList,
+  categories,
+  familyMembers,
 }) {
-  const router = useRouter();
   const [enteredTitle, setEnteredTitle] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [allocatedMembers, setAllocatedMembers] = useState(
@@ -58,7 +55,7 @@ export default function Form({
 
   const formattedTodayDate = new Date().toISOString().substring(0, 10);
 
-  function handleChange(event) {
+  function handleTitleChange(event) {
     setEnteredTitle(event.target.value);
   }
 
@@ -68,6 +65,22 @@ export default function Form({
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
+    if (value) {
+      const assignedMembersIds = assignedTo.map((member) => member._id);
+      if (
+        data.title.trim() === value.title &&
+        (data.category == value.category?._id ||
+          (data.category === "" && value.category === null)) &&
+        data.dueDate === value.dueDate &&
+        data.priority === value.priority &&
+        assignedTo.length === value.assignedTo.length &&
+        assignedTo.every((member) => assignedMembersIds.includes(member._id))
+      ) {
+        alert("No changes were made to the form.");
+        return;
+      }
+    }
+
     if (!data.title.trim()) {
       setIsValid(true);
       event.target.title.focus();
@@ -75,35 +88,48 @@ export default function Form({
     }
 
     if (isEdit) {
-      onTaskSubmit({ ...data, id: value.id, assignedTo, isDone: value.isDone });
-      router.push(`/tasks/${value.id}`);
+      onTaskSubmit({
+        ...data,
+        title: data.title.trim(),
+        id: value.id,
+        assignedTo,
+        isDone: value.isDone,
+        category: data.category === "" ? null : data.category,
+      });
     } else {
-      onTaskSubmit({ ...data, assignedTo });
-      router.push("/");
+      onTaskSubmit({
+        ...data,
+        title: data.title.trim(),
+        assignedTo,
+        category: data.category === "" ? null : data.category,
+      });
     }
   }
 
   function handleFamilyMembersSelection(event) {
     setAssignedTo([]);
     const selectedCategoryId = event.target.value;
-    const allocatedMembersIds = categories.find(
-      (category) => category.id === selectedCategoryId
-    )?.selectedMembers;
-    setAllocatedMembers(
-      allocatedMembersIds?.map((memberId) => ({
-        id: memberId,
-        name: familyMembers?.find((member) => member.id === memberId)?.name,
-      })) || familyMembers
-    );
+
+    let associatedMembers = [];
+
+    if (selectedCategoryId) {
+      associatedMembers = categories.find(
+        (category) => category._id === selectedCategoryId
+      )?.selectedMembers;
+    } else {
+      associatedMembers = familyMembers;
+    }
+    setAllocatedMembers(associatedMembers);
   }
 
   function onSelect(selectedList) {
-    const selectedMemberIds = selectedList.map((member) => member.id);
-    setAssignedTo(selectedMemberIds);
+    setAssignedTo(selectedList);
   }
 
-  function onRemove(selectedList, removedItem) {
-    setAssignedTo(assignedTo.filter((member) => member !== removedItem.id));
+  function onRemove(_selectedList, removedItem) {
+    setAssignedTo(
+      assignedTo.filter((member) => member._id !== removedItem._id)
+    );
   }
 
   return (
@@ -118,7 +144,7 @@ export default function Form({
         id="title"
         name="title"
         maxLength="150"
-        onChange={handleChange}
+        onChange={handleTitleChange}
         defaultValue={value?.title}
       ></input>
       <StyledSpan>{150 - enteredTitle.length} characters left</StyledSpan>
@@ -126,7 +152,7 @@ export default function Form({
       <StyledSelect
         id="category"
         name="category"
-        defaultValue={value?.category}
+        defaultValue={value?.category?._id}
         onChange={handleFamilyMembersSelection}
       >
         <option value="">
@@ -135,7 +161,7 @@ export default function Form({
             : "No categories added"}
         </option>
         {categories.map((category) => (
-          <option key={category.id} value={category.id}>
+          <option key={category._id} value={category._id}>
             {category.title}
           </option>
         ))}
@@ -165,7 +191,6 @@ export default function Form({
       <StyledLabel htmlFor="assignedTo">Assign to:</StyledLabel>
       <Multiselect
         id="assignedTo"
-        name="assignedTo"
         options={allocatedMembers}
         onSelect={onSelect}
         onRemove={onRemove}
@@ -180,10 +205,7 @@ export default function Form({
         }
         placeholder="Select Family Member"
         avoidHighlightFirstOption={true}
-        selectedValues={assignedTo.map((memberId) => ({
-          id: memberId,
-          name: familyMembers.find((member) => member.id === memberId).name,
-        }))}
+        selectedValues={assignedTo}
       />
       <StyledButton>{isEdit ? "Update" : "Create"}</StyledButton>
     </StyledForm>

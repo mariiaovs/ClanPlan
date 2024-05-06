@@ -6,13 +6,6 @@ const handlee = Handlee({
   weight: ["400"],
   variable: "--font-handlee",
 });
-// import { Indie_Flower } from "next/font/google";
-
-// const indieFlower = Indie_Flower({
-//   subsets: ["latin"],
-//   weight: ["400"],
-//   variable: "--font-indieflower",
-// });
 
 export default createGlobalStyle`
   *,
@@ -26,7 +19,7 @@ export default createGlobalStyle`
   }
 
   :root {
-    --color-background:#fbe0c3; 
+    --color-background:#edf7fd; 
     --color-font:#344648;
     --color-font-light:white;
     --font-handlee:${handlee.style.fontFamily};

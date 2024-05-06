@@ -30,7 +30,7 @@ export default function FamilyMembersList({ familyMembers }) {
     <section>
       <StyledList>
         {familyMembers.map((member) => (
-          <StyledListItems key={member.id}>
+          <StyledListItems key={member._id}>
             <StyleSpan title={member.name}>
               <strong>{member.name}</strong>
             </StyleSpan>

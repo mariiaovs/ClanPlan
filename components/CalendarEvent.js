@@ -5,7 +5,7 @@ const StyledDiv = styled.div`
     `background-color: gray;
        text-decoration: line-through;`}
 `;
-export default function CalendarTask({ event }) {
+export default function CalendarEvent({ event }) {
   return (
     <StyledDiv $isDone={event.isDone}>
       <span>{event.title}</span>

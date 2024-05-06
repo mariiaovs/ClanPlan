@@ -1,5 +1,6 @@
 import TaskPreview from "./TaskPreview";
 import styled from "styled-components";
+import useSWR from "swr";
 
 const StyledList = styled.ul`
   list-style: none;
@@ -21,30 +22,40 @@ const StyledListItems = styled.li`
   margin: 0.5rem;
 `;
 
-export default function TasksList({
-  tasks,
-  onCheckboxChange,
-  setDetailsBackLinkRef,
-  categories
-}) {
-
+export default function TasksList({ tasks, setDetailsBackLinkRef }) {
   function handleCurrentTask(dueDate) {
     const today = new Date();
     return today.toDateString() === new Date(dueDate).toDateString();
   }
+
+  const { mutate } = useSWR("/api/tasks");
+
+  async function handleCheckboxChange(task, event) {
+    const updatedTaskData = { ...task, isDone: event.target.checked };
+    const response = await fetch(`/api/tasks/${task._id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTaskData),
+    });
+    if (response.ok) {
+      mutate();
+    }
+  }
+
   return (
     <StyledList>
       {tasks.map((task) => (
         <StyledListItems
-          key={task.id}
+          key={task._id}
           $current={handleCurrentTask(task.dueDate)}
           $isDone={task.isDone}
         >
           <TaskPreview
             task={task}
-            onCheckboxChange={onCheckboxChange}
+            onCheckboxChange={handleCheckboxChange}
             setDetailsBackLinkRef={setDetailsBackLinkRef}
-            categories={categories}
           />
         </StyledListItems>
       ))}

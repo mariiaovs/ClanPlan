@@ -1,6 +1,5 @@
 import Filter from "@/components/Filter";
 import TasksList from "@/components/TasksList";
-
 import styled from "styled-components";
 
 const StyledSection = styled.section`
@@ -13,21 +12,22 @@ const StyledSection = styled.section`
 
 const StyledSpan = styled.span`
   color: ${({ $redColor }) => ($redColor ? "red" : "white")};
+  text-shadow: ${({ $redColor }) =>
+    !$redColor && "1px 1px 1px var(--color-font)"};
   text-align: center;
   display: block;
   width: 100%;
 `;
 
 const StyledButton = styled.button`
-  background-color: ${({ $isActive }) =>
-    $isActive ? "gray" : "var(--color-font)"};
+  background-color: ${({ $isActive }) => ($isActive ? "#87ceeb" : "#d0d0d0")};
   border: none;
   margin-top: 1rem;
   color: white;
   font-weight: 700;
   padding: 0.5rem 1rem;
   align-self: center;
-  border-radius: 0.7rem;
+  border-radius: 1rem;
 `;
 
 const StyledHeading = styled.h2`
@@ -41,7 +41,6 @@ const StyledMessage = styled.p`
 `;
 
 export default function HomePage({
-  tasks,
   onCheckboxChange,
   setShowModal,
   showModal,
@@ -52,10 +51,17 @@ export default function HomePage({
   setFilters,
   onApplyFilters,
   onDeleteFilterOption,
-  isFilterSet,
   onButtonClick,
   listType,
+  tasks,
 }) {
+  const isFilterSet =
+    (filters.priority !== "0" && filters.priority) ||
+    filters.category ||
+    filters.member
+      ? true
+      : false;
+
   const missedTasks = tasks.filter(
     (task) =>
       task.dueDate &&
@@ -90,7 +96,7 @@ export default function HomePage({
   const filteredTasks = tasksAfterListTypeSelection.filter(
     (task) =>
       (!Number(filters.priority) || task.priority === filters.priority) &&
-      (!filters.category || task.category === filters.category) &&
+      (!filters.category || task.category?._id === filters.category) &&
       (!filters.member || task.assignedTo.includes(filters.member))
   );
 
@@ -119,7 +125,7 @@ export default function HomePage({
           onClick={() => onButtonClick("missed")}
           $isActive={listType === "missed"}
         >
-          <StyledSpan $redColor={true}>Missed {missedTasks.length}!</StyledSpan>
+          <StyledSpan $redColor={true}>Missed {missedTasks.length}</StyledSpan>
         </StyledButton>
         <StyledButton
           onClick={() => onButtonClick("notAssigned")}
@@ -167,8 +173,7 @@ export default function HomePage({
       )}
       {!filteredTasks.length && !isFilterSet && listType === "today" && (
         <StyledMessage>
-          {" "}
-          <span>Relax !!!!</span>
+          <span>Relax!</span>
           <br />
           <span>No tasks for today</span>
         </StyledMessage>
@@ -180,7 +185,6 @@ export default function HomePage({
         tasks={filteredTasks}
         onCheckboxChange={onCheckboxChange}
         setDetailsBackLinkRef={setDetailsBackLinkRef}
-        categories={categories}
       />
     </>
   );

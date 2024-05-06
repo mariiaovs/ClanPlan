@@ -60,10 +60,10 @@ export default function Filter({
               >
                 ❌ {key}:{" "}
                 {key === "member"
-                  ? familyMembers.find((member) => member.id === filters[key])
+                  ? familyMembers.find((member) => member._id === filters[key])
                       .name
                   : key === "category"
-                  ? categories.find((category) => category.id === filters[key])
+                  ? categories.find((category) => category._id === filters[key])
                       .title
                   : filters[key]}
               </StyledClearFilterButton>

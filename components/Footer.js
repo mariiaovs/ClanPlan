@@ -35,17 +35,17 @@ const StyledList = styled.ul`
 const StyledLink = styled(Link)`
   display: flex;
   justify-content: center;
+  gap: 5px;
   align-items: center;
   width: 100%;
   height: 100%;
   padding: 0.6rem;
-
   background-color: ${({ $isActive }) => ($isActive ? "gray" : "")};
   flex-direction: column;
 `;
 
 const StyledSpan = styled.span`
-  font-size: 0.6rem;
+  font-size: 0.8rem;
 `;
 const StyledCreateItem = styled.li`
   position: fixed;

@@ -5,8 +5,8 @@ import globalize from "globalize";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import CalendarTask from "@/components/CalendarEvent";
+import useSWR from "swr";
+import CalendarEvent from "@/components/CalendarEvent";
 
 const localizer = globalizeLocalizer(globalize);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -32,12 +32,13 @@ const StyledCalendar = styled(DnDCalendar)`
 
 export default function CalendarPage({
   tasks,
-  onEditData,
   setDetailsBackLinkRef,
   currentDate,
-  onChangeDate,
+  setCurrentDate,
+  currentView,
+  setCurrentView,
 }) {
-  const [currentView, setCurrentView] = useState("month");
+  const { mutate } = useSWR(`/api/tasks`);
 
   const router = useRouter();
 
@@ -47,7 +48,7 @@ export default function CalendarPage({
     dueDate.setMinutes(0);
     dueDate.setSeconds(0);
     return {
-      id: task.id,
+      id: task._id,
       title: task.title,
       start: new Date(dueDate),
       end: new Date(dueDate),
@@ -65,20 +66,33 @@ export default function CalendarPage({
     const todayDate = new Date();
     const newTaskDate = data.start;
 
-    if (newTaskDate.toDateString() < todayDate.toDateString()) return;
+    if (
+      newTaskDate.toISOString().substring(0, 10) <
+      todayDate.toISOString().substring(0, 10)
+    )
+      return;
 
     const updatedTaskId = data.event.id;
-    const taskToUpdate = tasks.find((task) => task.id === updatedTaskId);
+
+    const taskToUpdate = tasks.find((task) => task._id === updatedTaskId);
     const updatedTask = {
       ...taskToUpdate,
       dueDate: data.start.toISOString().substring(0, 10),
     };
-    onEditData(updatedTask);
+    handleEditTaskData(updatedTask);
   }
 
-  function handleNavigate(date) {
-    setCurrentView("day");
-    onChangeDate(date);
+  async function handleEditTaskData(updatedTask) {
+    const response = await fetch(`/api/tasks/${updatedTask._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTask),
+    });
+    if (response.ok) {
+      mutate();
+    }
   }
 
   return (
@@ -96,9 +110,10 @@ export default function CalendarPage({
         views={["month", "week", "day", "agenda"]}
         defaultView={currentView}
         date={currentDate}
-        onNavigate={handleNavigate}
+        onNavigate={(date) => setCurrentDate(date)}
+        onView={(view) => setCurrentView(view)}
         components={{
-          event: CalendarTask,
+          event: CalendarEvent,
         }}
       />
     </StyledSection>

@@ -5,6 +5,8 @@ import Modal from "./Modal";
 import Link from "next/link";
 import DeleteConfirmBox from "./DeleteConfirmBox";
 import { useRouter } from "next/router";
+import checkForToday from "@/utils/checkForToday";
+import checkForMissedDate from "@/utils/checkForMissedDate";
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -51,6 +53,10 @@ const StyledParagraphContent = styled.p`
   font-weight: 600;
 `;
 
+const StyledSpan = styled.span`
+  color: ${({ $isMissed }) => $isMissed && "var(--color-alert)"};
+`;
+
 export default function TaskDetails({
   task,
   showModal,
@@ -67,6 +73,9 @@ export default function TaskDetails({
     assignedTo,
   } = task;
   const router = useRouter();
+
+  const isToday = dueDate && checkForToday(dueDate);
+  const isMissed = dueDate && checkForMissedDate(dueDate);
 
   async function handleDeleteTask(id) {
     const response = await fetch(`/api/tasks/${id}`, {
@@ -104,7 +113,11 @@ export default function TaskDetails({
         <p>Priority: </p>
         <h2>{"🔥".repeat(Number(priority))}</h2>
         <p>Due Date:</p>
-        <StyledParagraphContent>{dueDate || "-"}</StyledParagraphContent>
+        <StyledParagraphContent>
+          <StyledSpan $isMissed={isMissed}>
+            {isToday ? "Today" : dueDate || "-"}
+          </StyledSpan>
+        </StyledParagraphContent>
         <p>Assigned to:</p>
         <StyledParagraphContent>
           {assignedTo.map((member) => member.name).join(", ") || "-"}

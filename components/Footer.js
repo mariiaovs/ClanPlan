@@ -9,8 +9,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const StyledFooter = styled.footer`
-  background-color: var(--color-font);
-  color: var(--color-font-light);
+  background-color: var(--color-background);
+  box-shadow: -1px -6px 15px 0px #7d7d7d;
   text-align: center;
   position: fixed;
   bottom: 0;
@@ -22,11 +22,33 @@ const StyledFooter = styled.footer`
 
 const StyledPlus = styled(Plus)`
   width: 3rem;
-  fill: ${({ $isActive }) => ($isActive ? "gray" : "var(--color-font)")};
+  stroke: ${({ $isActive }) =>
+    $isActive ? "var(--color-font)" : "var(--color-footer-signature)"};
+`;
+
+const StyledHome = styled(Home)`
+  stroke: ${({ $isActive }) =>
+    $isActive ? "var(--color-font)" : "var(--color-footer-signature)"};
+`;
+
+const StyledFamily = styled(Family)`
+  stroke: ${({ $isActive }) =>
+    $isActive ? "var(--color-font)" : "var(--color-footer-signature)"};
+`;
+
+const StyledCategory = styled(Category)`
+  stroke: ${({ $isActive }) =>
+    $isActive ? "var(--color-font)" : "var(--color-footer-signature)"};
+`;
+
+const StyledCalendarIcon = styled(CalendarIcon)`
+  stroke: ${({ $isActive }) =>
+    $isActive ? "var(--color-font)" : "var(--color-footer-signature)"};
 `;
 
 const StyledList = styled.ul`
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   justify-content: space-between;
   list-style: none;
   padding: 0;
@@ -40,17 +62,23 @@ const StyledLink = styled(Link)`
   width: 100%;
   height: 100%;
   padding: 0.6rem;
-  background-color: ${({ $isActive }) => ($isActive ? "gray" : "")};
   flex-direction: column;
 `;
 
 const StyledSpan = styled.span`
   font-size: 0.8rem;
+  color: ${({ $isActive }) =>
+    $isActive ? "var(--color-font)" : "var(--color-footer-signature)"};
 `;
 const StyledCreateItem = styled.li`
   position: fixed;
   left: calc(100vw / 2 - 2rem);
   bottom: 0.6rem;
+`;
+
+const StyledListItem = styled.li`
+  padding-right: 4rem;
+  width: 9rem;
 `;
 
 export default function Footer() {
@@ -66,38 +94,41 @@ export default function Footer() {
       <nav>
         <StyledList>
           <li>
-            <StyledLink $isActive={currentPage === "/"} href="/">
-              <Home />
-              <StyledSpan>Home</StyledSpan>
+            <StyledLink href="/">
+              <StyledHome $isActive={currentPage === "/"} />
+              <StyledSpan $isActive={currentPage === "/"}>Home</StyledSpan>
             </StyledLink>
           </li>
-          <li>
-            <StyledLink $isActive={currentPage === "/family"} href="/family">
-              <Family />
-              <StyledSpan>Family</StyledSpan>
+          <StyledListItem>
+            <StyledLink href="/family">
+              <StyledFamily $isActive={currentPage === "/family"} />
+              <StyledSpan $isActive={currentPage === "/family"}>
+                Family
+              </StyledSpan>
             </StyledLink>
-          </li>
+          </StyledListItem>
           <StyledCreateItem>
             <StyledLink href="/create">
               <StyledPlus $isActive={currentPage === "/create"} />
-              <StyledSpan>Create</StyledSpan>
+              <StyledSpan $isActive={currentPage === "/create"}>
+                Create
+              </StyledSpan>
             </StyledLink>
           </StyledCreateItem>
           <li>
-            <StyledLink
-              $isActive={currentPage === "/categories"}
-              href="/categories"
-            >
-              <Category />
-              <StyledSpan>Category</StyledSpan>
+            <StyledLink href="/categories">
+              <StyledCategory $isActive={currentPage === "/categories"} />
+              <StyledSpan $isActive={currentPage === "/categories"}>
+                Category
+              </StyledSpan>
             </StyledLink>
           </li>
           <li>
-            <StyledLink
-              $isActive={currentPage === "/calendar"}
-              href="/calendar"
-            >
-              <CalendarIcon /> <StyledSpan>Calendar</StyledSpan>
+            <StyledLink href="/calendar">
+              <StyledCalendarIcon $isActive={currentPage === "/calendar"} />
+              <StyledSpan $isActive={currentPage === "/calendar"}>
+                Calendar
+              </StyledSpan>
             </StyledLink>
           </li>
         </StyledList>

@@ -19,9 +19,14 @@ export default createGlobalStyle`
   }
 
   :root {
-    --color-background:#edf7fd; 
+    --color-background:#ffffff; 
     --color-font:#344648;
-    --color-font-light:white;
+    --color-icon:#cccaca;
+    --color-footer-signature:#a7a3a3;
+    --color-font-light:#ffffff;
+    --color-alert:#ff0000;
+    --color-button-active:#bbf1f9ff;
+    --color-button:#e6e4e4;
     --font-handlee:${handlee.style.fontFamily};
   }
 
@@ -33,9 +38,6 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     max-width: 375px;
     background-color: var(--color-background);
-    
-    
-
   }
 
   img, picture, video, canvas, svg {
@@ -47,14 +49,6 @@ input, button, textarea, select {
   font: inherit;
 }
 
-/* button{
-  font-family: var(--font-handlee);
-} */
-
-/* li{
-  font-family: var(--font-handlee);
-} */
-
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
 }
@@ -62,10 +56,6 @@ p, h1, h2, h3, h4, h5, h6 {
 h2 {
   font-family: var(--font-handlee);
 }
-
-/* label{
-  font-family: var(--font-handlee);
-} */
 
 #root, #__next {
   isolation: isolate;
@@ -75,9 +65,13 @@ a {
   text-decoration: none;
   color:inherit;
 }
-a:hover, button:hover {
+a:hover {
   cursor: pointer;
-  opacity: 0.5;
+}
+
+ button:hover {
+  cursor: pointer;
+  background-color: var(--color-button-active);
 }
   
 

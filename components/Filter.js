@@ -16,7 +16,6 @@ const StyledClearFilterButton = styled.button`
   color: white;
   font-weight: 700;
   background-color: var(--color-font);
-  padding: 0.5rem;
   border-radius: 0.7rem;
 `;
 

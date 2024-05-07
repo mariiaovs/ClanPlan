@@ -11,19 +11,19 @@ const StyledSection = styled.section`
 `;
 
 const StyledSpan = styled.span`
-  color: ${({ $redColor }) => ($redColor ? "red" : "white")};
-  text-shadow: ${({ $redColor }) =>
-    !$redColor && "1px 1px 1px var(--color-font)"};
+  color: ${({ $redColor }) =>
+    $redColor ? "var(--color-alert)" : "var(--color-font)"};
   text-align: center;
   display: block;
   width: 100%;
 `;
 
 const StyledButton = styled.button`
-  background-color: ${({ $isActive }) => ($isActive ? "#87ceeb" : "#d0d0d0")};
+  background-color: ${({ $isActive }) =>
+    $isActive ? "var(--color-button-active)" : "var(--color-button)"};
   border: none;
   margin-top: 1rem;
-  color: white;
+  color: var(--color-font);
   font-weight: 700;
   padding: 0.5rem 1rem;
   align-self: center;
@@ -125,13 +125,15 @@ export default function HomePage({
           onClick={() => onButtonClick("missed")}
           $isActive={listType === "missed"}
         >
-          <StyledSpan $redColor={true}>Missed {missedTasks.length}</StyledSpan>
+          <StyledSpan $redColor={missedTasks.length}>
+            Missed {missedTasks.length}
+          </StyledSpan>
         </StyledButton>
         <StyledButton
           onClick={() => onButtonClick("notAssigned")}
           $isActive={listType === "notAssigned"}
         >
-          <StyledSpan $redColor={true}>
+          <StyledSpan $redColor={notAssignedTasks.length}>
             Not assigned {notAssignedTasks.length}
           </StyledSpan>
         </StyledButton>

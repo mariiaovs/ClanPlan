@@ -13,8 +13,7 @@ const StyledList = styled.ul`
 const StyledListItems = styled.li`
   border-radius: 2rem;
   transition: background-color 0.5s ease, color 0.5s ease, opacity 0.5s ease;
-  background-color: ${({ $current, $isDone }) =>
-    $isDone ? "lightgray" : $current ? "#f1afaffc" : "white"};
+  background-color: ${({ $isDone }) => ($isDone ? "lightgray" : "white")};
   opacity: ${({ $isDone }) => $isDone && "0.5"};
   color: ${({ $isDone }) => $isDone && "gray"};
   padding: 1rem;
@@ -23,11 +22,6 @@ const StyledListItems = styled.li`
 `;
 
 export default function TasksList({ tasks, setDetailsBackLinkRef }) {
-  function handleCurrentTask(dueDate) {
-    const today = new Date();
-    return today.toDateString() === new Date(dueDate).toDateString();
-  }
-
   const { mutate } = useSWR("/api/tasks");
 
   async function handleCheckboxChange(task, event) {
@@ -47,11 +41,7 @@ export default function TasksList({ tasks, setDetailsBackLinkRef }) {
   return (
     <StyledList>
       {tasks.map((task) => (
-        <StyledListItems
-          key={task._id}
-          $current={handleCurrentTask(task.dueDate)}
-          $isDone={task.isDone}
-        >
+        <StyledListItems key={task._id} $isDone={task.isDone}>
           <TaskPreview
             task={task}
             onCheckboxChange={handleCheckboxChange}

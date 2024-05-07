@@ -12,7 +12,8 @@ const StyledPlus = styled(Plus)`
   bottom: 4rem;
   right: calc(50% - 160px);
   width: 3rem;
-  fill: grey;
+  fill: white;
+  cursor: pointer;
 `;
 
 const StyledHeading = styled.h2`

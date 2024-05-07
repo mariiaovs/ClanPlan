@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">  
-  <line x1="4" y1="12" x2="36" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/> 
-  <line x1="4" y1="28" x2="36" y2="28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>  
-  <circle cx="28" cy="12" r="4" fill="currentColor"/>
-  <circle cx="12" cy="28" r="4" fill="currentColor"/>  
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50" height="50">  
+  <line x1="5" y1="15" x2="45" y2="15" stroke="#344648" stroke-width="2.5" stroke-linecap="round"/> 
+  <line x1="5" y1="35" x2="45" y2="35" stroke="#344648" stroke-width="2.5" stroke-linecap="round"/>  
+  <circle cx="35" cy="15" r="5" fill="#344648"/>
+  <circle cx="15" cy="35" r="5" fill="#344648"/>  
 </svg>

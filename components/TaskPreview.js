@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
+import checkForToday from "@/utils/checkForToday";
+import checkForMissedDate from "@/utils/checkForMissedDate";
 
 const StyledSection = styled.section`
   display: grid;
@@ -24,6 +26,10 @@ const StyledParagraph = styled.p`
   text-align: center;
 `;
 
+const StyledSpan = styled.span`
+  color: ${({ $isMissed }) => $isMissed && "var(--color-alert)"};
+`;
+
 const StyledParagraphContent = styled.p`
   font-size: larger;
   font-weight: 600;
@@ -35,6 +41,8 @@ export default function TaskPreview({
   setDetailsBackLinkRef,
 }) {
   const { title, category, priority, dueDate, _id: id, isDone } = task;
+  const isToday = dueDate && checkForToday(dueDate);
+  const isMissed = dueDate && checkForMissedDate(dueDate);
   return (
     <StyledSection>
       <StyledCheckbox
@@ -49,7 +57,11 @@ export default function TaskPreview({
         <StyledParagraphContent>{title}</StyledParagraphContent>
         <StyledParagraph>{"🔥".repeat(Number(priority))}</StyledParagraph>
         <p>{category?.title}</p>
-        <p>{dueDate}</p>
+        <StyledParagraph>
+          <StyledSpan $isMissed={isMissed}>
+            {isToday ? "Today" : dueDate}
+          </StyledSpan>
+        </StyledParagraph>
       </StyledLink>
     </StyledSection>
   );

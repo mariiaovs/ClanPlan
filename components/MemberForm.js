@@ -25,7 +25,7 @@ const StyledForm = styled.form`
   flex-direction: column;
   gap: 0.5rem;
   margin: 1rem;
-  background-color: white;
+  background-color: var(--color-background);
   padding: 1rem;
   border-radius: 1rem;
 `;

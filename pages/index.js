@@ -21,13 +21,14 @@ const StyledSpan = styled.span`
 const StyledButton = styled.button`
   background-color: ${({ $isActive }) =>
     $isActive ? "var(--color-button-active)" : "var(--color-button)"};
-  border: none;
   margin-top: 1rem;
   color: var(--color-font);
   font-weight: 700;
   padding: 0.5rem 1rem;
   align-self: center;
   border-radius: 1rem;
+  color: var(--color-font);
+  border: 0.5px solid var(--color-font);
 `;
 
 const StyledHeading = styled.h2`

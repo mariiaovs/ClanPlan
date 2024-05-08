@@ -11,7 +11,7 @@ const Overlay = styled.div`
 `;
 
 const StyledSection = styled.section`
-  background-color: white;
+  background-color: var(--color-background);
   border-radius: 2rem;
   position: fixed;
   top: ${({ $top }) => ($top ? $top : "0")};

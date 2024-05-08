@@ -8,10 +8,11 @@ const StyledForm = styled.form`
   flex-direction: column;
   margin: 1rem;
   margin-top: 6rem;
-  background-color: white;
+  background-color: var(--color-background);
   padding: 1rem;
   border-radius: 1rem;
   margin-bottom: 4.5rem;
+  box-shadow: 1px 1px 10px -1px var(--color-font);
 `;
 
 const StyledHeading = styled.h2`
@@ -26,6 +27,10 @@ const StyledSpan = styled.span`
   font-size: 1rem;
   color: red;
   float: ${({ $left }) => ($left ? "left" : "right")};
+`;
+
+const StyledDateInput = styled.input`
+  color-scheme: dark;
 `;
 
 const StyledSelect = styled.select`
@@ -181,13 +186,13 @@ export default function Form({
         max="3"
       ></input>
       <StyledLabel htmlFor="dueDate">Due date:</StyledLabel>
-      <input
+      <StyledDateInput
         type="date"
         id="dueDate"
         name="dueDate"
         min={formattedTodayDate}
         defaultValue={value?.dueDate}
-      ></input>
+      ></StyledDateInput>
       <StyledLabel htmlFor="assignedTo">Assign to:</StyledLabel>
       <Multiselect
         id="assignedTo"

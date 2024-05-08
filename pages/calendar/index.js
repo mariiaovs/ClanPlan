@@ -7,6 +7,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import CalendarEvent from "@/components/CalendarEvent";
+import CalendarAgendaEvent from "@/components/CalendarAgendaEvent";
 import { toast } from "react-toastify";
 
 const localizer = globalizeLocalizer(globalize);
@@ -19,12 +20,12 @@ const StyledHeading = styled.h2`
 
 const StyledSection = styled.section`
   padding: 1rem;
-  background-color: white;
+  background-color: var(--color-background);
   border-radius: 1rem;
   height: 530px;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-  box-shadow: 5px 5px 15px 5px rgba(112, 107, 91, 0.83);
+  box-shadow: 1px 1px 10px -1px var(--color-font);
 `;
 
 const StyledCalendar = styled(DnDCalendar)`
@@ -102,7 +103,6 @@ export default function CalendarPage({
       mutate();
     }
   }
-
   return (
     <StyledSection>
       <StyledHeading>My Calendar</StyledHeading>
@@ -121,7 +121,18 @@ export default function CalendarPage({
         onNavigate={(date) => setCurrentDate(date)}
         onView={(view) => setCurrentView(view)}
         components={{
-          event: CalendarEvent,
+          month: {
+            event: CalendarEvent,
+          },
+          week: {
+            event: CalendarEvent,
+          },
+          day: {
+            event: CalendarEvent,
+          },
+          agenda: {
+            event: CalendarAgendaEvent,
+          },
         }}
       />
     </StyledSection>

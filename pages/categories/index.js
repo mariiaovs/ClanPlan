@@ -15,11 +15,12 @@ const StyledHeading = styled.h2`
 
 const StyledPlus = styled(Plus)`
   position: fixed;
-  bottom: 4rem;
+  bottom: 5rem;
   right: calc(50% - 160px);
   width: 3rem;
-  fill: white;
+  fill: var(--color-background);
   cursor: pointer;
+  stroke: var(--color-font);
 `;
 
 export default function CategoriesPage({

@@ -7,6 +7,20 @@ const handlee = Handlee({
   variable: "--font-handlee",
 });
 
+export const lightTheme = {
+  background: "#FFFFFF",
+  text: "#344648",
+  button: "#e6e4e4",
+  buttonActive: "#bbf1f9ff",
+};
+
+export const darkTheme = {
+  background: "#344648",
+  text: "#FFFFFF",
+  button: "#344648",
+  buttonActive: "#065465",
+};
+
 export default createGlobalStyle`
   *,
   *::before,
@@ -19,20 +33,20 @@ export default createGlobalStyle`
   }
 
   :root {
-    --color-background:#ffffff; 
-    --color-font:#344648;
+    --color-background:${(props) => props.theme.background}; 
+    --color-font:${(props) => props.theme.text};
     --color-icon:#cccaca;
     --color-footer-signature:#a7a3a3;
-    --color-font-light:#ffffff;
     --color-alert:#ff0000;
-    --color-button-active:#bbf1f9ff;
-    --color-button:#e6e4e4;
+    --color-button-active:${(props) => props.theme.buttonActive};
+    --color-button:${(props) => props.theme.button};
     --font-handlee:${handlee.style.fontFamily};
   }
 
   body {
     margin: auto;
     margin-top:5rem;
+    color: var(--color-font);
     font-family: Helvetica;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -47,6 +61,8 @@ export default createGlobalStyle`
 
 input, button, textarea, select {
   font: inherit;
+  color: inherit;
+  background-color: var(--color-background);
 }
 
 p, h1, h2, h3, h4, h5, h6 {
@@ -78,7 +94,7 @@ a:hover {
 /* react-big-calendar styles: */
 
 .rbc-today {
-    background-color: var(--color-background);
+    background-color: var(--color-button-active);
 }
 
 .rbc-event {
@@ -114,15 +130,38 @@ display: none;
   height: 296px;
 }
 
+.rbc-btn-group button {
+  color: var(--color-font);
+}
+
+.rbc-btn-group .rbc-active {
+  color: #344648;
+}
+
 
 /* MultiSelect styles: */
 
 span.chip {
-  background-color: var(--color-font);
+  background-color: var(--color-button-active);
+  color: var(--color-font);
 }
 
 .multiSelectContainer li.option:hover {
-  background-color: var(--color-font);
+  background-color: var(--color-button-active);
+  color: var(--color-background);
+}
+
+multiselectContainer {
+	background-color: var(--color-background);
+  color: var(--color-font);
+  }
+
+.optionContainer {
+	background-color: var(--color-background);
+  }
+
+img.icon_cancel {
+  stroke: var(--color-font);
 }
 
 /* Tostify styles */

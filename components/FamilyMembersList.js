@@ -11,11 +11,11 @@ const StyledList = styled.ul`
 const StyledListItems = styled.li`
   border-radius: 2rem;
   padding: 1rem;
-  box-shadow: 5px 5px 15px 5px rgba(112, 107, 91, 0.83);
+  box-shadow: 1px 1px 10px -1px var(--color-font);
   margin: 0.5rem;
   display: grid;
   grid-template-columns: 3fr 1fr;
-  background-color: white;
+  background-color: var(--color-background);
 `;
 
 const StyleSpan = styled.span`

@@ -1,10 +1,10 @@
 import Header from "./Header";
 import Footer from "./Footer";
 
-export default function Layout({ children }) {
+export default function Layout({ children, isDarkTheme, setDarkTheme }) {
   return (
     <>
-      <Header />
+      <Header isDarkTheme={isDarkTheme} setDarkTheme={setDarkTheme} />
       {children}
       <Footer />
     </>

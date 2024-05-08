@@ -6,6 +6,7 @@ import Modal from "@/components/Modal";
 import Plus from "@/public/assets/images/plus.svg";
 import useSWR from "swr";
 import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
+import { toast } from "react-toastify";
 
 const StyledPlus = styled(Plus)`
   position: fixed;
@@ -32,13 +33,21 @@ export default function FamilyPage({ showModal, setShowModal }) {
   }
 
   async function handleAddMember(newMemberData) {
-    const response = await fetch("/api/members", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newMemberData),
-    });
+    const response = await toast.promise(
+      fetch("/api/members", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMemberData),
+      }),
+      {
+        pending: "Member addition is pending",
+        success: "Member added successfully",
+        error: "Member not deleted",
+      }
+    );
+
     if (response.ok) {
       setShowModal(false);
       mutate();

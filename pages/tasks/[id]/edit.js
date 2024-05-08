@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import StyledBackLink from "@/components/StyledBackLink";
 import useSWR from "swr";
 import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
+import { toast } from "react-toastify";
 
 export default function EditPage({ familyMembers, categories }) {
   const router = useRouter();
@@ -24,13 +25,21 @@ export default function EditPage({ familyMembers, categories }) {
   )?.selectedMembers;
 
   async function handleEditTaskData(updatedTask) {
-    const response = await fetch(`/api/tasks/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedTask),
-    });
+    const response = await toast.promise(
+      fetch(`/api/tasks/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTask),
+      }),
+      {
+        pending: "Task updation is pending",
+        success: "Task updated successfully",
+        error: "Task not updated",
+      }
+    );
+
     if (response.ok) {
       router.push(`/tasks/${id}`);
     }

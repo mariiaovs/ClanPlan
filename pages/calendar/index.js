@@ -7,6 +7,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import CalendarEvent from "@/components/CalendarEvent";
+import { toast } from "react-toastify";
 
 const localizer = globalizeLocalizer(globalize);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -83,13 +84,20 @@ export default function CalendarPage({
   }
 
   async function handleEditTaskData(updatedTask) {
-    const response = await fetch(`/api/tasks/${updatedTask._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedTask),
-    });
+    const response = await toast.promise(
+      fetch(`/api/tasks/${updatedTask._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTask),
+      }),
+      {
+        pending: "Task updation is pending",
+        success: "Task updated successfully",
+        error: "Task not updated",
+      }
+    );
     if (response.ok) {
       mutate();
     }

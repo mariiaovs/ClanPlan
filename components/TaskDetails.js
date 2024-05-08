@@ -7,6 +7,7 @@ import DeleteConfirmBox from "./DeleteConfirmBox";
 import { useRouter } from "next/router";
 import checkForToday from "@/utils/checkForToday";
 import checkForMissedDate from "@/utils/checkForMissedDate";
+import { toast } from "react-toastify";
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -20,9 +21,8 @@ const StyledPen = styled(Pen)`
 
 const StyledSection = styled.section`
   position: relative;
-  background-color: white;
   margin: 6rem 0.5rem 5rem 0.5rem;
-  background-color: white;
+  background-color: var(--color-background);
   display: flex;
   flex-direction: column;
   border-radius: 2rem;
@@ -62,6 +62,7 @@ export default function TaskDetails({
   showModal,
   setShowModal,
   onCheckboxChange,
+  detailsBackLinkRef,
 }) {
   const {
     title,
@@ -78,11 +79,18 @@ export default function TaskDetails({
   const isMissed = dueDate && checkForMissedDate(dueDate);
 
   async function handleDeleteTask(id) {
-    const response = await fetch(`/api/tasks/${id}`, {
-      method: "DELETE",
-    });
+    const response = await toast.promise(
+      fetch(`/api/tasks/${id}`, {
+        method: "DELETE",
+      }),
+      {
+        pending: "Task deletion is pending",
+        success: "Task deleted successfully",
+        error: "Task not deleted",
+      }
+    );
     if (response.ok) {
-      router.push("/");
+      router.push(detailsBackLinkRef);
       setShowModal(false);
     }
   }

@@ -1,6 +1,7 @@
 import TaskPreview from "./TaskPreview";
 import styled from "styled-components";
 import useSWR from "swr";
+import { toast } from "react-toastify";
 
 const StyledList = styled.ul`
   list-style: none;
@@ -26,13 +27,20 @@ export default function TasksList({ tasks, setDetailsBackLinkRef }) {
 
   async function handleCheckboxChange(task, event) {
     const updatedTaskData = { ...task, isDone: event.target.checked };
-    const response = await fetch(`/api/tasks/${task._id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedTaskData),
-    });
+    const response = await toast.promise(
+      fetch(`/api/tasks/${task._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTaskData),
+      }),
+      {
+        pending: "Task updation is pending",
+        success: "Task updated successfully",
+        error: "Task not updated",
+      }
+    );
     if (response.ok) {
       mutate();
     }

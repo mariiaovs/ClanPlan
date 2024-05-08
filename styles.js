@@ -125,4 +125,21 @@ span.chip {
   background-color: var(--color-font);
 }
 
+/* Tostify styles */
+
+.Toastify__progress-bar--success {
+  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(224,253,29,1) 50%, rgba(252,176,69,1) 100%);
+}
+
+.Toastify__toast{
+box-shadow: 5px 5px 15px 5px #000000;
+}
+ 
+.Toastify__toast-container--top-center {
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
 `;

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import StyledBackLink from "@/components/StyledBackLink";
 import useSWR from "swr";
 import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
+import { toast } from "react-toastify";
 
 const StyledMessage = styled.p`
   text-align: center;
@@ -31,13 +32,21 @@ export default function DetailsPage({
 
   async function handleCheckboxChange(task, event) {
     const updatedTaskData = { ...task, isDone: event.target.checked };
-    const response = await fetch(`/api/tasks/${task._id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedTaskData),
-    });
+    const response = await toast.promise(
+      fetch(`/api/tasks/${task._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTaskData),
+      }),
+      {
+        pending: "Task updation is pending",
+        success: "Task updated successfully",
+        error: "Task not updated",
+      }
+    );
+
     if (response.ok) {
       mutate();
     }
@@ -55,6 +64,7 @@ export default function DetailsPage({
           showModal={showModal}
           setShowModal={setShowModal}
           onCheckboxChange={handleCheckboxChange}
+          detailsBackLinkRef={detailsBackLinkRef}
         />
       ) : (
         <StyledMessage>Page not found!</StyledMessage>

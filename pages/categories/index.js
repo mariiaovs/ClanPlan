@@ -7,6 +7,7 @@ import Plus from "@/public/assets/images/plus.svg";
 import useSWR from "swr";
 import { useState } from "react";
 import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
+import { toast } from "react-toastify";
 
 const StyledHeading = styled.h2`
   text-align: center;
@@ -39,13 +40,20 @@ export default function CategoriesPage({
   }
 
   async function handleAddCategory(newCategoryData) {
-    const response = await fetch("/api/categories", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newCategoryData),
-    });
+    const response = await toast.promise(
+      fetch("/api/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newCategoryData),
+      }),
+      {
+        pending: "Category addition is pending",
+        success: "Category added successfully",
+        error: "Category not added",
+      }
+    );
     if (response.ok) {
       setShowModal(false);
       mutate();

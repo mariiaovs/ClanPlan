@@ -10,6 +10,7 @@ import StyledButton from "./StyledButton";
 import CategoryForm from "./CategoryForm";
 import useSWR from "swr";
 import StyledLoadingAnimation from "./StyledLoadingAnimation";
+import { toast } from "react-toastify";
 
 const StyledList = styled.ul`
   display: flex;
@@ -125,9 +126,16 @@ export default function CategoriesList({
   }
 
   async function handleDeleteCategory(id) {
-    const response = await fetch(`/api/categories/${id}`, {
-      method: "DELETE",
-    });
+    const response = await toast.promise(
+      fetch(`/api/categories/${id}`, {
+        method: "DELETE",
+      }),
+      {
+        pending: "Category deletion is pending",
+        success: "Category deleted successfully",
+        error: "Category not deleted",
+      }
+    );
     if (response.ok) {
       setShowModal(false);
       mutate();
@@ -135,13 +143,21 @@ export default function CategoriesList({
   }
 
   async function handleEditCategory(updatedCategory) {
-    const response = await fetch(`/api/categories/${updatedCategory.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedCategory),
-    });
+    const response = await toast.promise(
+      fetch(`/api/categories/${updatedCategory.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedCategory),
+      }),
+      {
+        pending: "Category updation is pending",
+        success: "Category updated successfully",
+        error: "Category not updated",
+      }
+    );
+
     if (response.ok) {
       setShowModal(false);
       mutate();

@@ -4,6 +4,8 @@ import Layout from "@/components/Layout";
 import { SWRConfig } from "swr";
 import useSWR from "swr";
 import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
@@ -70,6 +72,18 @@ export default function App({ Component, pageProps }) {
     <Layout>
       <GlobalStyle />
       <SWRConfig value={{ fetcher }}>
+        <ToastContainer
+          position="top-center"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <Component
           {...pageProps}
           tasks={tasksAfterSorting}

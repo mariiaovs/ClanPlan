@@ -149,23 +149,19 @@ span.chip {
   color: var(--color-font);
 }
 
+.multiselectContainer {
+	background-color: var(--color-background);
+  }
+
 .multiSelectContainer li.option:hover {
   background-color: var(--color-button-active);
-  color: var(--color-background);
-}
-
-multiselectContainer {
-	background-color: var(--color-background);
   color: var(--color-font);
-  }
+}
 
 .optionContainer {
 	background-color: var(--color-background);
   }
 
-img.icon_cancel {
-  stroke: var(--color-font);
-}
 
 /* Tostify styles */
 

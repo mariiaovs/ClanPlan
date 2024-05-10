@@ -6,7 +6,12 @@ import useSWR from "swr";
 import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
 import { toast } from "react-toastify";
 
-export default function EditPage({ familyMembers, categories }) {
+export default function EditPage({
+  familyMembers,
+  categories,
+  showModal,
+  setShowModal,
+}) {
   const router = useRouter();
   const { id } = router.query;
 
@@ -26,7 +31,7 @@ export default function EditPage({ familyMembers, categories }) {
 
   async function handleEditTaskData(updatedTask) {
     const response = await toast.promise(
-      fetch(`/api/tasks/${id}`, {
+      fetch(`/api/tasks/${id}?updateAll=false`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -59,6 +64,8 @@ export default function EditPage({ familyMembers, categories }) {
           familyMembers={familyMembers}
           categories={categories}
           allocatedMembersList={allocatedMembersList}
+          showModal={showModal}
+          setShowModal={setShowModal}
         />
       </div>
     </>

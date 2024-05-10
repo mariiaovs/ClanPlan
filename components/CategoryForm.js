@@ -162,6 +162,7 @@ export default function CategoryForm({
         placeholder="Please select a member"
         avoidHighlightFirstOption={true}
         selectedValues={selectedMembers}
+        closeIcon="circle"
       />
       <StyledButton>{value ? "Update" : "Add"}</StyledButton>
     </StyledForm>

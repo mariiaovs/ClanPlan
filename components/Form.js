@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import StyledButton from "./StyledButton";
 import Multiselect from "multiselect-react-dropdown";
+import { darkTheme } from "../styles";
 
 const StyledForm = styled.form`
   display: flex;
@@ -61,6 +62,8 @@ export default function Form({
 
   const formattedTodayDate = new Date().toISOString().substring(0, 10);
 
+  const [taskToUpdate, setTaskToUpdate] = useState();
+
   function handleTitleChange(event) {
     setEnteredTitle(event.target.value);
   }
@@ -98,6 +101,7 @@ export default function Form({
         ...data,
         title: data.title.trim(),
         id: value.id,
+        groupId: value.groupId,
         assignedTo,
         isDone: value.isDone,
         category: data.category === "" ? null : data.category,
@@ -192,8 +196,21 @@ export default function Form({
         id="dueDate"
         name="dueDate"
         min={formattedTodayDate}
-        defaultValue={value?.dueDate}
+        defaultValue={value?.dueDate || formattedTodayDate}
       ></StyledDateInput>
+
+      {!value?.groupId && (
+        <>
+          <StyledLabel htmlFor="repeat">Repeat:</StyledLabel>
+          <StyledSelect id="repeat" name="repeat" defaultValue={value?.repeat}>
+            <option value="none">Don&apos;t repeat</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </StyledSelect>
+        </>
+      )}
+
       <StyledLabel htmlFor="assignedTo">Assign to:</StyledLabel>
       <Multiselect
         id="assignedTo"

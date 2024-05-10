@@ -73,6 +73,7 @@ export default function TaskDetails({
     _id: id,
     isDone,
     assignedTo,
+    groupId,
   } = task;
   const router = useRouter();
 
@@ -81,7 +82,23 @@ export default function TaskDetails({
 
   async function handleDeleteTask(id) {
     const response = await toast.promise(
-      fetch(`/api/tasks/${id}`, {
+      fetch(`/api/tasks/${id}?deleteAll=false`, {
+        method: "DELETE",
+      }),
+      {
+        pending: "Task deletion is pending",
+        success: "Task deleted successfully",
+        error: "Task not deleted",
+      }
+    );
+    if (response.ok) {
+      router.push(detailsBackLinkRef);
+      setShowModal(false);
+    }
+  }
+  async function handleDeleteAllTasks(id) {
+    const response = await toast.promise(
+      fetch(`/api/tasks/${id}?deleteAll=true`, {
         method: "DELETE",
       }),
       {
@@ -103,11 +120,18 @@ export default function TaskDetails({
           <DeleteConfirmBox
             setShowModal={setShowModal}
             onConfirm={() => handleDeleteTask(id)}
+            onConfirmAll={() => handleDeleteAllTasks(id)}
             id={id}
-            message="Are you sure you want to delete this task?"
+            groupId={groupId}
+            message={
+              groupId
+                ? "Are you sure you want to delete?"
+                : "Are you sure you want to delete this task?"
+            }
           />
         )}
       </Modal>
+
       <StyledSection $isDone={isDone}>
         <StyledTrash onClick={() => setShowModal(true)} />
         <StyledLink href={`/tasks/${id}/edit`}>

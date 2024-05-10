@@ -16,6 +16,7 @@ const StyledListItems = styled.li`
   display: grid;
   grid-template-columns: 3fr 1fr;
   background-color: var(--color-background);
+  transition: background-color 0.5s ease;
 `;
 
 const StyleSpan = styled.span`

@@ -13,10 +13,12 @@ const StyledList = styled.ul`
 `;
 
 const StyledClearFilterButton = styled.button`
-  color: white;
+  color: var(--color-font);
   font-weight: 700;
-  background-color: var(--color-font);
+  background-color: var(--color-background);
+  border: 0.5px solid var(--color-font);
   border-radius: 0.7rem;
+  padding: 0.3rem 0.5rem;
 `;
 
 export default function Filter({
@@ -30,17 +32,16 @@ export default function Filter({
 }) {
   return (
     <>
-      {showModal && (
-        <Modal $top="5rem" setShowModal={setShowModal}>
+      <Modal $top="6rem" setShowModal={setShowModal} $open={showModal}>
+        {showModal && (
           <FilterWindow
             familyMembers={familyMembers}
             onApply={onApplyFilters}
             filters={filters}
             categories={categories}
           />
-        </Modal>
-      )}
-
+        )}
+      </Modal>
       <StyledButton
         $width="4rem"
         $left="0.5rem"

@@ -12,6 +12,7 @@ export const lightTheme = {
   text: "#344648",
   button: "#e6e4e4",
   buttonActive: "#bbf1f9ff",
+  colorScheme: "light",
 };
 
 export const darkTheme = {
@@ -19,6 +20,7 @@ export const darkTheme = {
   text: "#FFFFFF",
   button: "#344648",
   buttonActive: "#065465",
+  colorScheme: "dark",
 };
 
 export default createGlobalStyle`
@@ -41,6 +43,7 @@ export default createGlobalStyle`
     --color-button-active:${(props) => props.theme.buttonActive};
     --color-button:${(props) => props.theme.button};
     --font-handlee:${handlee.style.fontFamily};
+    --color-scheme-date:${(props) => props.theme.colorScheme};
   }
 
   body {
@@ -52,6 +55,7 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     max-width: 375px;
     background-color: var(--color-background);
+    transition: background-color 0.5s ease, color 0.5s ease;
   }
 
   img, picture, video, canvas, svg {
@@ -89,7 +93,6 @@ a:hover {
   cursor: pointer;
   background-color: var(--color-button-active);
 }
-  
 
 /* react-big-calendar styles: */
 

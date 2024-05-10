@@ -85,17 +85,20 @@ export default function CategoriesPage({
         }}
         $right={true}
       />
-
-      {showModal && modalMode === "add" && (
-        <Modal $top="7rem" setShowModal={setShowModal}>
+      <Modal
+        $top="7rem"
+        setShowModal={setShowModal}
+        $open={showModal && modalMode === "add"}
+      >
+        {showModal && modalMode === "add" && (
           <CategoryForm
             formHeading="Add a category"
             onSubmitCategory={handleAddCategory}
             familyMembers={familyMembers}
             categories={categories}
           />
-        </Modal>
-      )}
+        )}
+      </Modal>
     </>
   );
 }

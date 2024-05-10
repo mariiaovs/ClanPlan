@@ -36,7 +36,7 @@ export default function CategoryForm({
 }) {
   const [isValidCategory, setIsValidCategory] = useState(true);
   const [isUniqueCategory, setIsUniqueCategory] = useState(true);
-  const [enteredCategory, setEnteredCategory] = useState("");
+  const [enteredCategory, setEnteredCategory] = useState(value?.title || "");
 
   const [selectedMembers, setSelectedMembers] = useState(
     value?.selectedMembers || []

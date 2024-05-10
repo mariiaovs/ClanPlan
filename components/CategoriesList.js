@@ -31,6 +31,7 @@ const StyledListItem = styled.li`
   border-radius: 2rem;
   padding: 1rem 2rem;
   border: none;
+  transition: background-color 0.5s ease;
 `;
 
 const StyledListOfMembers = styled.ul`
@@ -223,8 +224,12 @@ export default function CategoriesList({
           </StyledListItem>
         ))}
       </StyledList>
-      {showModal && modalMode === "delete" && (
-        <Modal $top="12rem" setShowModal={setShowModal}>
+      <Modal
+        $top="12rem"
+        setShowModal={setShowModal}
+        $open={showModal && modalMode === "delete"}
+      >
+        {showModal && modalMode === "delete" && (
           <DeleteConfirmBox
             message={
               categoryIsUsed
@@ -235,10 +240,14 @@ export default function CategoriesList({
             onConfirm={handleDeleteCategory}
             id={categoryToHandle._id}
           />
-        </Modal>
-      )}
-      {showModal && modalMode === "confirm-edit" && categoryIsUsed && (
-        <Modal $top="13rem" setShowModal={setShowModal}>
+        )}
+      </Modal>
+      <Modal
+        $top="13rem"
+        setShowModal={setShowModal}
+        $open={showModal && modalMode === "confirm-edit" && categoryIsUsed}
+      >
+        {showModal && modalMode === "confirm-edit" && categoryIsUsed && (
           <StyledSection>
             <StyledPragraph>{`Category "${categoryToHandle.title}" is used in active tasks. Are you sure you want to edit "${categoryToHandle.title}"?`}</StyledPragraph>
             <ButtonContainer>
@@ -250,10 +259,14 @@ export default function CategoriesList({
               </StyledButton>
             </ButtonContainer>
           </StyledSection>
-        </Modal>
-      )}
-      {showModal && modalMode === "edit" && (
-        <Modal $top="8rem" setShowModal={setShowModal}>
+        )}
+      </Modal>
+      <Modal
+        $top="8rem"
+        setShowModal={setShowModal}
+        $open={showModal && modalMode === "edit"}
+      >
+        {showModal && modalMode === "edit" && (
           <CategoryForm
             formHeading="Edit a category"
             onSubmitCategory={handleEditCategory}
@@ -261,8 +274,8 @@ export default function CategoriesList({
             value={categoryToHandle}
             familyMembers={familyMembers}
           />
-        </Modal>
-      )}
+        )}
+      </Modal>
     </>
   );
 }

@@ -1,5 +1,6 @@
 import Filter from "@/components/Filter";
 import TasksList from "@/components/TasksList";
+import TasksListGroups from "@/components/TasksListGroups";
 import styled from "styled-components";
 
 const StyledSection = styled.section`
@@ -42,11 +43,10 @@ const StyledMessage = styled.p`
 `;
 
 export default function HomePage({
-  onCheckboxChange,
   setShowModal,
   showModal,
   familyMembers,
-  setDetailsBackLinkRef,
+  onSetDetailsBackLinkRef,
   categories,
   filters,
   setFilters,
@@ -184,11 +184,18 @@ export default function HomePage({
       {!filteredTasks.length && isFilterSet && (
         <StyledMessage>No tasks with this search criteria.</StyledMessage>
       )}
-      <TasksList
-        tasks={filteredTasks}
-        onCheckboxChange={onCheckboxChange}
-        setDetailsBackLinkRef={setDetailsBackLinkRef}
-      />
+      {listType !== "all" && (
+        <TasksList
+          tasks={filteredTasks}
+          onSetDetailsBackLinkRef={onSetDetailsBackLinkRef}
+        />
+      )}
+      {listType === "all" && (
+        <TasksListGroups
+          tasks={filteredTasks}
+          onSetDetailsBackLinkRef={onSetDetailsBackLinkRef}
+        />
+      )}
     </>
   );
 }

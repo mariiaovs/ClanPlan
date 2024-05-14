@@ -23,7 +23,7 @@ const StyledPen = styled(Pen)`
 const StyledSection = styled.section`
   position: relative;
   background-color: var(--color-background);
-  margin: 6rem 0.5rem 5rem 0.5rem;
+  margin: 1rem;
   display: flex;
   flex-direction: column;
   border-radius: 2rem;

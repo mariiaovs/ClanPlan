@@ -8,11 +8,9 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   margin: 1rem;
-  margin-top: 6rem;
   background-color: var(--color-background);
   padding: 1rem;
   border-radius: 1rem;
-  margin-bottom: 4.5rem;
   box-shadow: 1px 1px 10px -1px var(--color-font);
   transition: background-color 0.5s ease;
 `;

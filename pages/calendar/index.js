@@ -34,7 +34,7 @@ const StyledCalendar = styled(DnDCalendar)`
 
 export default function CalendarPage({
   tasks,
-  setDetailsBackLinkRef,
+  onSetDetailsBackLinkRef,
   currentDate,
   setCurrentDate,
   currentView,
@@ -60,7 +60,7 @@ export default function CalendarPage({
   });
 
   function handleEventClick(task) {
-    setDetailsBackLinkRef("/calendar");
+    onSetDetailsBackLinkRef("/calendar");
     router.push(`/tasks/${task.id}?listType=calendar`);
   }
 

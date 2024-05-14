@@ -8,7 +8,6 @@ const StyledList = styled.ul`
   padding: 0;
   display: flex;
   flex-direction: column;
-  margin-bottom: 5rem;
 `;
 
 const StyledListItems = styled.li`
@@ -23,7 +22,7 @@ const StyledListItems = styled.li`
   transition: background-color 0.5s ease;
 `;
 
-export default function TasksList({ tasks, setDetailsBackLinkRef }) {
+export default function TasksList({ tasks, onSetDetailsBackLinkRef }) {
   const { mutate } = useSWR("/api/tasks");
 
   async function handleCheckboxChange(task, event) {
@@ -54,7 +53,7 @@ export default function TasksList({ tasks, setDetailsBackLinkRef }) {
           <TaskPreview
             task={task}
             onCheckboxChange={handleCheckboxChange}
-            setDetailsBackLinkRef={setDetailsBackLinkRef}
+            onSetDetailsBackLinkRef={onSetDetailsBackLinkRef}
           />
         </StyledListItems>
       ))}

@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const StyledButton = styled.button`
-  ${({ $left }) => $left && `margin-left: ${$left};`}
   margin-top: 1rem;
   color: var(--color-font);
   font-weight: 700;

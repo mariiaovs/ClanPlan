@@ -16,20 +16,36 @@ export default async function handler(request, response) {
       const groupId = taskData.repeat !== "none" ? uid() : null;
 
       const startDate = new Date(taskData.dueDate);
-      const endDate = new Date(taskData.dueDate);
-      endDate.setFullYear(new Date().getFullYear() + 1);
+      const endDate = new Date(taskData.endDate);
 
       if (taskData.repeat === "monthly") {
-        const nextMonth = startDate;
-        while (nextMonth < endDate) {
-          taskData.dueDate = nextMonth.toISOString().substring(0, 10);
-          taskData.groupId = groupId;
-          await Task.create(taskData);
+        const nextMonth = new Date(
+          startDate.getFullYear(),
+          startDate.getMonth()
+        );
+        const currentDay = startDate.getDate();
+        while (nextMonth <= endDate) {
+          const dayInMonth = new Date(
+            nextMonth.getFullYear(),
+            nextMonth.getMonth() + 1,
+            0
+          ).getDate();
+          if (currentDay <= dayInMonth) {
+            taskData.dueDate = new Date(
+              nextMonth.getFullYear(),
+              nextMonth.getMonth(),
+              currentDay + 1
+            )
+              .toISOString()
+              .substring(0, 10);
+            taskData.groupId = groupId;
+            await Task.create(taskData);
+          }
           nextMonth.setMonth(nextMonth.getMonth() + 1);
         }
       } else if (taskData.repeat === "weekly") {
         const nextWeek = startDate;
-        while (nextWeek < endDate) {
+        while (nextWeek <= endDate) {
           taskData.dueDate = nextWeek.toISOString().substring(0, 10);
           taskData.groupId = groupId;
           await Task.create(taskData);
@@ -37,7 +53,7 @@ export default async function handler(request, response) {
         }
       } else if (taskData.repeat === "daily") {
         const nextDay = startDate;
-        while (nextDay < endDate) {
+        while (nextDay <= endDate) {
           taskData.dueDate = nextDay.toISOString().substring(0, 10);
           taskData.groupId = groupId;
           await Task.create(taskData);

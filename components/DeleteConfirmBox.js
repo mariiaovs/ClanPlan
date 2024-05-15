@@ -40,7 +40,6 @@ export default function DeleteConfirmBox({
         </StyledButton>
         {groupId && (
           <StyledButton onClick={() => onConfirmAll(id)}>
-            {" "}
             All occurrence
           </StyledButton>
         )}

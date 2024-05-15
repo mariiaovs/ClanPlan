@@ -14,6 +14,7 @@ const taskSchema = new Schema({
   assignedTo: { type: [Schema.Types.ObjectId], ref: "Member" },
   groupId: { type: String },
   repeat: { type: String },
+  endDate: { type: String },
   comments: { type: [Schema.Types.ObjectId], ref: "Comment" },
 });
 

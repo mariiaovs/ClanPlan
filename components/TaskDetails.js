@@ -3,11 +3,16 @@ import StyledTrash from "./StyledTrash";
 import Pen from "@/public/assets/images/edit-pen-icon.svg";
 import Modal from "./Modal";
 import Link from "next/link";
-import DeleteConfirmBox from "./DeleteConfirmBox";
 import { useRouter } from "next/router";
 import checkForToday from "@/utils/checkForToday";
 import checkForMissedDate from "@/utils/checkForMissedDate";
 import { toast } from "react-toastify";
+import DeleteConfirmBox from "./DeleteConfirmBox";
+
+const StyledArticle = styled.article`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`;
 
 const StyledLink = styled(Link)`
   position: absolute;
@@ -74,6 +79,7 @@ export default function TaskDetails({
     isDone,
     assignedTo,
     groupId,
+    repeat,
   } = task;
   const router = useRouter();
 
@@ -102,9 +108,9 @@ export default function TaskDetails({
         method: "DELETE",
       }),
       {
-        pending: "Task deletion is pending",
-        success: "Task deleted successfully",
-        error: "Task not deleted",
+        pending: "Recurring Tasks deletion is pending",
+        success: "Recurring Tasks deleted successfully",
+        error: "Recurring Tasks not deleted",
       }
     );
     if (response.ok) {
@@ -145,15 +151,20 @@ export default function TaskDetails({
         </StyledParagraphContent>
         <p>Priority: </p>
         <h2>{"🔥".repeat(Number(priority))}</h2>
-        <p>Due Date:</p>
-        <StyledParagraphContent>
-          <StyledSpan $isMissed={isMissed}>
-            {isToday ? "Today" : dueDate || "-"}
-          </StyledSpan>
-        </StyledParagraphContent>
+        <StyledArticle>
+          <p>Due Date:</p>
+          <p>Repeat:</p>
+          <StyledParagraphContent>
+            <StyledSpan $isMissed={isMissed}>
+              {isToday ? "Today" : dueDate || "-"}
+            </StyledSpan>
+          </StyledParagraphContent>
+          <StyledParagraphContent>{repeat}</StyledParagraphContent>
+        </StyledArticle>
+
         <p>Assigned to:</p>
         <StyledParagraphContent>
-          {assignedTo.map((member) => member.name).join(", ") || "-"}
+          {assignedTo?.map((member) => member.name).join(", ") || "-"}
         </StyledParagraphContent>
         <label htmlFor="checkbox">
           Done:

@@ -45,7 +45,7 @@ export default function FamilyPage({ showModal, setShowModal }) {
       {
         pending: "Member addition is pending",
         success: "Member added successfully",
-        error: "Member not deleted",
+        error: "Member not added",
       }
     );
 

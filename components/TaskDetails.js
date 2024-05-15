@@ -34,9 +34,9 @@ const StyledSection = styled.section`
   ${({ $isDone }) =>
     $isDone &&
     `
-      background-color: lightgray;
+      background-color: #d3d3d3;
       opacity: 0.5;
-      color: gray;
+      color: #808080;
     `};
 `;
 

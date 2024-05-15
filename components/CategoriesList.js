@@ -19,7 +19,6 @@ const StyledList = styled.ul`
   gap: 1rem;
   margin: 0.5rem;
   list-style: none;
-  margin-bottom: 6rem;
 `;
 
 const StyledListItem = styled.li`

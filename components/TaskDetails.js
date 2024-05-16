@@ -159,7 +159,7 @@ export default function TaskDetails({
               {isToday ? "Today" : dueDate || "-"}
             </StyledSpan>
           </StyledParagraphContent>
-          <StyledParagraphContent>{repeat}</StyledParagraphContent>
+          <StyledParagraphContent>{repeat || "none"}</StyledParagraphContent>
         </StyledArticle>
 
         <p>Assigned to:</p>

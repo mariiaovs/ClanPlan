@@ -1,5 +1,8 @@
 import { useState } from "react";
 import TasksListGroup from "./TasksListGroup";
+import convertDateToString from "@/utils/convertDateToString";
+import checkForMissedDate from "@/utils/checkForMissedDate";
+import checkForToday from "@/utils/checkForToday";
 
 export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
   const [hideGroup, setHideGroup] = useState({});
@@ -9,17 +12,11 @@ export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
   }
 
   const missedTasks = tasks.filter(
-    (task) =>
-      !task.isDone &&
-      task.dueDate &&
-      new Date(task.dueDate).toISOString().substring(0, 10) <
-        new Date().toISOString().substring(0, 10)
+    (task) => !task.isDone && task?.dueDate && checkForMissedDate(task.dueDate)
   );
 
   const todaysTasks = tasks.filter(
-    (task) =>
-      !task.isDone &&
-      new Date(task?.dueDate).toDateString() === new Date().toDateString()
+    (task) => task?.dueDate && checkForToday(task.dueDate) && !task.isDone
   );
 
   const tomorrow = new Date();
@@ -28,7 +25,8 @@ export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
   const tomorrowsTasks = tasks.filter(
     (task) =>
       !task.isDone &&
-      new Date(task?.dueDate).toDateString() === tomorrow.toDateString()
+      task?.dueDate &&
+      new Date(task.dueDate).toDateString() === tomorrow.toDateString()
   );
 
   const today = new Date();
@@ -45,8 +43,8 @@ export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
       : tasks.filter(
           (task) =>
             !task.isDone &&
-            task?.dueDate >= thirdDay.toISOString().substring(0, 10) &&
-            task?.dueDate <= thisSunday.toISOString().substring(0, 10)
+            task?.dueDate >= convertDateToString(thirdDay) &&
+            task?.dueDate <= convertDateToString(thisSunday)
         );
 
   const nextMonday = new Date();
@@ -61,14 +59,14 @@ export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
       ? tasks.filter(
           (task) =>
             !task.isDone &&
-            task?.dueDate >= nextTuesday.toISOString().substring(0, 10) &&
-            task?.dueDate <= nextSunday.toISOString().substring(0, 10)
+            task?.dueDate >= convertDateToString(nextTuesday) &&
+            task?.dueDate <= convertDateToString(nextSunday)
         )
       : tasks.filter(
           (task) =>
             !task.isDone &&
-            task?.dueDate >= nextMonday.toISOString().substring(0, 10) &&
-            task?.dueDate <= nextSunday.toISOString().substring(0, 10)
+            task?.dueDate >= convertDateToString(nextMonday) &&
+            task?.dueDate <= convertDateToString(nextSunday)
         );
 
   const afterNextWeekMonday = new Date(nextSunday);
@@ -76,8 +74,7 @@ export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
   const firstDayNextMonth = new Date(
     today.getFullYear(),
     today.getMonth() + 1,
-    1,
-    2
+    1
   );
 
   const lastDayThisMonth = new Date(firstDayNextMonth - 1);
@@ -85,29 +82,28 @@ export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
   const thisMonthTasks = tasks.filter(
     (task) =>
       !task.isDone &&
-      task?.dueDate >= afterNextWeekMonday.toISOString().substring(0, 10) &&
-      task?.dueDate <= lastDayThisMonth.toISOString().substring(0, 10)
+      task?.dueDate >= convertDateToString(afterNextWeekMonday) &&
+      task?.dueDate <= convertDateToString(lastDayThisMonth)
   );
 
   const firstDayAfterNextMonth = new Date(
     today.getFullYear(),
     today.getMonth() + 2,
-    1,
-    2
+    1
   );
 
   const lastDayNextMonth = new Date(firstDayAfterNextMonth - 1);
   const nextMonthTasks = tasks.filter(
     (task) =>
       !task.isDone &&
-      task?.dueDate >= firstDayNextMonth.toISOString().substring(0, 10) &&
-      task?.dueDate <= lastDayNextMonth.toISOString().substring(0, 10)
+      task?.dueDate >= convertDateToString(firstDayNextMonth) &&
+      task?.dueDate <= convertDateToString(lastDayNextMonth)
   );
 
   const laterTasks = tasks.filter(
     (task) =>
       !task.isDone &&
-      task?.dueDate >= firstDayAfterNextMonth.toISOString().substring(0, 10)
+      task?.dueDate >= convertDateToString(firstDayAfterNextMonth)
   );
 
   const completedTasks = tasks.filter((task) => task.isDone);

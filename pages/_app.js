@@ -8,7 +8,6 @@ import { ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "../styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import sortTaskAscendingOrder from "@/utils/sortTaskAscendingOrder";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
@@ -79,9 +78,6 @@ export default function App({ Component, pageProps }) {
     setFilters({});
   }
 
-  // Sorting the task in chronological order of date
-  const tasksAfterSorting = sortTaskAscendingOrder(tasks);
-
   return (
     <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
       <Layout isDarkTheme={isDarkTheme} setDarkTheme={setDarkTheme}>
@@ -101,7 +97,7 @@ export default function App({ Component, pageProps }) {
           />
           <Component
             {...pageProps}
-            tasks={tasksAfterSorting}
+            tasks={tasks}
             familyMembers={familyMembers}
             setShowModal={setShowModal}
             showModal={showModal}

@@ -1,6 +1,7 @@
 import dbConnect from "@/db/connect";
 import Comment from "@/db/models/Comment";
 import Task from "@/db/models/Task";
+import convertDateToString from "@/utils/convertDateToString";
 
 export default async function handler(request, response) {
   await dbConnect();
@@ -24,60 +25,63 @@ export default async function handler(request, response) {
 
   if (request.method === "PUT") {
     const updatedTask = request.body;
-
     if (updateAll === "true") {
+      const tasks = await Task.find({ groupId: updatedTask.groupId }).sort({
+        dueDate: 1,
+      });
+      const startDate = new Date(tasks[0].dueDate);
       const endDate = new Date(updatedTask.endDate);
-      const startDate = new Date(updatedTask.dueDate);
 
-      const task = await Task.findById(id);
-      const groupId = task?.groupId;
-      await Task.deleteMany({ groupId: groupId });
+      if (tasks && tasks.length > 0) {
+        await Task.deleteMany({ groupId: updatedTask.groupId });
+      }
 
       if (updatedTask.repeat === "monthly") {
-        const nextMonth = new Date(
+        const nextMonthDueDate = new Date(
           startDate.getFullYear(),
           startDate.getMonth()
         );
         const currentDay = new Date(updatedTask.dueDate).getDate();
-        while (nextMonth <= endDate) {
+
+        while (nextMonthDueDate <= endDate) {
           const dayInMonth = new Date(
-            nextMonth.getFullYear(),
-            nextMonth.getMonth() + 1,
+            nextMonthDueDate.getFullYear(),
+            nextMonthDueDate.getMonth() + 1,
             0
           ).getDate();
           if (currentDay <= dayInMonth) {
-            updatedTask.dueDate = new Date(
-              nextMonth.getFullYear(),
-              nextMonth.getMonth(),
-              currentDay + 1
-            )
-              .toISOString()
-              .substring(0, 10);
+            updatedTask.dueDate = convertDateToString(
+              new Date(
+                nextMonthDueDate.getFullYear(),
+                nextMonthDueDate.getMonth(),
+                currentDay
+              )
+            );
+
             await Task.create(updatedTask);
           }
-          nextMonth.setMonth(nextMonth.getMonth() + 1);
+          nextMonthDueDate.setMonth(nextMonthDueDate.getMonth() + 1);
         }
       } else if (updatedTask.repeat === "weekly") {
-        const nextWeek = new Date(updatedTask.dueDate);
-        while (nextWeek <= endDate) {
-          updatedTask.dueDate = nextWeek.toISOString().substring(0, 10);
-          updatedTask.groupId = groupId;
+        const nextWeekDueDate = startDate;
+        while (nextWeekDueDate <= endDate) {
+          updatedTask.dueDate = convertDateToString(nextWeekDueDate);
           await Task.create(updatedTask);
-          nextWeek.setDate(nextWeek.getDate() + 7);
+          nextWeekDueDate.setDate(nextWeekDueDate.getDate() + 7);
         }
       } else if (updatedTask.repeat === "daily") {
-        const nextDay = new Date(updatedTask.dueDate);
-        while (nextDay <= endDate) {
-          updatedTask.dueDate = nextDay.toISOString().substring(0, 10);
-          updatedTask.groupId = groupId;
+        const nextDayDueDate = startDate;
+        while (nextDayDueDate <= endDate) {
+          updatedTask.dueDate = convertDateToString(nextDayDueDate);
           await Task.create(updatedTask);
-          nextDay.setDate(nextDay.getDate() + 1);
+          nextDayDueDate.setDate(nextDayDueDate.getDate() + 1);
         }
       }
+      response.status(200).json({ status: "Tasks updated successfully." });
     } else {
       await Task.findByIdAndUpdate(id, updatedTask);
+      response.status(200).json({ status: "Task updated successfully." });
     }
-    response.status(200).json({ status: "Task updated successfully." });
   }
 
   if (request.method === "PATCH") {
@@ -97,13 +101,14 @@ export default async function handler(request, response) {
       }
       await Comment.deleteMany({ _id: { $in: commentIdsToDelete } });
       await Task.deleteMany({ groupId: groupId });
+      response.status(200).json({ status: "Tasks deleted successfully." });
     } else {
       const task = await Task.findById(id);
       for (const commentId of task.comments) {
         await Comment.findByIdAndDelete(commentId);
       }
       await Task.findByIdAndDelete(id);
+      response.status(200).json({ status: "Task deleted successfully." });
     }
-    response.status(200).json({ status: "Product deleted successfully." });
   }
 }

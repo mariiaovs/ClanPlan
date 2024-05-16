@@ -2,6 +2,8 @@ import Filter from "@/components/Filter";
 import TasksList from "@/components/TasksList";
 import TasksListGroups from "@/components/TasksListGroups";
 import styled from "styled-components";
+import checkForMissedDate from "@/utils/checkForMissedDate";
+import checkForToday from "@/utils/checkForToday";
 
 const StyledSection = styled.section`
   display: flex;
@@ -64,21 +66,15 @@ export default function HomePage({
       : false;
 
   const missedTasks = tasks.filter(
-    (task) =>
-      task.dueDate &&
-      new Date(task.dueDate).toISOString().substring(0, 10) <
-        new Date().toISOString().substring(0, 10) &&
-      !task.isDone
+    (task) => task?.dueDate && checkForMissedDate(task.dueDate) && !task.isDone
   );
 
   const todaysTasks = tasks.filter(
-    (task) =>
-      new Date(task?.dueDate).toDateString() === new Date().toDateString() &&
-      !task.isDone
+    (task) => task?.dueDate && checkForToday(task.dueDate) && !task.isDone
   );
 
   const notAssignedTasks = tasks.filter(
-    (task) => !task.assignedTo.length && !task.isDone
+    (task) => !task?.assignedTo.length && !task.isDone
   );
 
   const completedTasks = tasks.filter((task) => task.isDone);

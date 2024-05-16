@@ -9,6 +9,7 @@ import useSWR from "swr";
 import CalendarEvent from "@/components/CalendarEvent";
 import CalendarAgendaEvent from "@/components/CalendarAgendaEvent";
 import { toast } from "react-toastify";
+import convertDateToString from "@/utils/convertDateToString";
 
 const localizer = globalizeLocalizer(globalize);
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -65,13 +66,9 @@ export default function CalendarPage({
   }
 
   function onEventDrop(data) {
-    const todayDate = new Date();
     const newTaskDate = data.start;
 
-    if (
-      newTaskDate.toISOString().substring(0, 10) <
-      todayDate.toISOString().substring(0, 10)
-    )
+    if (convertDateToString(newTaskDate) < convertDateToString(new Date()))
       return;
 
     const updatedTaskId = data.event.id;
@@ -79,7 +76,7 @@ export default function CalendarPage({
     const taskToUpdate = tasks.find((task) => task._id === updatedTaskId);
     const updatedTask = {
       ...taskToUpdate,
-      dueDate: data.start.toISOString().substring(0, 10),
+      dueDate: convertDateToString(data.start),
     };
     handleEditTaskData(updatedTask);
   }

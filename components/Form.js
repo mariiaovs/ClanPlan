@@ -5,7 +5,6 @@ import Multiselect from "multiselect-react-dropdown";
 import Modal from "./Modal";
 import DeleteConfirmBox from "./DeleteConfirmBox";
 
-
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -58,7 +57,7 @@ export default function Form({
   showModal,
 }) {
   const [enteredTitle, setEnteredTitle] = useState(value?.title || "");
-  const [isValid, setIsValid] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const [allocatedMembers, setAllocatedMembers] = useState(
     allocatedMembersList || familyMembers
   );
@@ -66,10 +65,13 @@ export default function Form({
 
   const formattedTodayDate = new Date().toISOString().substring(0, 10);
   const [taskToUpdate, setTaskToUpdate] = useState();
-  const [showEndDate, setShowEndDate] = useState(value?.endDate);
+  const [displayEndDate, setDisplayEndDate] = useState(false);
+  const [isEndDateValid, setIsEndDateValid] = useState(true);
+  const [endDate, setEndDate] = useState(value?.endDate);
 
   function handleTitleChange(event) {
     setEnteredTitle(event.target.value);
+    setIsValid(true);
   }
 
   function handleSubmit(event) {
@@ -88,6 +90,7 @@ export default function Form({
         data.priority === value.priority &&
         assignedTo.length === value.assignedTo.length &&
         data.repeat === value.repeat &&
+        data.endDate === value.endDate &&
         assignedTo.every((member) => assignedMembersIds.includes(member._id))
       ) {
         alert("No changes were made to the form.");
@@ -96,8 +99,20 @@ export default function Form({
     }
 
     if (!data.title.trim()) {
-      setIsValid(true);
+      setIsValid(false);
       event.target.title.focus();
+      return;
+    }
+
+    if (
+      !isEdit &&
+      (data.repeat === "monthly" ||
+        data.repeat === "weekly" ||
+        data.repeat === "daily") &&
+      !data.endDate
+    ) {
+      setIsEndDateValid(false);
+      event.target.endDate.focus();
       return;
     }
 
@@ -110,6 +125,8 @@ export default function Form({
         assignedTo,
         isDone: value.isDone,
         category: data.category === "" ? null : data.category,
+        endDate: value.endDate,
+        startDate: value.startDate,
       };
 
       if (value?.groupId) {
@@ -124,6 +141,7 @@ export default function Form({
         title: data.title.trim(),
         assignedTo,
         category: data.category === "" ? null : data.category,
+        startDate: data.dueDate,
       });
     }
   }
@@ -167,10 +185,15 @@ export default function Form({
   function handleRepeat(event) {
     const repeat = event.target.value;
     if (repeat === "monthly" || repeat === "weekly" || repeat === "daily") {
-      setShowEndDate(true);
+      setDisplayEndDate(true);
     } else {
-      setShowEndDate(false);
+      setDisplayEndDate(false);
+      setEndDate("");
     }
+  }
+  function handleEndDate(event) {
+    setEndDate(event.target.value);
+    setIsEndDateValid(true);
   }
 
   return (
@@ -195,7 +218,7 @@ export default function Form({
         <StyledHeading>{title}</StyledHeading>
         <StyledLabel htmlFor="title">
           <StyledSpan $left={true}>*</StyledSpan>Title:
-          {isValid && <StyledSpan>Please enter valid title!</StyledSpan>}
+          {!isValid && <StyledSpan>Please enter valid title!</StyledSpan>}
         </StyledLabel>
         <input
           type="text"
@@ -259,16 +282,21 @@ export default function Form({
           <option value="weekly">Weekly</option>
           <option value="monthly">Monthly</option>
         </StyledSelect>
-        {showEndDate && (
+        {!isEdit && displayEndDate && (
           <>
-            <StyledLabel htmlFor="endDate">Until:</StyledLabel>
+            <StyledLabel htmlFor="endDate">
+              Until:
+              {!isEndDateValid && (
+                <StyledSpan>Please pick end date!</StyledSpan>
+              )}
+            </StyledLabel>
             <StyledDateInput
               type="date"
               id="endDate"
               name="endDate"
               min={formattedTodayDate}
-              defaultValue={value?.endDate || formattedTodayDate}
-              required
+              defaultValue={endDate}
+              onChange={handleEndDate}
             ></StyledDateInput>
           </>
         )}

@@ -31,7 +31,14 @@ export default async function handler(request, response) {
             nextMonthDueDate.getMonth() + 1,
             0
           ).getDate();
-          if (currentDay <= dayInMonth) {
+          if (
+            currentDay <= dayInMonth &&
+            new Date(
+              nextMonthDueDate.getFullYear(),
+              nextMonthDueDate.getMonth(),
+              currentDay
+            ) <= endDate
+          ) {
             taskData.dueDate = convertDateToString(
               new Date(
                 nextMonthDueDate.getFullYear(),

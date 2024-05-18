@@ -5,7 +5,7 @@ import convertDateToString from "@/utils/convertDateToString";
 
 export default async function handler(request, response) {
   await dbConnect();
-  const { id, deleteAll, updateAll } = request.query;
+  const { id, deleteRequest, updateRequest } = request.query;
 
   if (request.method === "GET") {
     const task = await Task.findById(id)
@@ -25,15 +25,30 @@ export default async function handler(request, response) {
 
   if (request.method === "PUT") {
     const updatedTask = request.body;
-    if (updateAll === "true") {
-      const tasks = await Task.find({ groupId: updatedTask.groupId }).sort({
+    if (updateRequest === "all" || updateRequest === "future") {
+      const tasks = await Task.find({
+        groupId: updatedTask.groupId,
+        isDone: { $ne: true },
+      }).sort({
         dueDate: 1,
       });
-      const startDate = new Date(tasks[0].dueDate);
+      const startDate =
+        updateRequest === "future"
+          ? new Date(updatedTask.dueDate)
+          : new Date(tasks[0].dueDate);
       const endDate = new Date(updatedTask.endDate);
 
       if (tasks && tasks.length > 0) {
-        await Task.deleteMany({ groupId: updatedTask.groupId });
+        updateRequest === "future"
+          ? await Task.deleteMany({
+              groupId: updatedTask.groupId,
+              dueDate: { $gte: updatedTask.dueDate },
+              isDone: { $ne: true },
+            })
+          : await Task.deleteMany({
+              groupId: updatedTask.groupId,
+              isDone: { $ne: true },
+            });
       }
 
       if (updatedTask.repeat === "monthly") {
@@ -49,7 +64,14 @@ export default async function handler(request, response) {
             nextMonthDueDate.getMonth() + 1,
             0
           ).getDate();
-          if (currentDay <= dayInMonth) {
+          if (
+            currentDay <= dayInMonth &&
+            new Date(
+              nextMonthDueDate.getFullYear(),
+              nextMonthDueDate.getMonth(),
+              currentDay
+            ) <= endDate
+          ) {
             updatedTask.dueDate = convertDateToString(
               new Date(
                 nextMonthDueDate.getFullYear(),
@@ -90,17 +112,38 @@ export default async function handler(request, response) {
     response.status(200).json({ status: "Task updated successfully." });
   }
 
+  async function deleteComments(tasksToDelete) {
+    const commentIdsToDelete = [];
+    for (const task of tasksToDelete) {
+      commentIdsToDelete.push(...task.comments);
+    }
+    await Comment.deleteMany({ _id: { $in: commentIdsToDelete } });
+  }
+
   if (request.method === "DELETE") {
-    if (deleteAll === "true") {
+    if (deleteRequest === "all") {
       const task = await Task.findById(id);
       const groupId = task?.groupId;
-      const tasksToDelete = await Task.find({ groupId: groupId });
-      const commentIdsToDelete = [];
-      for (const task of tasksToDelete) {
-        commentIdsToDelete.push(...task.comments);
-      }
-      await Comment.deleteMany({ _id: { $in: commentIdsToDelete } });
-      await Task.deleteMany({ groupId: groupId });
+      const tasksToDelete = await Task.find({
+        groupId: groupId,
+        isDone: { $ne: true },
+      });
+      deleteComments(tasksToDelete);
+      await Task.deleteMany({ groupId: groupId, isDone: { $ne: true } });
+      response.status(200).json({ status: "Tasks deleted successfully." });
+    } else if (deleteRequest === "future") {
+      const task = await Task.findById(id);
+      const futherTasksToDelete = await Task.find({
+        groupId: task.groupId,
+        dueDate: { $gte: task.dueDate },
+        isDone: { $ne: true },
+      });
+      deleteComments(futherTasksToDelete);
+      await Task.deleteMany({
+        groupId: task.groupId,
+        dueDate: { $gte: task.dueDate },
+        isDone: { $ne: true },
+      });
       response.status(200).json({ status: "Tasks deleted successfully." });
     } else {
       const task = await Task.findById(id);

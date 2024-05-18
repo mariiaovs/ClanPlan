@@ -10,7 +10,7 @@ import useSWR from "swr";
 import StyledLoadingAnimation from "./StyledLoadingAnimation";
 import { toast } from "react-toastify";
 import StyledPen from "./StyledPen";
-import DeleteConfirmBox from "./DeleteConfirmBox";
+import ConfirmBox from "./ConfirmBox";
 
 const StyledList = styled.ul`
   display: flex;
@@ -217,7 +217,7 @@ export default function CategoriesList({
         $open={showModal && modalMode === "delete"}
       >
         {showModal && modalMode === "delete" && (
-          <DeleteConfirmBox
+          <ConfirmBox
             message={
               categoryIsUsed
                 ? `Category "${categoryToHandle.title}" is used in active tasks. Are you sure you want to delete "${categoryToHandle.title}"?`

@@ -4,7 +4,7 @@ import StyledTrash from "./StyledTrash";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import Modal from "./Modal";
-import DeleteConfirmBox from "./DeleteConfirmBox";
+import ConfirmBox from "./ConfirmBox";
 import CommentForm from "./CommentForm";
 
 const StyledList = styled.ul`
@@ -128,7 +128,7 @@ export default function Comments({
         $open={showModal && modalMode === "delete-comment"}
       >
         {showModal && modalMode === "delete-comment" && (
-          <DeleteConfirmBox
+          <ConfirmBox
             setShowModal={setShowModal}
             onConfirm={handleDeleteComment}
             id={commentIdToDelete}

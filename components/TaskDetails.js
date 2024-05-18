@@ -8,7 +8,7 @@ import checkForToday from "@/utils/checkForToday";
 import checkForMissedDate from "@/utils/checkForMissedDate";
 import { toast } from "react-toastify";
 import Flame from "@/public/assets/images/flame.svg";
-import DeleteConfirmBox from "./DeleteConfirmBox";
+import ConfirmBox from "./ConfirmBox";
 
 const StyledArticle = styled.article`
   display: grid;
@@ -97,7 +97,7 @@ export default function TaskDetails({
 
   async function handleDeleteTask(id) {
     const response = await toast.promise(
-      fetch(`/api/tasks/${id}?deleteAll=false`, {
+      fetch(`/api/tasks/${id}?deleteRequest=single`, {
         method: "DELETE",
       }),
       {
@@ -111,9 +111,11 @@ export default function TaskDetails({
       setShowModal(false);
     }
   }
-  async function handleDeleteAllTasks(id) {
+
+  async function handleDeleteTasks(actionObject) {
+    const { id, action } = actionObject;
     const response = await toast.promise(
-      fetch(`/api/tasks/${id}?deleteAll=true`, {
+      fetch(`/api/tasks/${id}?deleteRequest=${action}`, {
         method: "DELETE",
       }),
       {
@@ -135,16 +137,15 @@ export default function TaskDetails({
 
   return (
     <>
-      <Modal
-        $top="13.5rem"
-        setShowModal={setShowModal}
-        $open={showModal && modalMode === "delete-task"}
-      >
-        {showModal && modalMode === "delete-task" && (
-          <DeleteConfirmBox
+      <Modal $top="13.5rem" setShowModal={setShowModal} $open={showModal}>
+        {showModal && (
+          <ConfirmBox
             setShowModal={setShowModal}
-            onConfirm={handleDeleteTask}
-            onConfirmAll={handleDeleteAllTasks}
+            onConfirm={() => handleDeleteTask(id)}
+            onConfirmFutherTasks={() =>
+              handleDeleteTasks({ id, action: "future" })
+            }
+            onConfirmAllTasks={() => handleDeleteTasks({ id, action: "all" })}
             id={id}
             groupId={groupId}
             message={

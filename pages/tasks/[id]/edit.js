@@ -50,9 +50,9 @@ export default function EditPage({
     }
   }
 
-  async function handleEditAllTasksData(updatedTask) {
+  async function handleEditTasksData(updatedTask, action) {
     const response = await toast.promise(
-      fetch(`/api/tasks/${id}?updateAll=true`, {
+      fetch(`/api/tasks/${id}?updateRequest=${action}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +79,7 @@ export default function EditPage({
         </StyledBackLink>
         <Form
           onTaskSubmit={handleEditTaskData}
-          onAllTasksSubmit={handleEditAllTasksData}
+          onTasksSubmit={handleEditTasksData}
           title="Edit a task"
           isEdit
           value={task}

@@ -12,7 +12,7 @@ export default async function handler(request, response) {
       { category: id, isDone: { $ne: true } },
       { $set: { category: null } }
     );
-    response.status(200).json({ status: "Product deleted successfully." });
+    response.status(200).json({ status: "Category deleted successfully." });
   }
 
   if (request.method === "PUT") {

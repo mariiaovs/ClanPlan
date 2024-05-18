@@ -1,4 +1,11 @@
 import styled from "styled-components";
+import StyledPen from "./StyledPen";
+import StyledTrash from "./StyledTrash";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import Modal from "./Modal";
+import DeleteConfirmBox from "./DeleteConfirmBox";
+import CommentForm from "./CommentForm";
 
 const StyledList = styled.ul`
   list-style: none;
@@ -18,17 +25,26 @@ const StyledListItems = styled.li`
   grid-template-columns: 3fr 1fr;
   background-color: var(--color-background);
   transition: background-color 0.5s ease;
+  position: relative;
 `;
 
 const StyledDate = styled.p`
   font-size: 0.9rem;
+  margin-bottom: 0.5rem;
 `;
 
-const StyledMessage = styled.p`
-  font-size: 1.2rem;
-`;
+export default function Comments({
+  comments,
+  onUpdateComment,
+  showModal,
+  setShowModal,
+  modalMode,
+  onChangeModalMode,
+  taskId,
+}) {
+  const [commentToEdit, setCommentToEdit] = useState(null);
+  const [commentIdToDelete, setCommentIdToDelete] = useState("");
 
-export default function Comments({ comments }) {
   function formatDate(date) {
     const options = {
       year: "numeric",
@@ -40,14 +56,86 @@ export default function Comments({ comments }) {
     return new Date(date).toLocaleString("us-US", options);
   }
 
+  function handlePenClick(comment) {
+    setCommentToEdit(comment);
+  }
+
+  function handleCancelEditComment() {
+    setCommentToEdit(null);
+  }
+
+  function handleChangeCommentToEdit(comment) {
+    setCommentToEdit(comment);
+  }
+
+  function handleCommentTrashClick(commentId) {
+    onChangeModalMode("delete-comment");
+    setShowModal(true);
+    setCommentIdToDelete(commentId);
+  }
+
+  async function handleDeleteComment(commentId) {
+    const response = await toast.promise(
+      fetch("/api/comments", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ commentId, taskId }),
+      }),
+      {
+        pending: "Comment deletion is pending",
+        success: "Comment deleted successfully",
+        error: "Comment not deleted",
+      }
+    );
+    if (response.ok) {
+      onUpdateComment();
+      setShowModal(false);
+    }
+  }
+
   return (
-    <StyledList>
-      {comments?.map((comment) => (
-        <StyledListItems key={comment._id}>
-          <StyledDate>{formatDate(comment.date)}</StyledDate>
-          <StyledMessage>{comment.message}</StyledMessage>
-        </StyledListItems>
-      ))}
-    </StyledList>
+    <>
+      <StyledList>
+        {comments?.map((comment) => (
+          <StyledListItems key={comment._id}>
+            <StyledPen $small={true} onClick={() => handlePenClick(comment)} />
+            <StyledTrash
+              $small={true}
+              onClick={() => handleCommentTrashClick(comment._id)}
+            />
+            <StyledDate>
+              {comment.updatedDate
+                ? `Updated: ${formatDate(comment.updatedDate)}`
+                : formatDate(comment.date)}
+            </StyledDate>
+            {commentToEdit?._id !== comment._id && <p>{comment.message}</p>}
+            {commentToEdit?._id === comment._id && (
+              <CommentForm
+                commentToEdit={commentToEdit}
+                onCancelEditComment={handleCancelEditComment}
+                onChangeCommentToEdit={handleChangeCommentToEdit}
+                onUpdateComment={onUpdateComment}
+              />
+            )}
+          </StyledListItems>
+        ))}
+      </StyledList>
+      <Modal
+        $top="12rem"
+        setShowModal={setShowModal}
+        $open={showModal && modalMode === "delete-comment"}
+      >
+        {showModal && modalMode === "delete-comment" && (
+          <DeleteConfirmBox
+            setShowModal={setShowModal}
+            onConfirm={handleDeleteComment}
+            id={commentIdToDelete}
+            message="Are you sure you want to delete this comment?"
+          />
+        )}
+      </Modal>
+    </>
   );
 }

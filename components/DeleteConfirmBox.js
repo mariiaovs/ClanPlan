@@ -4,15 +4,14 @@ import StyledButton from "./StyledButton";
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
 `;
 
 const StyledSection = styled.section`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin: 1rem;
-  padding: 1rem;
+  margin: 1.5rem 0.5rem;
   border-radius: 1rem;
 `;
 
@@ -40,7 +39,7 @@ export default function DeleteConfirmBox({
         </StyledButton>
         {groupId && (
           <StyledButton onClick={() => onConfirmAll(id)}>
-            All occurrence
+            All tasks
           </StyledButton>
         )}
       </ButtonContainer>

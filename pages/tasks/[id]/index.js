@@ -8,6 +8,7 @@ import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
 import { toast } from "react-toastify";
 import CommentForm from "@/components/CommentForm";
 import Comments from "@/components/Comments";
+import { useState } from "react";
 
 const StyledMessage = styled.p`
   text-align: center;
@@ -22,6 +23,7 @@ const StyledSection = styled.section`
   flex-direction: column;
   border-radius: 2rem;
   box-shadow: 1px 1px 10px -1px var(--color-font);
+  transition: background-color 0.5s ease;
 `;
 
 const StyledHeading = styled.h2`
@@ -34,6 +36,7 @@ export default function DetailsPage({
   setShowModal,
   detailsBackLinkRef,
 }) {
+  const [modalMode, setModalMode] = useState("");
   const router = useRouter();
   const { id } = router.query;
 
@@ -47,7 +50,11 @@ export default function DetailsPage({
     return;
   }
 
-  async function handleAddComment() {
+  function handleChangeModalMode(mode) {
+    setModalMode(mode);
+  }
+
+  async function handleUpdateComment() {
     mutate();
   }
 
@@ -86,11 +93,21 @@ export default function DetailsPage({
             setShowModal={setShowModal}
             onCheckboxChange={handleCheckboxChange}
             detailsBackLinkRef={detailsBackLinkRef}
+            modalMode={modalMode}
+            onChangeModalMode={handleChangeModalMode}
           />
           <StyledSection>
             <StyledHeading>Comments</StyledHeading>
-            <CommentForm taskId={id} onAddComment={handleAddComment} />
-            <Comments comments={task.comments} />
+            <CommentForm taskId={id} onUpdateComment={handleUpdateComment} />
+            <Comments
+              showModal={showModal}
+              setShowModal={setShowModal}
+              comments={task.comments}
+              onUpdateComment={handleUpdateComment}
+              modalMode={modalMode}
+              onChangeModalMode={handleChangeModalMode}
+              taskId={id}
+            />
             {!task.comments?.length && (
               <StyledMessage>No comments added.</StyledMessage>
             )}

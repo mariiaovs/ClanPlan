@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 const commentSchema = new Schema({
   message: { type: String, required: true },
   date: { type: Date, requred: true },
+  updatedDate: { type: Date },
 });
 
 const Comment =

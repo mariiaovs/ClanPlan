@@ -12,12 +12,12 @@ export default async function handler(request, response) {
       .populate("category")
       .populate("assignedTo");
 
-    if (!task) {
-      return response.status(404).json({ status: "Task not found" });
+    if (task?.comments) {
+      await task.populate("comments");
     }
 
-    if (task.comments) {
-      await task.populate("comments");
+    if (!task) {
+      return response.status(404).json({ status: "Task not found" });
     }
 
     response.status(200).json(task);

@@ -25,7 +25,7 @@ const StyledSection = styled.section`
   transform: translateX(-50%);
   z-index: 10;
   opacity: ${({ $open }) => ($open ? 1 : 0)};
-  transition: top 0.5s ease, opacity 0.5s ease;
+  transition: top 0.5s ease, opacity 0.5s ease, background-color 0.5s ease;
 `;
 
 export default function Modal({ children, setShowModal, $top, $open }) {

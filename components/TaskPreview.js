@@ -2,6 +2,7 @@ import styled from "styled-components";
 import Link from "next/link";
 import checkForToday from "@/utils/checkForToday";
 import checkForMissedDate from "@/utils/checkForMissedDate";
+import Flame from "@/public/assets/images/flame.svg";
 
 const StyledSection = styled.section`
   display: grid;
@@ -24,6 +25,12 @@ const StyledLink = styled(Link)`
 
 const StyledParagraph = styled.p`
   text-align: center;
+`;
+
+const StyledFlame = styled(Flame)`
+  display: inline-block;
+  width: 1rem;
+  margin: 0 0.2rem;
 `;
 
 const StyledSpan = styled.span`
@@ -55,7 +62,12 @@ export default function TaskPreview({
         onClick={() => onSetDetailsBackLinkRef("/")}
       >
         <StyledParagraphContent>{title}</StyledParagraphContent>
-        <StyledParagraph>{"🔥".repeat(Number(priority))}</StyledParagraph>
+
+        <StyledParagraph>
+          {[...Array(Number(priority))].map((_element, index) => (
+            <StyledFlame key={index} />
+          ))}
+        </StyledParagraph>
         <p>{category?.title}</p>
         <StyledParagraph>
           <StyledSpan $isMissed={isMissed}>

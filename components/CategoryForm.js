@@ -15,7 +15,7 @@ const StyledLabel = styled.label`
 
 const StyledSpan = styled.span`
   font-size: 1rem;
-  color: red;
+  color: var(--color-aler);
   float: ${({ $left }) => ($left ? "left" : "right")};
 `;
 
@@ -142,7 +142,7 @@ export default function CategoryForm({
         onChange={handleChange}
         maxLength={50}
         defaultValue={value?.title}
-      ></input>
+      />
       <StyledSpan>{50 - enteredCategory.length} characters left</StyledSpan>
 
       <StyledLabel htmlFor="members">

@@ -142,7 +142,7 @@ export default function CommentForm({
         maxLength="200"
         defaultValue={commentToEdit?.message}
         onChange={handleChangeMessage}
-      ></textarea>
+      />
       <StyledButtonContainer>
         {commentToEdit && (
           <StyledFormButton type="button" onClick={onCancelEditComment}>

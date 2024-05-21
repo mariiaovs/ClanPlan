@@ -26,77 +26,56 @@ export default async function handler(request, response) {
   if (request.method === "PUT") {
     const updatedTask = request.body;
     if (updateRequest === "all" || updateRequest === "future") {
-      const tasks = await Task.find({
-        groupId: updatedTask.groupId,
-        isDone: { $ne: true },
-      }).sort({
-        dueDate: 1,
-      });
-      const startDate =
-        updateRequest === "future"
-          ? new Date(updatedTask.dueDate)
-          : new Date(tasks[0].dueDate);
-      const endDate = new Date(updatedTask.endDate);
-
-      if (tasks && tasks.length > 0) {
-        updateRequest === "future"
-          ? await Task.deleteMany({
+      const tasks =
+        updateRequest === "all"
+          ? await Task.find({
               groupId: updatedTask.groupId,
-              dueDate: { $gte: updatedTask.dueDate },
               isDone: { $ne: true },
+            }).sort({
+              dueDate: 1,
             })
-          : await Task.deleteMany({
+          : await Task.find({
               groupId: updatedTask.groupId,
               isDone: { $ne: true },
+              dueDate: { $gte: updatedTask.dueDate },
+            }).sort({
+              dueDate: 1,
             });
-      }
 
-      if (updatedTask.repeat === "monthly") {
-        const nextMonthDueDate = new Date(
-          startDate.getFullYear(),
-          startDate.getMonth()
-        );
-        const currentDay = new Date(updatedTask.dueDate).getDate();
+      if (updatedTask.repeat === "Monthly") {
+        for (const task of tasks) {
+          const updatedDueDate = new Date(updatedTask.dueDate);
+          const existingTaskDueDate = new Date(task.dueDate);
 
-        while (nextMonthDueDate <= endDate) {
-          const dayInMonth = new Date(
-            nextMonthDueDate.getFullYear(),
-            nextMonthDueDate.getMonth() + 1,
-            0
-          ).getDate();
-          if (
-            currentDay <= dayInMonth &&
-            new Date(
-              nextMonthDueDate.getFullYear(),
-              nextMonthDueDate.getMonth(),
-              currentDay
-            ) <= endDate
-          ) {
-            updatedTask.dueDate = convertDateToString(
+          const updatedMonthlyTask = {
+            ...updatedTask,
+            dueDate: convertDateToString(
               new Date(
-                nextMonthDueDate.getFullYear(),
-                nextMonthDueDate.getMonth(),
-                currentDay
+                existingTaskDueDate.getFullYear(),
+                existingTaskDueDate.getMonth(),
+                updatedDueDate.getDate()
               )
-            );
-
-            await Task.create(updatedTask);
-          }
-          nextMonthDueDate.setMonth(nextMonthDueDate.getMonth() + 1);
+            ),
+          };
+          await Task.findByIdAndUpdate(task._id, updatedMonthlyTask);
         }
-      } else if (updatedTask.repeat === "weekly") {
-        const nextWeekDueDate = startDate;
-        while (nextWeekDueDate <= endDate) {
-          updatedTask.dueDate = convertDateToString(nextWeekDueDate);
-          await Task.create(updatedTask);
+      } else if (updatedTask.repeat === "Weekly") {
+        const nextWeekDueDate = new Date(updatedTask.dueDate);
+        for (const task of tasks) {
+          const updatedWeeklyTask = {
+            ...updatedTask,
+            dueDate: convertDateToString(nextWeekDueDate),
+          };
+          await Task.findByIdAndUpdate(task._id, updatedWeeklyTask);
           nextWeekDueDate.setDate(nextWeekDueDate.getDate() + 7);
         }
-      } else if (updatedTask.repeat === "daily") {
-        const nextDayDueDate = startDate;
-        while (nextDayDueDate <= endDate) {
-          updatedTask.dueDate = convertDateToString(nextDayDueDate);
-          await Task.create(updatedTask);
-          nextDayDueDate.setDate(nextDayDueDate.getDate() + 1);
+      } else if (updatedTask.repeat === "Daily") {
+        for (const task of tasks) {
+          const updatedDailyTask = {
+            ...updatedTask,
+            dueDate: task.dueDate,
+          };
+          await Task.findByIdAndUpdate(task._id, updatedDailyTask);
         }
       }
       response.status(200).json({ status: "Tasks updated successfully." });

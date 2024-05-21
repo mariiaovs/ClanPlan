@@ -90,7 +90,7 @@ export default function MemberForm({ onAddMember, familyMembers }) {
         id="name"
         onChange={handleChange}
         maxLength={50}
-      ></input>
+      />
       <StyledSpan>{50 - enteredName.length} characters left</StyledSpan>
 
       <StyledLabel htmlFor="role">

@@ -73,7 +73,7 @@ export default function FilterWindow({
         min="0"
         max="3"
         defaultValue={filters.priority || "0"}
-      ></input>
+      />
       <StyledLabel htmlFor="category">Category:</StyledLabel>
       <StyledSelect
         id="category"

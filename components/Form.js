@@ -4,6 +4,8 @@ import StyledButton from "./StyledButton";
 import Multiselect from "multiselect-react-dropdown";
 import Modal from "./Modal";
 import ConfirmBox from "./ConfirmBox";
+import convertDateToString from "@/utils/convertDateToString";
+import getWeekRange from "@/utils/getWeekRange";
 
 const StyledForm = styled.form`
   display: flex;
@@ -62,26 +64,33 @@ export default function Form({
     allocatedMembersList || familyMembers
   );
   const [assignedTo, setAssignedTo] = useState(value?.assignedTo || []);
-
-  const formattedTodayDate = new Date().toISOString().substring(0, 10);
   const [taskToUpdate, setTaskToUpdate] = useState();
   const [displayEndDate, setDisplayEndDate] = useState(false);
   const [isEndDateValid, setIsEndDateValid] = useState(true);
   const [endDate, setEndDate] = useState(value?.endDate);
 
+  const formattedTodayDate = convertDateToString(new Date());
+
+  let minDate = null;
+  let maxDate = null;
+
   const date = new Date(value?.dueDate);
 
-  const firstDay =
-    value?.dueDate &&
-    new Date(date.getFullYear(), date.getMonth(), 2)
-      .toISOString()
-      .substring(0, 10);
+  if (value?.repeat === "Monthly") {
+    minDate =
+      value?.dueDate &&
+      convertDateToString(new Date(date.getFullYear(), date.getMonth(), 1));
 
-  const lastDay =
-    value?.dueDate &&
-    new Date(date.getFullYear(), date.getMonth() + 1, 1)
-      .toISOString()
-      .substring(0, 10);
+    maxDate =
+      value?.dueDate &&
+      convertDateToString(new Date(date.getFullYear(), date.getMonth() + 1, 0));
+  } else if (value?.repeat === "Weekly") {
+    minDate = convertDateToString(getWeekRange(value?.dueDate).startOfWeek);
+    maxDate = convertDateToString(getWeekRange(value?.dueDate).endOfWeek);
+  } else if (value?.repeat === "Daily") {
+    minDate = value?.dueDate;
+    maxDate = value?.dueDate;
+  }
 
   function handleTitleChange(event) {
     setEnteredTitle(event.target.value);
@@ -120,9 +129,9 @@ export default function Form({
 
     if (
       !isEdit &&
-      (data.repeat === "monthly" ||
-        data.repeat === "weekly" ||
-        data.repeat === "daily") &&
+      (data.repeat === "Monthly" ||
+        data.repeat === "Weekly" ||
+        data.repeat === "Daily") &&
       !data.endDate
     ) {
       setIsEndDateValid(false);
@@ -140,7 +149,7 @@ export default function Form({
         isDone: value.isDone,
         category: data.category === "" ? null : data.category,
         endDate: value.endDate,
-        startDate: value.startDate,
+        repeat: value.repeat,
       };
 
       if (value?.groupId) {
@@ -198,7 +207,7 @@ export default function Form({
 
   function handleRepeat(event) {
     const repeat = event.target.value;
-    if (repeat === "monthly" || repeat === "weekly" || repeat === "daily") {
+    if (repeat === "Monthly" || repeat === "Weekly" || repeat === "Daily") {
       setDisplayEndDate(true);
     } else {
       setDisplayEndDate(false);
@@ -242,7 +251,7 @@ export default function Form({
           maxLength="150"
           onChange={handleTitleChange}
           defaultValue={value?.title}
-        ></input>
+        />
         <StyledSpan>{150 - enteredTitle.length} characters left</StyledSpan>
         <StyledLabel htmlFor="category">Category:</StyledLabel>
         <StyledSelect
@@ -275,29 +284,16 @@ export default function Form({
           defaultValue={isEdit ? value?.priority : "1"}
           min="1"
           max="3"
-        ></input>
+        />
         <StyledLabel htmlFor="dueDate">Due date:</StyledLabel>
         <StyledDateInput
           type="date"
           id="dueDate"
           name="dueDate"
-          min={
-            isEdit &&
-            (value?.repeat.includes("monthly") ||
-              value?.repeat.includes("weekly") ||
-              value?.repeat.includes("daily"))
-              ? firstDay
-              : formattedTodayDate
-          }
-          max={
-            isEdit &&
-            (value?.repeat.includes("monthly") ||
-              value?.repeat.includes("weekly") ||
-              value?.repeat.includes("daily")) &&
-            lastDay
-          }
+          min={isEdit ? minDate : formattedTodayDate}
+          max={isEdit && maxDate}
           defaultValue={value?.dueDate || formattedTodayDate}
-        ></StyledDateInput>
+        />
 
         <StyledLabel htmlFor="repeat">Repeat:</StyledLabel>
         <StyledSelect
@@ -305,11 +301,12 @@ export default function Form({
           name="repeat"
           defaultValue={value?.repeat}
           onChange={handleRepeat}
+          disabled={isEdit}
         >
-          <option value="none">Don&apos;t repeat</option>
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
+          <option value="None">Don&apos;t repeat</option>
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
         </StyledSelect>
         {!isEdit && displayEndDate && (
           <>
@@ -326,7 +323,26 @@ export default function Form({
               min={formattedTodayDate}
               defaultValue={endDate}
               onChange={handleEndDate}
-            ></StyledDateInput>
+            />
+          </>
+        )}
+        {isEdit && (
+          <>
+            <StyledLabel htmlFor="endDate">
+              Until:
+              {!isEndDateValid && (
+                <StyledSpan>Please pick end date!</StyledSpan>
+              )}
+            </StyledLabel>
+            <StyledDateInput
+              type="date"
+              id="endDate"
+              name="endDate"
+              min={formattedTodayDate}
+              defaultValue={endDate}
+              onChange={handleEndDate}
+              readOnly
+            />
           </>
         )}
 

@@ -56,7 +56,7 @@ const StyledCheckbox = styled.input`
   }
 `;
 const StyledParagraphContent = styled.p`
-  font-size: larger;
+  font-size: large;
   font-weight: 600;
 `;
 
@@ -89,12 +89,17 @@ export default function TaskDetails({
     assignedTo,
     groupId,
     repeat,
+    endDate,
   } = task;
   const router = useRouter();
 
   const isToday = dueDate && checkForToday(dueDate);
   const isMissed = dueDate && checkForMissedDate(dueDate);
-
+  const isRepeat =
+    repeat &&
+    (repeat === "Monthly" || repeat === "Weekly" || repeat === "Daily")
+      ? true
+      : false;
   async function handleDeleteTask(id) {
     const response = await toast.promise(
       fetch(`/api/tasks/${id}?deleteRequest=single`, {
@@ -137,8 +142,12 @@ export default function TaskDetails({
 
   return (
     <>
-      <Modal $top="13.5rem" setShowModal={setShowModal} $open={showModal}>
-        {showModal && (
+      <Modal
+        $top="13.5rem"
+        setShowModal={setShowModal}
+        $open={showModal && modalMode === "delete-task"}
+      >
+        {showModal && modalMode === "delete-task" && (
           <ConfirmBox
             setShowModal={setShowModal}
             onConfirm={() => handleDeleteTask(id)}
@@ -174,16 +183,20 @@ export default function TaskDetails({
             <StyledFlame key={index} />
           ))}
         </p>
-        <StyledArticle>
-          <p>Due Date:</p>
-          <p>Repeat:</p>
-          <StyledParagraphContent>
-            <StyledSpan $isMissed={isMissed}>
-              {isToday ? "Today" : dueDate || "-"}
-            </StyledSpan>
-          </StyledParagraphContent>
-          <StyledParagraphContent>{repeat || "none"}</StyledParagraphContent>
-        </StyledArticle>
+        <p>Due Date:</p>
+        <StyledParagraphContent>
+          <StyledSpan $isMissed={isMissed}>
+            {isToday ? "Today" : dueDate || "-"}
+          </StyledSpan>
+        </StyledParagraphContent>
+        {isRepeat && (
+          <StyledArticle>
+            <p>Repeat:</p>
+            <p>End Date:</p>
+            <StyledParagraphContent>{repeat || "None"}</StyledParagraphContent>
+            <StyledParagraphContent>{endDate || "-"}</StyledParagraphContent>
+          </StyledArticle>
+        )}
         <p>Assigned to:</p>
         <StyledParagraphContent>
           {assignedTo?.map((member) => member.name).join(", ") || "-"}

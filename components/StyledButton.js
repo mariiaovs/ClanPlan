@@ -15,7 +15,7 @@ const StyledButton = styled.button`
   ${({ $clear }) =>
     $clear &&
     `position: absolute;
-  margin-top: 0;
+  margin-top: 0.5rem;
   right: 0.5rem;`}
 `;
 

@@ -163,7 +163,6 @@ span.chip {
 	background-color: var(--color-background);
   }
 
-
 /* Tostify styles */
 
 .Toastify__progress-bar--success {

@@ -5,7 +5,9 @@ export default async function handler(request, response) {
   await dbConnect();
 
   if (request.method === "GET") {
-    const category = await Category.find().populate("selectedMembers");
+    const category = await Category.find()
+      .populate("selectedMembers")
+      .sort({ title: "asc" });
     return response.status(200).json(category);
   }
 

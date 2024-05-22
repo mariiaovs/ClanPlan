@@ -17,7 +17,7 @@ const StyledContainer = styled.div`
   padding: 0 0.5rem;
 `;
 
-const StyledMissedHeading = styled.h3`
+const StyledGroupHeading = styled.h3`
   ${({ $red }) => $red && `color: #ff0000;`}
 `;
 
@@ -52,9 +52,9 @@ export default function TasksListGroup({
   return (
     <StyledSection>
       <StyledContainer onClick={() => onHideGroup(groupKey)}>
-        <StyledMissedHeading $red={$red}>
+        <StyledGroupHeading $red={$red}>
           {groupKey} ({tasks.length})
-        </StyledMissedHeading>
+        </StyledGroupHeading>
         {hideGroup[groupKey] ? <StyledDownArrow /> : <StyledUpArrow />}
       </StyledContainer>
       <StyledDiv $isHide={hideGroup[groupKey]}>

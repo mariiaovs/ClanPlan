@@ -221,14 +221,13 @@ export default function Form({
 
   return (
     <>
-      {showModal && isEdit && (
-        <Modal $top="13.5rem" setShowModal={setShowModal} $open={true}>
+      <Modal $top="13.5rem" setShowModal={setShowModal} $open={showModal}>
+        {showModal && (
           <ConfirmBox
             setShowModal={setShowModal}
             onConfirm={handleUpdateOneTask}
-            onConfirmFutherTasks={() => handleUpdateTasks("future")}
+            onConfirmFurtherTasks={() => handleUpdateTasks("future")}
             onConfirmAllTasks={() => handleUpdateTasks("all")}
-            id={value._id}
             groupId={value.groupId}
             message={
               value.groupId
@@ -236,8 +235,8 @@ export default function Form({
                 : "Are you sure you want to update this task?"
             }
           />
-        </Modal>
-      )}
+        )}
+      </Modal>
       <StyledForm onSubmit={handleSubmit}>
         <StyledHeading>{title}</StyledHeading>
         <StyledLabel htmlFor="title">
@@ -291,7 +290,7 @@ export default function Form({
           id="dueDate"
           name="dueDate"
           min={isEdit ? minDate : formattedTodayDate}
-          max={isEdit && maxDate}
+          max={isEdit ? maxDate : ""}
           defaultValue={value?.dueDate || formattedTodayDate}
         />
 
@@ -356,11 +355,7 @@ export default function Form({
           showCheckbox={true}
           keepSearchTerm={true}
           showArrow={true}
-          emptyRecordMsg={
-            familyMembers.length
-              ? "No members added to the category"
-              : "No members added to the family"
-          }
+          emptyRecordMsg="No members found"
           placeholder="Select Family Member"
           avoidHighlightFirstOption={true}
           selectedValues={assignedTo}

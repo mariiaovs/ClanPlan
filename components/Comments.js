@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Modal from "./Modal";
 import ConfirmBox from "./ConfirmBox";
 import CommentForm from "./CommentForm";
+import formatCommentDate from "@/utils/formatCommentDate";
 
 const StyledList = styled.ul`
   list-style: none;
@@ -44,17 +45,6 @@ export default function Comments({
 }) {
   const [commentToEdit, setCommentToEdit] = useState(null);
   const [commentIdToDelete, setCommentIdToDelete] = useState("");
-
-  function formatDate(date) {
-    const options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    };
-    return new Date(date).toLocaleString("us-US", options);
-  }
 
   function handlePenClick(comment) {
     setCommentToEdit(comment);
@@ -107,8 +97,8 @@ export default function Comments({
             />
             <StyledDate>
               {comment.updatedDate
-                ? `Updated: ${formatDate(comment.updatedDate)}`
-                : formatDate(comment.date)}
+                ? `Updated: ${formatCommentDate(comment.updatedDate)}`
+                : formatCommentDate(comment.date)}
             </StyledDate>
             {commentToEdit?._id !== comment._id && <p>{comment.message}</p>}
             {commentToEdit?._id === comment._id && (
@@ -130,8 +120,7 @@ export default function Comments({
         {showModal && modalMode === "delete-comment" && (
           <ConfirmBox
             setShowModal={setShowModal}
-            onConfirm={handleDeleteComment}
-            id={commentIdToDelete}
+            onConfirm={() => handleDeleteComment(commentIdToDelete)}
             message="Are you sure you want to delete this comment?"
           />
         )}

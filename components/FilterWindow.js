@@ -7,18 +7,16 @@ const StyledForm = styled.form`
   flex-direction: column;
   gap: 0.5rem;
   margin: 1rem;
-  background-color: var(--color-background);
   padding: 1rem;
   position: relative;
 `;
 
 const StyledHeading = styled.h2`
-  align-self: left;
-  margin-bottom: 1.5rem;
+  margin: 1rem 0;
 `;
 
 const StyledLabel = styled.label`
-  font-size: 1.2rem;
+  font-size: 0.9rem;
 `;
 
 const StyledDiv = styled.div`

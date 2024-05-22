@@ -9,10 +9,12 @@ import checkForMissedDate from "@/utils/checkForMissedDate";
 import { toast } from "react-toastify";
 import Flame from "@/public/assets/images/flame.svg";
 import ConfirmBox from "./ConfirmBox";
+import formatTasksDate from "@/utils/formatTasksDate";
 
 const StyledArticle = styled.article`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 3fr 4fr;
+  gap: 0.5rem;
 `;
 
 const StyledLink = styled(Link)`
@@ -55,6 +57,11 @@ const StyledCheckbox = styled.input`
     filter: hue-rotate(180deg);
   }
 `;
+
+const StyledParagraph = styled.p`
+  font-size: 0.9rem;
+`;
+
 const StyledParagraphContent = styled.p`
   font-size: large;
   font-weight: 600;
@@ -151,11 +158,10 @@ export default function TaskDetails({
           <ConfirmBox
             setShowModal={setShowModal}
             onConfirm={() => handleDeleteTask(id)}
-            onConfirmFutherTasks={() =>
+            onConfirmFurtherTasks={() =>
               handleDeleteTasks({ id, action: "future" })
             }
             onConfirmAllTasks={() => handleDeleteTasks({ id, action: "all" })}
-            id={id}
             groupId={groupId}
             message={
               groupId
@@ -165,28 +171,28 @@ export default function TaskDetails({
           />
         )}
       </Modal>
-
       <StyledSection $isDone={isDone}>
         <StyledTrash onClick={handleTaskTrashClick} />
         <StyledLink href={`/tasks/${id}/edit`}>
           <StyledPen />
         </StyledLink>
-        <p> What is to do?</p>
+        <StyledParagraph> What is to do?</StyledParagraph>
         <StyledParagraphContent>{title}</StyledParagraphContent>
-        <p>Category: </p>
+        <StyledParagraph>Category: </StyledParagraph>
         <StyledParagraphContent>
           {category?.title || "-"}
         </StyledParagraphContent>
-        <p>Priority: </p>
+        <StyledParagraph>Priority: </StyledParagraph>
         <p>
-          {[...Array(Number(priority))].map((_element, index) => (
-            <StyledFlame key={index} />
-          ))}
+          {priority &&
+            [...Array(Number(priority))].map((_element, index) => (
+              <StyledFlame key={index} />
+            ))}
         </p>
         <p>Due Date:</p>
         <StyledParagraphContent>
           <StyledSpan $isMissed={isMissed}>
-            {isToday ? "Today" : dueDate || "-"}
+            {isToday ? "Today" : formatTasksDate(dueDate) || "-"}
           </StyledSpan>
         </StyledParagraphContent>
         {isRepeat && (
@@ -194,7 +200,9 @@ export default function TaskDetails({
             <p>Repeat:</p>
             <p>End Date:</p>
             <StyledParagraphContent>{repeat || "None"}</StyledParagraphContent>
-            <StyledParagraphContent>{endDate || "-"}</StyledParagraphContent>
+            <StyledParagraphContent>
+              {formatTasksDate(endDate) || "-"}
+            </StyledParagraphContent>
           </StyledArticle>
         )}
         <p>Assigned to:</p>
@@ -206,7 +214,7 @@ export default function TaskDetails({
           <StyledCheckbox
             type="checkbox"
             id="checkbox"
-            checked={isDone}
+            defaultChecked={isDone}
             onChange={(event) => onCheckboxChange(task, event)}
           />
         </label>

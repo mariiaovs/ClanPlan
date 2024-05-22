@@ -4,7 +4,6 @@ import DownArrow from "@/public/assets/images/down-arrow.svg";
 import UpArrow from "@/public/assets/images/up-arrow.svg";
 import StyledTrash from "./StyledTrash";
 import Modal from "./Modal";
-import StyledButton from "./StyledButton";
 import CategoryForm from "./CategoryForm";
 import useSWR from "swr";
 import StyledLoadingAnimation from "./StyledLoadingAnimation";
@@ -28,7 +27,7 @@ const StyledListItem = styled.li`
   background-color: var(--color-background);
   box-shadow: 1px 1px 10px -1px var(--color-font);
   border-radius: 2rem;
-  padding: 1rem 2rem;
+  padding: 0.7rem 2rem 0.4rem 2rem;
   border: none;
   transition: background-color 0.5s ease;
 `;
@@ -59,27 +58,6 @@ const StyledDownArrow = styled(DownArrow)`
   margin: auto;
   stroke: var(--color-font);
   fill: var(--color-font);
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-`;
-
-const StyledSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin: 1rem;
-  padding: 1rem;
-  border-radius: 1rem;
-`;
-
-const StyledPragraph = styled.p`
-  font-size: larger;
-  font-weight: 600;
-  text-align: center;
 `;
 
 export default function CategoriesList({
@@ -224,8 +202,7 @@ export default function CategoriesList({
                 : `Are you sure you want to delete "${categoryToHandle.title}"?`
             }
             setShowModal={setShowModal}
-            onConfirm={handleDeleteCategory}
-            id={categoryToHandle._id}
+            onConfirm={() => handleDeleteCategory(categoryToHandle._id)}
           />
         )}
       </Modal>
@@ -235,17 +212,11 @@ export default function CategoriesList({
         $open={showModal && modalMode === "confirm-edit" && categoryIsUsed}
       >
         {showModal && modalMode === "confirm-edit" && categoryIsUsed && (
-          <StyledSection>
-            <StyledPragraph>{`Category "${categoryToHandle.title}" is used in active tasks. Are you sure you want to edit "${categoryToHandle.title}"?`}</StyledPragraph>
-            <ButtonContainer>
-              <StyledButton onClick={() => setShowModal(false)}>
-                No
-              </StyledButton>
-              <StyledButton onClick={() => setModalMode("edit")}>
-                Yes
-              </StyledButton>
-            </ButtonContainer>
-          </StyledSection>
+          <ConfirmBox
+            message={`Category "${categoryToHandle.title}" is used in active tasks. Are you sure you want to edit "${categoryToHandle.title}"?`}
+            setShowModal={setShowModal}
+            onConfirm={() => setModalMode("edit")}
+          />
         )}
       </Modal>
       <Modal

@@ -3,11 +3,13 @@ import Link from "next/link";
 import checkForToday from "@/utils/checkForToday";
 import checkForMissedDate from "@/utils/checkForMissedDate";
 import Flame from "@/public/assets/images/flame.svg";
+import formatTasksDate from "@/utils/formatTasksDate";
 
 const StyledSection = styled.section`
   display: grid;
   grid-template-columns: 1fr 8fr;
   gap: 1rem;
+  font-size: 0.9rem;
 `;
 
 const StyledCheckbox = styled.input`
@@ -20,7 +22,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   color: inherit;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 8fr 5fr;
 `;
 
 const StyledParagraph = styled.p`
@@ -40,6 +42,9 @@ const StyledSpan = styled.span`
 const StyledParagraphContent = styled.p`
   font-size: larger;
   font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export default function TaskPreview({
@@ -54,7 +59,7 @@ export default function TaskPreview({
     <StyledSection>
       <StyledCheckbox
         type="checkbox"
-        checked={isDone}
+        defaultChecked={isDone}
         onChange={(event) => onCheckboxChange(task, event)}
       />
       <StyledLink
@@ -71,7 +76,7 @@ export default function TaskPreview({
         <p>{category?.title}</p>
         <StyledParagraph>
           <StyledSpan $isMissed={isMissed}>
-            {isToday ? "Today" : dueDate}
+            {isToday ? "Today" : formatTasksDate(dueDate)}
           </StyledSpan>
         </StyledParagraph>
       </StyledLink>

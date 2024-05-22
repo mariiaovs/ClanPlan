@@ -7,7 +7,7 @@ const StyledHeading = styled.h2`
 `;
 
 const StyledLabel = styled.label`
-  font-size: 1.2rem;
+  font-size: 0.9rem;
 `;
 
 const StyledSpan = styled.span`

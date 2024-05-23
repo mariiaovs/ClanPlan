@@ -6,6 +6,7 @@ import Modal from "./Modal";
 import ConfirmBox from "./ConfirmBox";
 import convertDateToString from "@/utils/convertDateToString";
 import getWeekRange from "@/utils/getWeekRange";
+import MultiselectContainer from "./MultiselectContainer";
 
 const StyledForm = styled.form`
   display: flex;
@@ -346,20 +347,26 @@ export default function Form({
         )}
 
         <StyledLabel htmlFor="assignedTo">Assign to:</StyledLabel>
-        <Multiselect
-          id="assignedTo"
-          options={allocatedMembers}
-          onSelect={onSelect}
-          onRemove={onRemove}
-          displayValue="name"
-          showCheckbox={true}
-          keepSearchTerm={true}
-          showArrow={true}
-          emptyRecordMsg="No members found"
-          placeholder="Select Family Member"
-          avoidHighlightFirstOption={true}
-          selectedValues={assignedTo}
-        />
+        <MultiselectContainer>
+          <Multiselect
+            id="assignedTo"
+            options={allocatedMembers}
+            onSelect={onSelect}
+            onRemove={onRemove}
+            displayValue="name"
+            showCheckbox={true}
+            keepSearchTerm={true}
+            emptyRecordMsg="No members found"
+            placeholder="Select Family Member"
+            avoidHighlightFirstOption={true}
+            selectedValues={assignedTo}
+            style={{
+              searchBox: {
+                paddingRight: "25px",
+              },
+            }}
+          />
+        </MultiselectContainer>
         <StyledButton>{isEdit ? "Update" : "Create"}</StyledButton>
       </StyledForm>
     </>

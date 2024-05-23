@@ -146,7 +146,6 @@ export default function TaskDetails({
     onChangeModalMode("delete-task");
     setShowModal(true);
   }
-
   return (
     <>
       <Modal
@@ -214,7 +213,7 @@ export default function TaskDetails({
           <StyledCheckbox
             type="checkbox"
             id="checkbox"
-            defaultChecked={isDone}
+            checked={isDone}
             onChange={(event) => onCheckboxChange(task, event)}
           />
         </label>

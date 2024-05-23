@@ -8,6 +8,7 @@ import { ThemeProvider } from "styled-components";
 import { darkTheme, lightTheme } from "../styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { SessionProvider } from "next-auth/react";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
@@ -79,44 +80,46 @@ export default function App({ Component, pageProps }) {
   }
 
   return (
-    <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-      <Layout isDarkTheme={isDarkTheme} setDarkTheme={setDarkTheme}>
-        <GlobalStyle />
-        <SWRConfig value={{ fetcher }}>
-          <ToastContainer
-            position="top-center"
-            autoClose={2000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme={isDarkTheme ? "dark" : "light"}
-          />
-          <Component
-            {...pageProps}
-            tasks={tasks}
-            familyMembers={familyMembers}
-            setShowModal={setShowModal}
-            showModal={showModal}
-            categories={categories}
-            detailsBackLinkRef={detailsBackLinkRef}
-            onSetDetailsBackLinkRef={handleSetDetailsBackLinkRef}
-            onApplyFilters={handleApplyFilters}
-            onDeleteFilterOption={handleDeleteFilterOption}
-            filters={filters}
-            setFilters={setFilters}
-            onButtonClick={handleHomePageButtonClick}
-            listType={listType}
-            currentDate={currentDate}
-            setCurrentDate={setCurrentDate}
-            currentView={currentView}
-            setCurrentView={setCurrentView}
-          />
-        </SWRConfig>
-      </Layout>
-    </ThemeProvider>
+    <SessionProvider session={pageProps.session}>
+      <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+        <Layout isDarkTheme={isDarkTheme} setDarkTheme={setDarkTheme}>
+          <GlobalStyle />
+          <SWRConfig value={{ fetcher }}>
+            <ToastContainer
+              position="top-center"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme={isDarkTheme ? "dark" : "light"}
+            />
+            <Component
+              {...pageProps}
+              tasks={tasks}
+              familyMembers={familyMembers}
+              setShowModal={setShowModal}
+              showModal={showModal}
+              categories={categories}
+              detailsBackLinkRef={detailsBackLinkRef}
+              onSetDetailsBackLinkRef={handleSetDetailsBackLinkRef}
+              onApplyFilters={handleApplyFilters}
+              onDeleteFilterOption={handleDeleteFilterOption}
+              filters={filters}
+              setFilters={setFilters}
+              onButtonClick={handleHomePageButtonClick}
+              listType={listType}
+              currentDate={currentDate}
+              setCurrentDate={setCurrentDate}
+              currentView={currentView}
+              setCurrentView={setCurrentView}
+            />
+          </SWRConfig>
+        </Layout>
+      </ThemeProvider>
+    </SessionProvider>
   );
 }

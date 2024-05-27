@@ -3,12 +3,11 @@ import Sun from "@/public/assets/images/sun.svg";
 import Moon from "@/public/assets/images/moon.svg";
 
 const ToggleLabel = styled.label`
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: center;
 `;
 
 const ToggleCheckbox = styled.input`

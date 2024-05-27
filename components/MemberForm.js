@@ -64,7 +64,7 @@ export default function MemberForm({ onAddMember, familyMembers }) {
       return;
     }
 
-    onAddMember(data);
+    onAddMember({ ...data, family: "1234ff475a93007538a23e95" });
   }
 
   function handleChange(event) {

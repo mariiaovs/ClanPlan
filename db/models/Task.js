@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import "./Category";
 import "./Member";
 import "./Comment";
+import "./Family";
 
 const { Schema } = mongoose;
 
@@ -16,6 +17,7 @@ const taskSchema = new Schema({
   repeat: { type: String },
   endDate: { type: String },
   comments: { type: [Schema.Types.ObjectId], ref: "Comment" },
+  family: { type: [Schema.Types.ObjectId], ref: "Family" },
 });
 
 const Task = mongoose.models.Task || mongoose.model("Task", taskSchema);

@@ -9,10 +9,14 @@ import { darkTheme, lightTheme } from "../styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SessionProvider } from "next-auth/react";
+import StopMessage from "@/components/StopMessage";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
-export default function App({ Component, pageProps }) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}) {
   const [showModal, setShowModal] = useState(false);
   const [detailsBackLinkRef, setDetailsBackLinkRef] = useState("/");
   const [filters, setFilters] = useState({});
@@ -80,9 +84,9 @@ export default function App({ Component, pageProps }) {
   }
 
   return (
-    <SessionProvider session={pageProps.session}>
+    <SessionProvider session={session}>
       <ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-        <Layout isDarkTheme={isDarkTheme} setDarkTheme={setDarkTheme}>
+        <Layout>
           <GlobalStyle />
           <SWRConfig value={{ fetcher }}>
             <ToastContainer
@@ -97,26 +101,29 @@ export default function App({ Component, pageProps }) {
               pauseOnHover
               theme={isDarkTheme ? "dark" : "light"}
             />
-            <Component
-              {...pageProps}
-              tasks={tasks}
-              familyMembers={familyMembers}
-              setShowModal={setShowModal}
-              showModal={showModal}
-              categories={categories}
-              detailsBackLinkRef={detailsBackLinkRef}
-              onSetDetailsBackLinkRef={handleSetDetailsBackLinkRef}
-              onApplyFilters={handleApplyFilters}
-              onDeleteFilterOption={handleDeleteFilterOption}
-              filters={filters}
-              setFilters={setFilters}
-              onButtonClick={handleHomePageButtonClick}
-              listType={listType}
-              currentDate={currentDate}
-              setCurrentDate={setCurrentDate}
-              currentView={currentView}
-              setCurrentView={setCurrentView}
-            />
+            {!session && <StopMessage />}
+            {session && (
+              <Component
+                {...pageProps}
+                tasks={tasks}
+                familyMembers={familyMembers}
+                setShowModal={setShowModal}
+                showModal={showModal}
+                categories={categories}
+                detailsBackLinkRef={detailsBackLinkRef}
+                onSetDetailsBackLinkRef={handleSetDetailsBackLinkRef}
+                onApplyFilters={handleApplyFilters}
+                onDeleteFilterOption={handleDeleteFilterOption}
+                filters={filters}
+                setFilters={setFilters}
+                onButtonClick={handleHomePageButtonClick}
+                listType={listType}
+                currentDate={currentDate}
+                setCurrentDate={setCurrentDate}
+                currentView={currentView}
+                setCurrentView={setCurrentView}
+              />
+            )}
           </SWRConfig>
         </Layout>
       </ThemeProvider>

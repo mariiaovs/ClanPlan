@@ -260,11 +260,11 @@ export default function Form({
           onChange={handleFamilyMembersSelection}
         >
           <option value="">
-            {categories.length
+            {categories?.length
               ? "Please select a category"
               : "No categories added"}
           </option>
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <option key={category._id} value={category._id}>
               {category.title}
             </option>

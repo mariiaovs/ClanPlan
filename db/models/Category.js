@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import "./Member";
+import "./Family";
 
 const { Schema } = mongoose;
 
@@ -11,6 +12,7 @@ const categorySchema = new Schema({
     required: true,
   },
   owner: { type: String, required: true },
+  family: { type: [Schema.Types.ObjectId], ref: "Family" },
 });
 
 const Category =

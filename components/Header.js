@@ -13,10 +13,16 @@ const StyledHeader = styled.header`
   top: 0;
   right: 0;
   left: 0;
-  max-width: 375px;
   margin: auto;
   padding: 0.7rem;
   z-index: 1;
+  max-width: 375px;
+
+  @media (min-width: 1200px), (min-width: 900px) {
+    max-width: 100vw;
+    left: 100px;
+    box-shadow: -1px 6px 15px 0px #7d7d7d;
+  }
 `;
 
 const StyledLink = styled(Link)`

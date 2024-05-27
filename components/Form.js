@@ -17,6 +17,10 @@ const StyledForm = styled.form`
   border-radius: 1rem;
   box-shadow: 1px 1px 10px -1px var(--color-font);
   transition: background-color 0.5s ease;
+  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
+    margin-left: 6rem;
+    margin-top: 6rem;
+  }
 `;
 
 const StyledHeading = styled.h2`
@@ -25,12 +29,18 @@ const StyledHeading = styled.h2`
 
 const StyledLabel = styled.label`
   font-size: 0.9rem;
+  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const StyledSpan = styled.span`
   font-size: 1rem;
   color: red;
   float: ${({ $left }) => ($left ? "left" : "right")};
+  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const StyledDateInput = styled.input`
@@ -45,6 +55,9 @@ const StyledDiv = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
+  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
+    font-size: 1.5rem;
+  }
 `;
 
 export default function Form({

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import ThemeToggle from "./ThemeToggle";
+import Login from "./Login";
 
 const StyledHeader = styled.header`
   background-color: var(--color-background);
@@ -26,6 +27,7 @@ export default function Header({ isDarkTheme, setDarkTheme }) {
     <StyledHeader>
       <ThemeToggle isDarkTheme={isDarkTheme} setDarkTheme={setDarkTheme} />
       <StyledH1>ClanPlan</StyledH1>
+      <Login />
     </StyledHeader>
   );
 }

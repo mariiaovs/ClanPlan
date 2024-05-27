@@ -4,6 +4,7 @@ import TasksListGroups from "@/components/TasksListGroups";
 import styled from "styled-components";
 import checkForMissedDate from "@/utils/checkForMissedDate";
 import checkForToday from "@/utils/checkForToday";
+import { useSession } from "next-auth/react";
 
 const StyledSection = styled.section`
   display: flex;
@@ -96,45 +97,48 @@ export default function HomePage({
       (!filters.category || task.category?._id === filters.category) &&
       (!filters.member || task.assignedTo.includes(filters.member))
   );
+  const { data: session } = useSession();
 
   return (
     <>
-      <StyledSection>
-        <StyledButton
-          onClick={() => onButtonClick("today")}
-          $isActive={listType === "today"}
-        >
-          <StyledSpan>Today</StyledSpan>
-        </StyledButton>
-        <StyledButton
-          onClick={() => onButtonClick("all")}
-          $isActive={listType === "all"}
-        >
-          <StyledSpan>All Tasks</StyledSpan>
-        </StyledButton>
-        <StyledButton
-          onClick={() => onButtonClick("done")}
-          $isActive={listType === "done"}
-        >
-          <StyledSpan>Done</StyledSpan>
-        </StyledButton>
-        <StyledButton
-          onClick={() => onButtonClick("missed")}
-          $isActive={listType === "missed"}
-        >
-          <StyledSpan $redColor={missedTasks.length}>
-            Missed {missedTasks.length}
-          </StyledSpan>
-        </StyledButton>
-        <StyledButton
-          onClick={() => onButtonClick("notAssigned")}
-          $isActive={listType === "notAssigned"}
-        >
-          <StyledSpan $redColor={notAssignedTasks.length}>
-            Not assigned {notAssignedTasks.length}
-          </StyledSpan>
-        </StyledButton>
-      </StyledSection>
+      {session && (
+        <StyledSection>
+          <StyledButton
+            onClick={() => onButtonClick("today")}
+            $isActive={listType === "today"}
+          >
+            <StyledSpan>Today</StyledSpan>
+          </StyledButton>
+          <StyledButton
+            onClick={() => onButtonClick("all")}
+            $isActive={listType === "all"}
+          >
+            <StyledSpan>All Tasks</StyledSpan>
+          </StyledButton>
+          <StyledButton
+            onClick={() => onButtonClick("done")}
+            $isActive={listType === "done"}
+          >
+            <StyledSpan>Done</StyledSpan>
+          </StyledButton>
+          <StyledButton
+            onClick={() => onButtonClick("missed")}
+            $isActive={listType === "missed"}
+          >
+            <StyledSpan $redColor={missedTasks.length}>
+              Missed {missedTasks.length}
+            </StyledSpan>
+          </StyledButton>
+          <StyledButton
+            onClick={() => onButtonClick("notAssigned")}
+            $isActive={listType === "notAssigned"}
+          >
+            <StyledSpan $redColor={notAssignedTasks.length}>
+              Not assigned {notAssignedTasks.length}
+            </StyledSpan>
+          </StyledButton>
+        </StyledSection>
+      )}
       {listType === "today" && (
         <StyledHeading>
           {todaysTasks.length === 1

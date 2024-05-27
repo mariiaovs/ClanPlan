@@ -27,6 +27,16 @@ const StyledSection = styled.section`
   z-index: 10;
   opacity: ${({ $open }) => ($open ? 1 : 0)};
   transition: top 0.5s ease, opacity 0.5s ease, background-color 0.5s ease;
+
+  @media (min-width: 900px) {
+    width: 25rem;
+  }
+  @media (min-width: 1200px) {
+    width: 30rem;
+  }
+  @media (min-width: 1536) {
+    width: 45rem;
+  }
 `;
 
 export default function Modal({ children, setShowModal, $top, $open }) {

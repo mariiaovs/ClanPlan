@@ -11,6 +11,9 @@ const StyledSection = styled.section`
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  @media (min-width: 1200px), (min-width: 900px) {
+    margin-left: 6rem;
+  }
 `;
 
 const StyledSpan = styled.span`
@@ -31,7 +34,7 @@ const StyledButton = styled.button`
   align-self: center;
   border-radius: 1rem;
   color: var(--color-font);
-  border: 0.5px solid var(--color-font);
+  border: none;
 `;
 
 const StyledHeading = styled.h2`

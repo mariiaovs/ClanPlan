@@ -18,6 +18,15 @@ const StyledFooter = styled.footer`
   left: 0;
   max-width: 375px;
   margin: auto;
+
+  @media (min-width: 1200px), (min-width: 900px) {
+    position: fixed;
+    max-width: 100vw;
+    margin: 0;
+    height: 100vh;
+    width: 100px;
+    flex-direction: column;
+  }
 `;
 
 const StyledPlus = styled(Plus)`
@@ -52,6 +61,14 @@ const StyledList = styled.ul`
   justify-content: space-between;
   list-style: none;
   padding: 0;
+
+  @media (min-width: 1200px), (min-width: 900px) {
+    grid-template-columns: 1fr;
+    left: 0;
+    height: 100vh;
+    width: 90px;
+    flex-direction: column;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -74,11 +91,19 @@ const StyledCreateItem = styled.li`
   position: fixed;
   left: calc(100vw / 2 - 2rem);
   bottom: 0.6rem;
+  @media (min-width: 1200px), (min-width: 900px) {
+    position: inherit;
+  }
 `;
 
 const StyledListItem = styled.li`
   padding-right: 4rem;
   width: 9rem;
+
+  @media (min-width: 1200px), (min-width: 900px) {
+    padding-right: inherit;
+    width: inherit;
+  }
 `;
 
 export default function Footer() {
@@ -107,14 +132,7 @@ export default function Footer() {
               </StyledSpan>
             </StyledLink>
           </StyledListItem>
-          <StyledCreateItem>
-            <StyledLink href="/create">
-              <StyledPlus $isActive={currentPage === "/create"} />
-              <StyledSpan $isActive={currentPage === "/create"}>
-                Create
-              </StyledSpan>
-            </StyledLink>
-          </StyledCreateItem>
+
           <li>
             <StyledLink href="/categories">
               <StyledCategory $isActive={currentPage === "/categories"} />
@@ -131,6 +149,14 @@ export default function Footer() {
               </StyledSpan>
             </StyledLink>
           </li>
+          <StyledCreateItem>
+            <StyledLink href="/create">
+              <StyledPlus $isActive={currentPage === "/create"} />
+              <StyledSpan $isActive={currentPage === "/create"}>
+                Create
+              </StyledSpan>
+            </StyledLink>
+          </StyledCreateItem>
         </StyledList>
       </nav>
     </StyledFooter>

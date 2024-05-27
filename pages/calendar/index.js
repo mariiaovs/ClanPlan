@@ -23,14 +23,37 @@ const StyledSection = styled.section`
   padding: 1rem;
   background-color: var(--color-background);
   border-radius: 1rem;
-  height: 530px;
+  height: 500px;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   box-shadow: 1px 1px 10px -1px var(--color-font);
+
+  @media (min-width: 900px) {
+    height: 35rem;
+    margin-left: 6rem;
+  }
+
+  @media (min-width: 1200px) {
+    height: 40rem;
+    margin-left: 6rem;
+  }
+  @media (min-width: 1536px) {
+    height: 60rem;
+    margin-left: 6rem;
+  }
 `;
 
 const StyledCalendar = styled(DnDCalendar)`
-  height: 440px;
+  height: 410px;
+  @media (min-width: 900px) {
+    height: 30rem;
+  }
+  @media (min-width: 1200px) {
+    height: 35rem;
+  }
+  @media (min-width: 1536px) {
+    height: 50rem;
+  }
 `;
 
 export default function CalendarPage({

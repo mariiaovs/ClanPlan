@@ -9,7 +9,7 @@ import { darkTheme, lightTheme } from "../styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SessionProvider } from "next-auth/react";
-import StopMessage from "@/components/StopMessage";
+import AuthGate from "@/components/AuthGate";
 
 const fetcher = (url) => fetch(url).then((response) => response.json());
 
@@ -101,8 +101,7 @@ export default function App({
               pauseOnHover
               theme={isDarkTheme ? "dark" : "light"}
             />
-            {!session && <StopMessage />}
-            {session && (
+            <AuthGate>
               <Component
                 {...pageProps}
                 tasks={tasks}
@@ -123,7 +122,7 @@ export default function App({
                 currentView={currentView}
                 setCurrentView={setCurrentView}
               />
-            )}
+            </AuthGate>
           </SWRConfig>
         </Layout>
       </ThemeProvider>

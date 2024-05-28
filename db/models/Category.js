@@ -10,6 +10,7 @@ const categorySchema = new Schema({
     ref: "Member",
     required: true,
   },
+  owner: { type: String, required: true },
 });
 
 const Category =

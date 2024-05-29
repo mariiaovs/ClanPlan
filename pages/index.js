@@ -11,9 +11,6 @@ const StyledSection = styled.section`
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  @media (min-width: 1200px), (min-width: 900px) {
-    margin-left: 6rem;
-  }
 `;
 
 const StyledSpan = styled.span`

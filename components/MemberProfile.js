@@ -2,6 +2,7 @@ import styled from "styled-components";
 import ThemeToggle from "./ThemeToggle";
 import Image from "next/image";
 import User from "@/public/assets/images/user.svg";
+import FileUploadForm from "./FileUploadForm";
 
 const StyledSection = styled.section`
   position: relative;
@@ -16,9 +17,31 @@ const StyledSection = styled.section`
   box-shadow: 1px 1px 10px -1px var(--color-font);
   align-items: center;
 
-  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
-    margin-left: 6rem;
+  ${({ $settings }) =>
+    !$settings &&
+    `
+@media (min-width: 900px) {
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
   }
+`}
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 80vw;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 1rem;
+  @media (min-width: 900px) {
+    max-width: 50vw;
+  }
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
 `;
 
 const StyledUser = styled(User)`
@@ -29,6 +52,9 @@ const UserInfoContainer = styled.div`
   display: flex;
   gap: 1rem;
   align-items: center;
+  @media (min-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const StyledParagraph = styled.p`
@@ -47,23 +73,27 @@ const StyledHeading = styled.h3`
   font-size: 1.4rem;
 `;
 
-export default function MemberProfile({ familyMember, user }) {
+export default function MemberProfile({ familyMember, user, onAddPhoto }) {
   const { _id, name, role, profilePhoto } = familyMember;
 
   return (
     <>
       <StyledSection>
         {profilePhoto ? (
-          <Image
-            src={profilePhoto}
-            alt="user profile image"
-            width={150}
-            height={150}
-            priority={true}
-          />
+          <ImageContainer>
+            <StyledImage
+              src={profilePhoto}
+              alt="user profile image"
+              sizes="80vw"
+              fill
+              priority={true}
+            />
+          </ImageContainer>
         ) : (
           <StyledUser />
         )}
+
+        {_id === user._id && <FileUploadForm onAddPhoto={onAddPhoto} />}
         <UserInfoContainer>
           <StyledParagraph>
             Name: <StyledContent>{name}</StyledContent>
@@ -74,7 +104,7 @@ export default function MemberProfile({ familyMember, user }) {
         </UserInfoContainer>
       </StyledSection>
       {_id === user._id && (
-        <StyledSection>
+        <StyledSection $settings={true}>
           <StyledHeading>Settings</StyledHeading>
           <ThemeToggle familyMember={familyMember} />
         </StyledSection>

@@ -47,19 +47,32 @@ const StyledH1 = styled.h1`
   font-family: Arial, Helvetica, sans-serif;
 `;
 
+const ImageContainer = styled.div`
+  position: relative;
+  width: 35px;
+  height: 35px;
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
+  border-radius: 50%;
+`;
+
 export default function Header({ user }) {
   return (
     <StyledHeader>
       <StyledH1>ClanPlan</StyledH1>
       <StyledLink href={`/family/${user._id}`}>
-        {user?.profilePhoto ? (
-          <Image
-            src={user.profilePhoto}
-            alt="user profile image"
-            width={150}
-            height={150}
-            priority={true}
-          />
+        {user.profilePhoto ? (
+          <ImageContainer>
+            <StyledImage
+              src={user.profilePhoto}
+              alt="user profile image"
+              fill={true}
+              sizes="20vw"
+              priority={true}
+            />
+          </ImageContainer>
         ) : (
           <StyledUser />
         )}

@@ -19,7 +19,7 @@ const StyledFooter = styled.footer`
   max-width: 375px;
   margin: auto;
 
-  @media (min-width: 1200px), (min-width: 900px) {
+  @media (min-width: 900px) {
     position: fixed;
     max-width: 100vw;
     margin: 0;

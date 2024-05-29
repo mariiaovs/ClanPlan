@@ -8,13 +8,7 @@ const StyledBackLink = styled(Link)`
   z-index: 2;
 
   @media (min-width: 900px) {
-    left: 13%;
-  }
-  @media (min-width: 1200px) {
-    left: 10%;
-  }
-  @media (min-width: 1536px) {
-    left: 8%;
+    left: calc(100px + 2rem);
   }
 `;
 

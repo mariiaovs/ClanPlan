@@ -5,6 +5,7 @@ import useSWR from "swr";
 import StyledLoadingAnimation from "@/components/StyledLoadingAnimation";
 import MemberProfile from "@/components/MemberProfile";
 import StyledBackLink from "@/components/StyledBackLink";
+import { toast } from "react-toastify";
 
 const StyledBackButton = styled.button`
   position: fixed;
@@ -12,6 +13,10 @@ const StyledBackButton = styled.button`
   left: calc(50% - 170px);
   z-index: 2;
   border: none;
+
+  @media (min-width: 900px) {
+    left: calc(100px + 2rem);
+  }
 `;
 
 const StyledMessage = styled.p`
@@ -24,11 +29,18 @@ const StyledHeading = styled.h2`
   margin-top: 1rem;
 `;
 
-export default function MemberProfilePage({ user }) {
+export default function MemberProfilePage({  
+  user,
+  mutateMembers,
+}) {
   const router = useRouter();
   const { id } = router.query;
 
-  const { data: familyMember, isLoading } = useSWR(`/api/members/${id}`);
+  const {
+    data: familyMember,
+    isLoading,
+    mutate,
+  } = useSWR(`/api/members/${id}`);
 
   if (isLoading) {
     return <StyledLoadingAnimation />;
@@ -40,6 +52,28 @@ export default function MemberProfilePage({ user }) {
 
   function handleGoBack() {
     router.back();
+  }
+
+  async function handleAddPhoto(url) {
+    const updatedMemberData = { ...familyMember, profilePhoto: url };
+    const response = await toast.promise(
+      fetch(`/api/members/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedMemberData),
+      }),
+      {
+        pending: "Photo updation is pending",
+        success: "Photo updated successfully",
+        error: "Photo not updated",
+      }
+    );
+    if (response.ok) {
+      mutate();
+      mutateMembers();
+    }
   }
 
   return (
@@ -55,7 +89,11 @@ export default function MemberProfilePage({ user }) {
       )}
       <StyledHeading>Family Member Profile</StyledHeading>
       {familyMember ? (
-        <MemberProfile familyMember={familyMember} user={user} />
+        <MemberProfile
+          familyMember={familyMember}          
+          user={user}
+          onAddPhoto={handleAddPhoto}
+        />
       ) : (
         <StyledMessage>Page not found!</StyledMessage>
       )}

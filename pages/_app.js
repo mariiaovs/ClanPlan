@@ -136,6 +136,7 @@ export default function App({
                 setCurrentView={setCurrentView}
                 isDarkTheme={isDarkTheme}
                 user={user}
+                mutateMembers={mutateMembers}
               />
             </AuthGate>
           </SWRConfig>

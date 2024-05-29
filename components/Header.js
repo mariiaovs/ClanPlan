@@ -56,9 +56,9 @@ export default function Header({ user }) {
     <StyledHeader>
       <StyledH1>ClanPlan</StyledH1>
       <StyledLink href={`/family/${user._id}`}>
-        {user.profilePhoto ? (
+        {user?.profilePhoto ? (
           <Image
-            src={profilePhoto}
+            src={user.profilePhoto}
             alt="user profile image"
             width={150}
             height={150}

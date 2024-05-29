@@ -15,6 +15,10 @@ const StyledSection = styled.section`
   transition: background-color 0.5s ease, color 0.5s ease, opacity 0.5s ease;
   box-shadow: 1px 1px 10px -1px var(--color-font);
   align-items: center;
+
+  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
+    margin-left: 6rem;
+  }
 `;
 
 const StyledUser = styled(User)`
@@ -43,12 +47,7 @@ const StyledHeading = styled.h3`
   font-size: 1.4rem;
 `;
 
-export default function MemberProfile({
-  familyMember,
-  isDarkTheme,
-  setDarkTheme,
-  user,
-}) {
+export default function MemberProfile({ familyMember, user }) {
   const { _id, name, role, profilePhoto } = familyMember;
 
   return (
@@ -77,7 +76,7 @@ export default function MemberProfile({
       {_id === user._id && (
         <StyledSection>
           <StyledHeading>Settings</StyledHeading>
-          <ThemeToggle isDarkTheme={isDarkTheme} setDarkTheme={setDarkTheme} />
+          <ThemeToggle familyMember={familyMember} />
         </StyledSection>
       )}
     </>

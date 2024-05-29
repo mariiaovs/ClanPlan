@@ -23,15 +23,6 @@ export default function App({
   const [listType, setListType] = useState("today");
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState("month");
-  const [isDarkTheme, setDarkTheme] = useState(false);
-
-  useEffect(() => {
-    // Set the initial theme based on user preference or default to light
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    setDarkTheme(prefersDark);
-  }, []);
 
   const { data: categories, isLoading: isCategoryLoading } = useSWR(
     "/api/categories",
@@ -65,8 +56,12 @@ export default function App({
     return;
   }
 
-  const userId = "6631ff475a93007538a23e95";
+  //const userId = "6631ff475a93007538a23e95"; //swetha
+  const userId = "6631ff575a93007538a23e98"; // Lokesh
   const user = familyMembers.find((member) => member._id === userId);
+  const isDarkTheme = user
+    ? user.isDarkTheme
+    : window.matchMedia("(prefers-color-scheme: dark)").matches;
 
   function handleSetDetailsBackLinkRef(link) {
     setDetailsBackLinkRef(link);
@@ -125,7 +120,6 @@ export default function App({
                 currentView={currentView}
                 setCurrentView={setCurrentView}
                 isDarkTheme={isDarkTheme}
-                setDarkTheme={setDarkTheme}
                 user={user}
               />
             </AuthGate>

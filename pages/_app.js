@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import GlobalStyle from "../styles";
 import Layout from "@/components/Layout";
 import { SWRConfig } from "swr";
@@ -34,6 +34,11 @@ export default function App({
   );
   const { data: tasks, isLoading } = useSWR("/api/tasks", fetcher);
 
+  const { data: user, isLoading: isUserLoading } = useSWR(
+    `/api/members/auth`,
+    fetcher
+  );
+
   if (isLoading) {
     return <StyledLoadingAnimation />;
   }
@@ -56,9 +61,18 @@ export default function App({
     return;
   }
 
+  if (isUserLoading) {
+    return <StyledLoadingAnimation />;
+  }
+  if (!user) {
+    return;
+  }
+
   //const userId = "6631ff475a93007538a23e95"; //swetha
-  const userId = "6631ff575a93007538a23e98"; // Lokesh
-  const user = familyMembers.find((member) => member._id === userId);
+  //const userId = "6631ff575a93007538a23e98"; // Lokesh
+
+  //const user = familyMembers.find((member) => member.email === userId);
+
   const isDarkTheme = user
     ? user.isDarkTheme
     : window.matchMedia("(prefers-color-scheme: dark)").matches;

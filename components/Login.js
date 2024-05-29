@@ -3,10 +3,13 @@ import StyledButton from "./StyledButton";
 import styled from "styled-components";
 
 const StyledSignButton = styled(StyledButton)`
+  width: 3rem;
+  padding: 0.2rem;
+  font-size: 0.5rem;
   margin: 0;
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 50px;
+  right: 6px;
   display: flex;
   align-items: center;
   justify-content: center;

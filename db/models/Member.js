@@ -8,6 +8,7 @@ const memberSchema = new Schema({
   role: { type: String, requred: true },
   family: { type: Schema.Types.ObjectId, ref: "Family" },
   profilePhoto: { type: String },
+  isDarkTheme: { type: Boolean },
 });
 
 const Member = mongoose.models.Member || mongoose.model("Member", memberSchema);

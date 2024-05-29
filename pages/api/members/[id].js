@@ -14,4 +14,12 @@ export default async function handler(request, response) {
 
     response.status(200).json(familyMember);
   }
+
+  if (request.method === "PATCH") {
+    const updatedMember = request.body;
+    await Member.findByIdAndUpdate(id, updatedMember, { new: true });
+    response
+      .status(200)
+      .json({ status: "Member mode for profile updated successfully." });
+  }
 }

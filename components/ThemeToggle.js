@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import Sun from "@/public/assets/images/sun.svg";
 import Moon from "@/public/assets/images/moon.svg";
+import { toast } from "react-toastify";
+import useSWR from "swr";
 
 const ToggleLabel = styled.label`
   position: relative;
@@ -49,13 +51,40 @@ const MoonIcon = styled(Moon)`
   right: 6px;
 `;
 
-export default function ThemeToggle({ isDarkTheme, setDarkTheme }) {
+export default function ThemeToggle({ familyMember }) {
+  const { isDarkTheme, _id: id } = familyMember;
+  const { mutate } = useSWR(`/api/members/${id}`);
+  const { mutate: membersMutate } = useSWR("/api/members");
+
+  async function handleModeToggle() {
+    const updatedMember = { ...familyMember, isDarkTheme: !isDarkTheme };
+    const response = await toast.promise(
+      fetch(`/api/members/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedMember),
+      }),
+      {
+        pending: "Profile updation is pending",
+        success: "Profile updated successfully",
+        error: "Profile not updated",
+      }
+    );
+
+    if (response.ok) {
+      mutate();
+      membersMutate();
+    }
+  }
+
   return (
     <ToggleLabel htmlFor="theme-toggle" $dark={isDarkTheme}>
       <ToggleCheckbox
         type="checkbox"
         id="theme-toggle"
-        onChange={() => setDarkTheme(!isDarkTheme)}
+        onChange={handleModeToggle}
         checked={isDarkTheme}
       />
       <SunIcon />

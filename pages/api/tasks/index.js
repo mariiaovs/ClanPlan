@@ -2,12 +2,22 @@ import dbConnect from "@/db/connect";
 import Task from "@/db/models/Task";
 import { uid } from "uid";
 import convertDateToString from "@/utils/convertDateToString";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(request, response) {
   await dbConnect();
 
+  const session = await getServerSession(request, response, authOptions);
+  if (!session) {
+    response.status(401).json({ status: "Not authorized" });
+    return;
+  }
+
   if (request.method === "GET") {
-    const tasks = await Task.find().populate("category").sort({ dueDate: 1 });
+    const tasks = await Task.find({ owner: session.user.email })
+      .populate("category")
+      .sort({ dueDate: 1 });
     return response.status(200).json(tasks);
   }
 
@@ -62,7 +72,7 @@ export default async function handler(request, response) {
             );
           }
           taskData.groupId = groupId;
-          await Task.create(taskData);
+          await Task.create({ ...taskData, owner: session.user.email });
           nextMonthDueDate.setMonth(nextMonthDueDate.getMonth() + 1);
         }
         return response
@@ -73,7 +83,7 @@ export default async function handler(request, response) {
         while (nextWeekDueDate <= endDate) {
           taskData.dueDate = convertDateToString(nextWeekDueDate);
           taskData.groupId = groupId;
-          await Task.create(taskData);
+          await Task.create({ ...taskData, owner: session.user.email });
           nextWeekDueDate.setDate(nextWeekDueDate.getDate() + 7);
         }
         return response
@@ -84,14 +94,14 @@ export default async function handler(request, response) {
         while (nextDayDueDate <= endDate) {
           taskData.dueDate = convertDateToString(nextDayDueDate);
           taskData.groupId = groupId;
-          await Task.create(taskData);
+          await Task.create({ ...taskData, owner: session.user.email });
           nextDayDueDate.setDate(nextDayDueDate.getDate() + 1);
         }
         return response
           .status(201)
           .json({ status: "Tasks successfully created." });
       } else {
-        await Task.create(taskData);
+        await Task.create({ ...taskData, owner: session.user.email });
         return response
           .status(201)
           .json({ status: "Task successfully created." });

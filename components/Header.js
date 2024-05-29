@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import Login from "./Login";
 import User from "@/public/assets/images/user.svg";
+import { useSession } from "next-auth/react";
 
 const StyledHeader = styled.header`
   background-color: var(--color-background);
@@ -27,9 +29,8 @@ const StyledHeader = styled.header`
 
 const StyledLink = styled(Link)`
   position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0.7rem;
+  top: 2px;
+  right: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,7 +41,7 @@ const StyledUser = styled(User)`
 `;
 
 const StyledParagraph = styled.p`
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 `;
 
 const StyledH1 = styled.h1`
@@ -59,25 +60,27 @@ const StyledImage = styled(Image)`
 `;
 
 export default function Header({ user }) {
+  const { data: session } = useSession();
   return (
     <StyledHeader>
       <StyledH1>ClanPlan</StyledH1>
-      <StyledLink href={`/family/${user._id}`}>
-        {user.profilePhoto ? (
-          <ImageContainer>
-            <StyledImage
+      {session && (
+        <StyledLink href={`/family/${user._id}`}>
+          {user?.profilePhoto ? (
+            <Image
               src={user.profilePhoto}
               alt="user profile image"
-              fill={true}
-              sizes="20vw"
+              width={150}
+              height={150}
               priority={true}
             />
-          </ImageContainer>
-        ) : (
-          <StyledUser />
-        )}
-        <StyledParagraph>{user.name}</StyledParagraph>
-      </StyledLink>
+          ) : (
+            <StyledUser />
+          )}
+          <StyledParagraph>{user.name}</StyledParagraph>
+        </StyledLink>
+      )}
+      <Login />
     </StyledHeader>
   );
 }

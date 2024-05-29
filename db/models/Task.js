@@ -17,6 +17,7 @@ const taskSchema = new Schema({
   repeat: { type: String },
   endDate: { type: String },
   comments: { type: [Schema.Types.ObjectId], ref: "Comment" },
+  owner: { type: String, required: true },
   family: { type: [Schema.Types.ObjectId], ref: "Family" },
 });
 

@@ -1,15 +1,26 @@
 import dbConnect from "@/db/connect";
 import Comment from "@/db/models/Comment";
 import Task from "@/db/models/Task";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(request, response) {
   await dbConnect();
+
+  const session = await getServerSession(request, response, authOptions);
+  if (!session) {
+    response.status(401).json({ status: "Not authorized" });
+    return;
+  }
 
   if (request.method === "POST") {
     try {
       const commentData = request.body.commentData;
       const taskId = request.body.taskId;
-      const comment = await Comment.create(commentData);
+      const comment = await Comment.create({
+        ...commentData,
+        owner: session.user.email,
+      });
       const commentId = comment._id;
       const task = await Task.findById(taskId);
       if (!task.comments) {

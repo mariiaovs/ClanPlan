@@ -11,6 +11,7 @@ const categorySchema = new Schema({
     ref: "Member",
     required: true,
   },
+  owner: { type: String, required: true },
   family: { type: [Schema.Types.ObjectId], ref: "Family" },
 });
 

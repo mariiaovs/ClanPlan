@@ -31,12 +31,6 @@ const StyledHeading = styled.h2`
   margin-top: 1rem;
 `;
 
-const StyledContainer = styled.div`
-  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
-    margin-left: 6rem;
-  }
-`;
-
 export default function DetailsPage({
   showModal,
   setShowModal,
@@ -87,7 +81,7 @@ export default function DetailsPage({
   }
 
   return (
-    <StyledContainer>
+    <>
       <StyledBackLink href={detailsBackLinkRef}>
         <BackArrow />
       </StyledBackLink>
@@ -122,6 +116,6 @@ export default function DetailsPage({
       ) : (
         <StyledMessage>Page not found!</StyledMessage>
       )}
-    </StyledContainer>
+    </>
   );
 }

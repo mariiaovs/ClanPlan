@@ -58,9 +58,10 @@ export default createGlobalStyle`
     background-color: var(--color-background);
     transition: background-color 0.5s ease, color 0.5s ease;
     
-
-    @media (min-width: 900px), (min-width: 1200px),(min-width:1536px){
+    @media (min-width: 900px) {
     max-width: 90vw;
+    margin-left: 6.5rem;
+    margin-bottom:auto;
     }
   }
 

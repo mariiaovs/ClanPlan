@@ -9,10 +9,6 @@ const StyledSection = styled.section`
   background-color: var(--color-background);
   box-shadow: 1px 1px 15px -5px var(--color-font);
   transition: background-color 0.5s ease;
-
-  @media (min-width: 900px), (min-width: 1200px) {
-    margin-left: 6rem;
-  }
 `;
 
 const StyledContainer = styled.div`

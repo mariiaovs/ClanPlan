@@ -30,16 +30,13 @@ const StyledSection = styled.section`
 
   @media (min-width: 900px) {
     height: 35rem;
-    margin-left: 6rem;
   }
 
   @media (min-width: 1200px) {
     height: 40rem;
-    margin-left: 6rem;
   }
   @media (min-width: 1536px) {
     height: 60rem;
-    margin-left: 6rem;
   }
 `;
 

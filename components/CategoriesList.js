@@ -18,9 +18,6 @@ const StyledList = styled.ul`
   gap: 1rem;
   margin: 0.5rem;
   list-style: none;
-  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
-    margin-left: 6rem;
-  }
 `;
 
 const StyledListItem = styled.li`

@@ -17,10 +17,6 @@ const StyledForm = styled.form`
   border-radius: 1rem;
   box-shadow: 1px 1px 10px -1px var(--color-font);
   transition: background-color 0.5s ease;
-  @media (min-width: 900px), (min-width: 1200px), (min-width: 1536px) {
-    margin-left: 6rem;
-    margin-top: 6rem;
-  }
 `;
 
 const StyledHeading = styled.h2`

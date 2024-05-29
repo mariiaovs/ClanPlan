@@ -47,12 +47,12 @@ export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
             task?.dueDate <= convertDateToString(thisSunday)
         );
 
-  const nextMonday = new Date();
-  nextMonday.setDate(thisSunday.getDate() + 1);
-  const nextTuesday = new Date();
-  nextTuesday.setDate(thisSunday.getDate() + 2);
-  const nextSunday = new Date();
-  nextSunday.setDate(thisSunday.getDate() + 7);
+  const nextMonday = new Date(thisSunday);
+  nextMonday.setDate(nextMonday.getDate() + 1);
+  const nextTuesday = new Date(thisSunday);
+  nextTuesday.setDate(nextTuesday.getDate() + 2);
+  const nextSunday = new Date(thisSunday);
+  nextSunday.setDate(nextSunday.getDate() + 7);
 
   const nextWeekTasks =
     today.getDay() === 0
@@ -93,9 +93,11 @@ export default function TasksListGroups({ tasks, onSetDetailsBackLinkRef }) {
   );
 
   const lastDayNextMonth = new Date(firstDayAfterNextMonth - 1);
+
   const nextMonthTasks = tasks.filter(
     (task) =>
       !task.isDone &&
+      task?.dueDate > convertDateToString(nextSunday) &&
       task?.dueDate >= convertDateToString(firstDayNextMonth) &&
       task?.dueDate <= convertDateToString(lastDayNextMonth)
   );

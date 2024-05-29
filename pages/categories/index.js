@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { StyledMessage } from "..";
 import Modal from "@/components/Modal";
 import CategoriesList from "@/components/CategoriesList";
